@@ -1,0 +1,336 @@
+
+# 菜单配置（系统自动生成资源、权限、路由）
+menus:
+  # 审核管理分组
+  - id: review-group
+    title: 审核管理
+    icon: ShieldCheckmark
+    type: group
+    order: 1
+    children:
+      - id: submissions
+        title: 插件审核
+        icon: CheckmarkDone
+        path: /plugins/appstore-admin/submissions
+        component: PluginSubmissions
+        order: 1
+        apiPrefix: /api/v2/plugins/appstore-admin/submissions
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: approve
+            label: 审核通过
+            method: POST
+            path: /api/v2/plugins/appstore-admin/submissions/{id}/approve
+          - id: reject
+            label: 审核拒绝
+            method: POST
+            path: /api/v2/plugins/appstore-admin/submissions/{id}/reject
+          - id: batch-approve
+            label: 批量通过
+            method: POST
+            path: /api/v2/plugins/appstore-admin/submissions/batch-approve
+          - id: batch-reject
+            label: 批量拒绝
+            method: POST
+            path: /api/v2/plugins/appstore-admin/submissions/batch-reject
+          - id: refresh
+            label: 刷新
+            method: GET
+            path: /api/v2/plugins/appstore-admin/submissions/refresh
+
+      - id: permission-requests
+        title: 权限申请审核
+        icon: LockClosed
+        path: /plugins/appstore-admin/permission-requests
+        component: PermissionRequestReview
+        order: 2
+        apiPrefix: /api/v2/plugins/appstore-admin/permission-requests
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: approve
+            label: 批准申请
+            method: POST
+            path: /api/v2/plugins/appstore-admin/permission-requests/{id}/approve
+          - id: reject
+            label: 拒绝申请
+            method: POST
+            path: /api/v2/plugins/appstore-admin/permission-requests/{id}/reject
+          - id: batch-approve
+            label: 批量批准
+            method: POST
+            path: /api/v2/plugins/appstore-admin/permission-requests/batch-approve
+          - id: refresh
+            label: 刷新
+            method: GET
+            path: /api/v2/plugins/appstore-admin/permission-requests/refresh
+
+      - id: table-permissions
+        title: 表权限管理
+        icon: Grid
+        path: /plugins/appstore-admin/table-permissions
+        component: PluginTablePermissionManagement
+        order: 3
+        apiPrefix: /api/v2/plugins/appstore-admin/table-permissions
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: grant
+            label: 授予权限
+            method: POST
+            path: /api/v2/plugins/appstore-admin/table-permissions/grant
+          - id: revoke
+            label: 撤销权限
+            method: POST
+            path: /api/v2/plugins/appstore-admin/table-permissions/{id}/revoke
+          - id: batch-grant
+            label: 批量授予
+            method: POST
+            path: /api/v2/plugins/appstore-admin/table-permissions/batch-grant
+          - id: refresh
+            label: 刷新
+            method: GET
+            path: /api/v2/plugins/appstore-admin/table-permissions/refresh
+
+      - id: review-rules
+        title: 审核规则
+        icon: ShieldCheckmark
+        path: /plugins/appstore-admin/review-rules
+        component: ReviewRules
+        order: 4
+        apiPrefix: /api/v2/plugins/appstore-admin/review-rules
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: create
+            label: 新建规则
+            method: POST
+            path: /api/v2/plugins/appstore-admin/review-rules
+          - id: update
+            label: 编辑规则
+            method: PUT
+            path: /api/v2/plugins/appstore-admin/review-rules/{id}
+          - id: delete
+            label: 删除规则
+            method: DELETE
+            path: /api/v2/plugins/appstore-admin/review-rules/{id}
+          - id: enable
+            label: 启用规则
+            method: POST
+            path: /api/v2/plugins/appstore-admin/review-rules/{id}/enable
+          - id: disable
+            label: 禁用规则
+            method: POST
+            path: /api/v2/plugins/appstore-admin/review-rules/{id}/disable
+
+  # 内容管理分组
+  - id: content-group
+    title: 内容管理
+    icon: Cube
+    type: group
+    order: 2
+    children:
+      - id: plugins
+        title: 插件列表
+        icon: Apps
+        path: /plugins/appstore-admin/plugins
+        component: PluginManagement
+        order: 1
+        apiPrefix: /api/v2/plugins/appstore-admin/plugins
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: upload
+            label: 上传插件
+            method: POST
+            path: /api/v2/plugins/appstore-admin/plugins/upload
+          - id: upgrade
+            label: 升级插件
+            method: POST
+            path: /api/v2/plugins/appstore-admin/plugins/{id}/upgrade
+          - id: delist
+            label: 下架
+            method: POST
+            path: /api/v2/plugins/appstore-admin/plugins/{id}/delist
+          - id: relist
+            label: 重新上架
+            method: POST
+            path: /api/v2/plugins/appstore-admin/plugins/{id}/relist
+          - id: batch-delist
+            label: 批量下架
+            method: POST
+            path: /api/v2/plugins/appstore-admin/plugins/batch-delist
+          - id: refresh
+            label: 刷新
+            method: GET
+            path: /api/v2/plugins/appstore-admin/plugins/refresh
+
+      - id: categories
+        title: 分类管理
+        icon: FolderOpen
+        path: /plugins/appstore-admin/categories
+        component: CategoryManagement
+        order: 2
+        apiPrefix: /api/v2/plugins/appstore-admin/categories
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: create
+            label: 新建分类
+            method: POST
+            path: /api/v2/plugins/appstore-admin/categories
+          - id: update
+            label: 编辑分类
+            method: PUT
+            path: /api/v2/plugins/appstore-admin/categories/{id}
+          - id: delete
+            label: 删除分类
+            method: DELETE
+            path: /api/v2/plugins/appstore-admin/categories/{id}
+
+      - id: tags
+        title: 标签管理
+        icon: Pricetags
+        path: /plugins/appstore-admin/tags
+        component: TagManagement
+        order: 3
+        apiPrefix: /api/v2/plugins/appstore-admin/tags
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: create
+            label: 新建标签
+            method: POST
+            path: /api/v2/plugins/appstore-admin/tags
+          - id: update
+            label: 编辑标签
+            method: PUT
+            path: /api/v2/plugins/appstore-admin/tags/{id}
+          - id: delete
+            label: 删除标签
+            method: DELETE
+            path: /api/v2/plugins/appstore-admin/tags/{id}
+
+  # 用户管理分组
+  - id: user-group
+    title: 用户管理
+    icon: People
+    type: group
+    order: 3
+    children:
+      - id: developers
+        title: 开发者管理
+        icon: Person
+        path: /plugins/appstore-admin/developers
+        component: DeveloperManagement
+        order: 1
+        apiPrefix: /api/v2/plugins/appstore-admin/developers
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: verify
+            label: 认证开发者
+            method: POST
+            path: /api/v2/plugins/appstore-admin/developers/{id}/verify
+          - id: unverify
+            label: 取消认证
+            method: POST
+            path: /api/v2/plugins/appstore-admin/developers/{id}/unverify
+          - id: disable
+            label: 禁用开发者
+            method: POST
+            path: /api/v2/plugins/appstore-admin/developers/{id}/disable
+          - id: enable
+            label: 启用开发者
+            method: POST
+            path: /api/v2/plugins/appstore-admin/developers/{id}/enable
+
+      - id: feedbacks
+        title: 用户反馈
+        icon: ChatbubbleEllipses
+        path: /plugins/appstore-admin/feedbacks
+        component: FeedbackManagement
+        order: 2
+        apiPrefix: /api/v2/plugins/appstore-admin/feedbacks
+        operations: [VIEW, MANAGE]
+        buttons:
+          - id: reply
+            label: 回复反馈
+            method: POST
+            path: /api/v2/plugins/appstore-admin/feedbacks/{id}/reply
+          - id: resolve
+            label: 标记已解决
+            method: POST
+            path: /api/v2/plugins/appstore-admin/feedbacks/{id}/resolve
+          - id: delete
+            label: 删除反馈
+            method: DELETE
+            path: /api/v2/plugins/appstore-admin/feedbacks/{id}
+
+  # 数据分析分组
+  - id: analytics-group
+    title: 数据分析
+    icon: Analytics
+    type: group
+    order: 4
+    children:
+      - id: statistics
+        title: 统计分析
+        icon: BarChart
+        path: /plugins/appstore-admin/statistics
+        component: StatisticsAnalysis
+        order: 1
+        apiPrefix: /api/v2/plugins/appstore-admin/statistics
+        operations: [VIEW]
+        # 统计分析页面通常只有查看权限，不需要按钮
+
+      - id: audit-logs
+        title: 审计日志
+        icon: DocumentText
+        path: /plugins/appstore-admin/audit-logs
+        component: AuditLog
+        order: 2
+        apiPrefix: /api/v2/plugins/appstore-admin/audit-logs
+        operations: [VIEW]
+        buttons:
+          - id: export
+            label: 导出日志
+            method: GET
+            path: /api/v2/plugins/appstore-admin/audit-logs/export
+
+# 角色配置（使用简化写法）
+roles:
+  - code: viewer
+    name: 查看者
+    description: 只能查看插件管理相关页面，不能进行管理操作
+    permissions:
+      - submissions:VIEW
+      - permission-requests:VIEW
+      - table-permissions:VIEW
+      - plugins:VIEW
+      - review-rules:VIEW
+      - categories:VIEW
+      - tags:VIEW
+      - developers:VIEW
+      - feedbacks:VIEW
+      - statistics:VIEW
+      - audit-logs:VIEW
+
+  - code: manager
+    name: 插件管理员
+    description: 拥有插件管理的完整权限，可以进行审核、上架、下架等操作
+    permissions:
+      - submissions:VIEW,MANAGE
+      - submissions.*
+      - permission-requests:VIEW,MANAGE
+      - permission-requests.*
+      - table-permissions:VIEW,MANAGE
+      - table-permissions.*
+      - plugins:VIEW,MANAGE
+      - plugins.*
+      - review-rules:VIEW,MANAGE
+      - review-rules.*
+      - categories:VIEW,MANAGE
+      - categories.*
+      - tags:VIEW,MANAGE
+      - tags.*
+      - developers:VIEW,MANAGE
+      - developers.*
+      - feedbacks:VIEW,MANAGE
+      - feedbacks.*
+      - statistics:VIEW
+      - audit-logs:VIEW
+      - audit-logs.export
