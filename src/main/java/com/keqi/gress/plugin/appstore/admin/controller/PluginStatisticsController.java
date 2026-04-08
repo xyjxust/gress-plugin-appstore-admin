@@ -40,19 +40,14 @@ public class PluginStatisticsController {
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate) {
         
-        log.info("Getting statistics for plugin: {}, startDate: {}, endDate: {}", pluginId, startDate, endDate);
-        
-        try {
+
             LocalDate start = startDate != null ? LocalDate.parse(startDate) : LocalDate.now().minusDays(30);
             LocalDate end = endDate != null ? LocalDate.parse(endDate) : LocalDate.now();
             
             PluginStatisticsDTO statistics = pluginStatisticsService.getPluginStatistics(pluginId, start, end);
             return Result.success(statistics);
             
-        } catch (Exception e) {
-            log.error("Failed to get plugin statistics", e);
-            return Result.error("Failed to get statistics: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -62,16 +57,10 @@ public class PluginStatisticsController {
      */
     @GetMapping("/overview")
     public Result<StatisticsOverviewDTO> getStatisticsOverview() {
-        log.info("Getting statistics overview");
-        
-        try {
+
             StatisticsOverviewDTO overview = pluginStatisticsService.getStatisticsOverview();
             return Result.success(overview);
-            
-        } catch (Exception e) {
-            log.error("Failed to get statistics overview", e);
-            return Result.error("Failed to get overview: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -82,9 +71,7 @@ public class PluginStatisticsController {
      */
     @PostMapping("/trending")
     public Result<TrendDataDTO> getTrendData(@RequestBody StatisticsQueryRequest request) {
-        log.info("Getting trend data");
-        
-        try {
+
             // Set default date range if not provided
             if (request.getStartDate() == null) {
                 request.setStartDate(LocalDate.now().minusDays(30));
@@ -95,11 +82,7 @@ public class PluginStatisticsController {
             
             TrendDataDTO trendData = pluginStatisticsService.getTrendData(request);
             return Result.success(trendData);
-            
-        } catch (Exception e) {
-            log.error("Failed to get trend data", e);
-            return Result.error("Failed to get trend data: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -110,9 +93,7 @@ public class PluginStatisticsController {
      */
     @PostMapping("/export")
     public Result<String> exportStatistics(@RequestBody ExportRequest request) {
-        log.info("Exporting statistics");
-        
-        try {
+
             // Validate request
             if (request.getFormat() == null || request.getFormat().isEmpty()) {
                 return Result.error("Export format is required");
@@ -127,10 +108,6 @@ public class PluginStatisticsController {
             }
             
             return pluginStatisticsService.exportStatistics(request);
-            
-        } catch (Exception e) {
-            log.error("Failed to export statistics", e);
-            return Result.error("Failed to export: " + e.getMessage());
-        }
+
     }
 }

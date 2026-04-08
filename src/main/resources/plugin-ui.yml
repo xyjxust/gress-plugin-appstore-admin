@@ -291,6 +291,22 @@ menus:
             method: GET
             path: /api/v2/plugins/appstore-admin/audit-logs/export
 
+  # 数据安全与密钥管理分组
+  - id: security-group
+    title: 安全管理
+    icon: ShieldCheckmark
+    type: group
+    order: 5
+    children:
+      - id: signing-keys
+        title: 签名密钥管理
+        icon: ShieldCheckmark
+        path: /plugins/appstore-admin/signing-keys
+        component: SigningKeyManagement
+        order: 1
+        apiPrefix: /api/v2/plugins/appstore-admin/signing-keys
+        operations: [VIEW, MANAGE]
+
 # 角色配置（使用简化写法）
 roles:
   - code: viewer
@@ -308,6 +324,7 @@ roles:
       - feedbacks:VIEW
       - statistics:VIEW
       - audit-logs:VIEW
+      - signing-keys:VIEW
 
   - code: manager
     name: 插件管理员
@@ -334,3 +351,5 @@ roles:
       - statistics:VIEW
       - audit-logs:VIEW
       - audit-logs.export
+      - signing-keys:VIEW,MANAGE
+      - signing-keys.*

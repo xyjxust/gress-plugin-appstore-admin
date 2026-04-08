@@ -92,6 +92,7 @@
           @delist="handleDelist"
           @relist="handleRelist"
           @edit="handleEdit"
+          @delete="(id: string) => confirmDeletePlugin(id)"
           @close="showDetailDrawer = false"
         />
       </n-drawer-content>
@@ -299,6 +300,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, h, onMounted, resolveComponent } from 'vue'
 import { useMessage, useIcon } from '@keqi.gress/plugin-bridge'
+import { useDialog } from 'naive-ui'
 import { NUploadDragger } from 'naive-ui'
 
 // 图标
@@ -309,6 +311,7 @@ const CreateOutline = useIcon('CreateOutline')
 const CheckmarkCircle = useIcon('CheckmarkCircleOutline')
 const CloudUploadOutline = useIcon('CloudUploadOutline')
 const CloudUpload = useIcon('CloudUpload')
+const TrashOutline = useIcon('TrashOutline')
 import PluginDetail from '../components/PluginDetail.vue'
 import { pluginApi, type PluginTypeInfo } from '../api'
 import type { Plugin, PluginStatus, PluginType } from '../types'
@@ -330,6 +333,7 @@ export type FilterFieldConfig = {
 
 // 消息提示
 const message = useMessage()
+const dialog = useDialog()
 
 // 数据状态
 const loading = ref(false)
@@ -657,6 +661,14 @@ const columns = [
         })
       }
 
+      if (row.status === 'DELISTED' || row.status === 'OFFLINE') {
+        moreOptions.push({
+          label: '删除',
+          key: 'delete',
+          icon: () => h(NIcon, { component: TrashOutline })
+        })
+      }
+
       const handleMoreSelect = (key: string) => {
         switch (key) {
           case 'upgrade':
@@ -667,6 +679,9 @@ const columns = [
             break
           case 'relist':
             handleRelist(row.pluginId)
+            break
+          case 'delete':
+            confirmDeletePlugin(row.pluginId, row.pluginName)
             break
         }
       }
@@ -805,6 +820,35 @@ async function handleRelist(pluginId: string) {
     message.success('插件已重新上架')
     await loadData()
 
+}
+
+/** 永久删除（已下架 / 离线）：后端会清理应用信息、版本与存储中的 JAR */
+function confirmDeletePlugin(pluginId: string, pluginName?: string) {
+  dialog.warning({
+    title: '永久删除插件',
+    content: `将删除插件「${pluginName || pluginId}」的应用信息、全部版本记录，并移除已存储的插件包（JAR），不可恢复。确定继续？`,
+    positiveText: '删除',
+    negativeText: '取消',
+    onPositiveClick: async () => {
+      try {
+        await pluginApi.delete(pluginId)
+        message.success('插件已删除')
+        showDetailDrawer.value = false
+        currentPlugin.value = null
+        checkedRowKeys.value = []
+        await loadData()
+        return true
+      } catch (error: any) {
+        const msg =
+          error.response?.data?.errorMessage ||
+          error.response?.data?.message ||
+          error.message ||
+          '删除失败'
+        message.error(msg)
+        return false
+      }
+    }
+  })
 }
 
 // 编辑插件

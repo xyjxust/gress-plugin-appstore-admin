@@ -11,6 +11,7 @@ import com.keqi.gress.plugin.appstore.admin.entity.PluginSubmission;
 import com.keqi.gress.plugin.appstore.admin.enums.ScanStatus;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,14 +30,14 @@ import java.util.regex.Pattern;
  * Performs security scanning on plugin packages
  */
 @Service
+@Slf4j
 public class SecurityScanService {
     
-    private static final Log log = LogFactory.get(SecurityScanService.class);
-    
-    @Inject(source = Inject.BeanSource.SPRING)
+
+    @Inject
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Inject
     private FileStorageService fileStorageService;
     
     // Known vulnerable patterns (simplified for demonstration)
@@ -90,7 +91,7 @@ public class SecurityScanService {
         
         LocalDateTime scanStartTime = LocalDateTime.now();
         
-        try {
+
             // Update scan status to SCANNING
             updateScanStatus(submissionId, ScanStatus.SCANNING, null);
             
@@ -131,11 +132,6 @@ public class SecurityScanService {
                 submissionId, vulnerabilities.size(), riskLevel);
             
             return result;
-            
-        } catch (Exception e) {
-            log.error("Security scan failed for submission: " + submissionId, e);
-            return handleScanFailure(submissionId, e.getMessage(), scanStartTime);
-        }
     }
     
     /**
@@ -147,7 +143,7 @@ public class SecurityScanService {
     private byte[] downloadPluginFile(String fileUrl) {
         log.debug("Downloading plugin file from: {}", fileUrl);
         
-        try {
+
             AtomicReference<byte[]> bytesRef = new AtomicReference<>();
             
             fileStorageService.download(fileUrl)
@@ -162,10 +158,7 @@ public class SecurityScanService {
             
             return bytesRef.get();
             
-        } catch (Exception e) {
-            log.error("Error downloading plugin file", e);
-            return null;
-        }
+
     }
     
     /**
@@ -294,7 +287,7 @@ public class SecurityScanService {
      * @param result Scan result
      */
     private void saveScanResult(Long submissionId, ScanResult result) {
-        try {
+
             dataSource.dynamicSql("""
                 INSERT INTO appstore_security_scan 
                 (submission_id, scan_status, risk_level, vulnerabilities_count, 
@@ -315,9 +308,7 @@ public class SecurityScanService {
             
             log.debug("Scan result saved to database for submission: {}", submissionId);
             
-        } catch (Exception e) {
-            log.error("Failed to save scan result to database", e);
-        }
+
     }
     
     /**
@@ -379,7 +370,7 @@ public class SecurityScanService {
      * @return Scan result or null if not found
      */
     public ScanResult getScanResult(Long submissionId) {
-        try {
+
             List<Map<String, Object>> results = dataSource.dynamicSql("""
                 SELECT scan_result FROM appstore_security_scan 
                 WHERE submission_id = #{submissionId} 
@@ -396,9 +387,7 @@ public class SecurityScanService {
                 }
             }
             
-        } catch (Exception e) {
-            log.error("Failed to get scan result for submission: " + submissionId, e);
-        }
+
         
         return null;
     }

@@ -34,13 +34,10 @@ public class ReviewRuleController {
      */
     @GetMapping
     public Result<List<ReviewRuleDTO>> getAllRules() {
-        try {
+
             List<ReviewRuleDTO> rules = reviewRuleService.getAllRules();
             return Result.success(rules);
-        } catch (Exception e) {
-            log.error("Error getting review rules", e);
-            return Result.error("Failed to get review rules: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -49,13 +46,10 @@ public class ReviewRuleController {
      */
     @GetMapping("/{id}")
     public Result<ReviewRuleDTO> getRuleById(@PathVariable Long id) {
-        try {
+
             ReviewRuleDTO rule = reviewRuleService.getRuleById(id);
             return Result.success(rule);
-        } catch (Exception e) {
-            log.error("Error getting review rule: {}", id, e);
-            return Result.error("Failed to get review rule: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -64,16 +58,13 @@ public class ReviewRuleController {
      */
     @PostMapping
     public Result<Long> createRule(@RequestBody CreateReviewRuleRequest request) {
-        try {
+
             // TODO: Get current user from security context
             String createdBy = "admin";
             
             Long ruleId = reviewRuleService.createRule(request, createdBy);
             return Result.success(ruleId);
-        } catch (Exception e) {
-            log.error("Error creating review rule", e);
-            return Result.error("Failed to create review rule: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -83,13 +74,10 @@ public class ReviewRuleController {
     @PutMapping("/{id}")
     public Result<Void> updateRule(@PathVariable Long id, 
                                     @RequestBody UpdateReviewRuleRequest request) {
-        try {
+
             reviewRuleService.updateRule(id, request);
             return Result.success(null);
-        } catch (Exception e) {
-            log.error("Error updating review rule: {}", id, e);
-            return Result.error("Failed to update review rule: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -98,13 +86,10 @@ public class ReviewRuleController {
      */
     @DeleteMapping("/{id}")
     public Result<Void> deleteRule(@PathVariable Long id) {
-        try {
+
             reviewRuleService.deleteRule(id);
             return Result.success(null);
-        } catch (Exception e) {
-            log.error("Error deleting review rule: {}", id, e);
-            return Result.error("Failed to delete review rule: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -113,13 +98,10 @@ public class ReviewRuleController {
      */
     @PostMapping("/{id}/enable")
     public Result<Void> enableRule(@PathVariable Long id) {
-        try {
+
             reviewRuleService.enableRule(id);
             return Result.success(null);
-        } catch (Exception e) {
-            log.error("Error enabling review rule: {}", id, e);
-            return Result.error("Failed to enable review rule: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -128,13 +110,10 @@ public class ReviewRuleController {
      */
     @PostMapping("/{id}/disable")
     public Result<Void> disableRule(@PathVariable Long id) {
-        try {
+
             reviewRuleService.disableRule(id);
             return Result.success(null);
-        } catch (Exception e) {
-            log.error("Error disabling review rule: {}", id, e);
-            return Result.error("Failed to disable review rule: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -143,12 +122,9 @@ public class ReviewRuleController {
      */
     @GetMapping("/enabled")
     public Result<List<ReviewRuleDTO>> getEnabledRules() {
-        try {
+
             List<ReviewRuleDTO> rules = reviewRuleService.getEnabledRules();
             return Result.success(rules);
-        } catch (Exception e) {
-            log.error("Error getting enabled review rules", e);
-            return Result.error("Failed to get enabled review rules: " + e.getMessage());
-        }
+
     }
 }

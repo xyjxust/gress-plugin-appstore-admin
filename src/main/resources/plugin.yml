@@ -1,0 +1,6 @@
+appstoreAdmin:
+  security:
+    # 是否启用客户端侧应用包验签（由客户端在安装前拉取）
+    # 建议：启用时必须保证 appstore_signing_key 表已有有效 trusted roots。
+    verifySignature: false
+

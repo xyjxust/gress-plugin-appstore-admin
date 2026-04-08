@@ -19,6 +19,7 @@ import ReviewRules from './views/ReviewRules.vue'
 import FeedbackManagement from './views/FeedbackManagement.vue'
 import PermissionRequestReview from './views/PermissionRequestReview.vue'
 import PluginTablePermissionManagement from './views/PluginTablePermissionManagement.vue'
+import SigningKeyManagement from './views/SigningKeyManagement.vue'
 
 export interface AppStoreAdminConfig {
   enabled?: boolean
@@ -106,7 +107,8 @@ export default (bridge: any, properties?: AppStoreAdminConfig): any => {
       ReviewRules,
       FeedbackManagement,
       PermissionRequestReview,
-      PluginTablePermissionManagement
+      PluginTablePermissionManagement,
+      SigningKeyManagement
     },
 
     extensions: {

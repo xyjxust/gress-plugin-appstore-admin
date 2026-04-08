@@ -31,14 +31,10 @@ public class CategoryController {
      */
     @GetMapping
     public Result<List<CategoryDTO>> getAllCategories() {
-        try {
+
             List<CategoryDTO> categories = categoryService.getAllCategories();
             return Result.success(categories);
-            
-        } catch (Exception e) {
-            log.error("Failed to get categories", e);
-            return Result.error("获取分类列表失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -47,14 +43,11 @@ public class CategoryController {
      */
     @GetMapping("/{id}")
     public Result<CategoryDTO> getCategoryById(@PathVariable Long id) {
-        try {
+
             CategoryDTO category = categoryService.getCategoryById(id);
             return Result.success(category);
             
-        } catch (Exception e) {
-            log.error("Failed to get category: id={}", id, e);
-            return Result.error("获取分类失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -63,14 +56,11 @@ public class CategoryController {
      */
     @PostMapping
     public Result<CategoryDTO> createCategory(@RequestBody CreateCategoryRequest request) {
-        try {
+
             CategoryDTO category = categoryService.createCategory(request);
             return Result.success(category);
             
-        } catch (Exception e) {
-            log.error("Failed to create category", e);
-            return Result.error("创建分类失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -81,14 +71,11 @@ public class CategoryController {
     public Result<CategoryDTO> updateCategory(
             @PathVariable Long id,
             @RequestBody UpdateCategoryRequest request) {
-        try {
+
             CategoryDTO category = categoryService.updateCategory(id, request);
             return Result.success(category);
             
-        } catch (Exception e) {
-            log.error("Failed to update category: id={}", id, e);
-            return Result.error("更新分类失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -97,13 +84,10 @@ public class CategoryController {
      */
     @DeleteMapping("/{id}")
     public Result<Void> deleteCategory(@PathVariable Long id) {
-        try {
+
             categoryService.deleteCategory(id);
             return Result.success();
             
-        } catch (Exception e) {
-            log.error("Failed to delete category: id={}", id, e);
-            return Result.error("删除分类失败: " + e.getMessage());
-        }
+
     }
 }

@@ -491,3 +491,27 @@ export interface FeedbackProcessRequest {
   handleComment: string
   status: FeedbackStatus
 }
+
+/**
+ * Signing key management
+ */
+export interface SigningKeyDTO {
+  keyId: string
+  alias: string
+  fingerprintSha256: string
+  active: boolean
+  trustedUntil?: string | null
+  revokedAt?: string | null
+  createTime: string
+}
+
+export interface GenerateSigningKeyRequest {
+  alias?: string
+  validityDays?: number
+  makeActive?: boolean
+  trustedWindowDays?: number
+}
+
+export interface ActivateSigningKeyRequest {
+  trustedWindowDays?: number
+}

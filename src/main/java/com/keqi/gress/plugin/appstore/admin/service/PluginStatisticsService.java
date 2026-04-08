@@ -226,7 +226,7 @@ public class PluginStatisticsService {
     public Result<String> exportStatistics(ExportRequest request) {
         log.info("Exporting statistics: {}", JSON.toJSONString(request));
         
-        try {
+
             // Build dynamic SQL query
             StringBuilder sqlBuilder = new StringBuilder();
             sqlBuilder.append("""
@@ -281,10 +281,7 @@ public class PluginStatisticsService {
             log.info("Export completed, data size: {} bytes", exportData.length());
             return Result.success(exportData);
             
-        } catch (Exception e) {
-            log.error("Failed to export statistics", e);
-            return Result.error("Export failed: " + e.getMessage());
-        }
+
     }
     
     /**

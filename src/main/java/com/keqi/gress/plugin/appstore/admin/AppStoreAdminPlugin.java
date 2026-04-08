@@ -8,6 +8,7 @@ import com.keqi.gress.common.plugin.annotion.PluginSpec;
 import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.MappingInterface;
 
+import com.keqi.gress.plugin.appstore.admin.config.AppStoreAdminConfig;
 import com.keqi.gress.plugin.appstore.admin.controller.*;
 import org.pf4j.Extension;
 import org.pf4j.Plugin;
@@ -42,7 +43,8 @@ import org.pf4j.Plugin;
         author = "Gress Team",
         tags = {"admin", "management", "plugin-store"},
         icon = "icons/appstore-admin.svg",
-        jsPath = "js/appstore-admin-frontend.js"
+        jsPath = "js/appstore-admin-frontend.js",
+        inputClass = AppStoreAdminConfig.class
 )
 @Service
 public class AppStoreAdminPlugin extends Plugin implements ApplicationPlugin {

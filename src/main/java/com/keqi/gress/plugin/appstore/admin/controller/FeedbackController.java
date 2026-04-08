@@ -51,10 +51,7 @@ public class FeedbackController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String userId) {
         
-        log.info("GET /feedbacks - page: {}, size: {}, pluginId: {}, type: {}, status: {}, severity: {}, keyword: {}, userId: {}", 
-                 page, size, pluginId, feedbackType, status, severity, keyword, userId);
-        
-        try {
+
             // Build query request
             FeedbackQueryRequest request = FeedbackQueryRequest.builder()
                     .page(page)
@@ -95,11 +92,7 @@ public class FeedbackController {
             PageResult<FeedbackDTO> result = feedbackService.getFeedbacks(request);
             
             return Result.success(result);
-            
-        } catch (Exception e) {
-            log.error("Failed to get feedbacks", e);
-            return Result.error("Failed to query feedbacks: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -110,9 +103,7 @@ public class FeedbackController {
      */
     @GetMapping("/{id}")
     public Result<FeedbackDetailDTO> getFeedbackDetail(@PathVariable Long id) {
-        log.info("GET /feedbacks/{}", id);
-        
-        try {
+
             FeedbackDetailDTO detail = feedbackService.getFeedbackDetail(id);
             
             if (detail == null) {
@@ -120,11 +111,7 @@ public class FeedbackController {
             }
             
             return Result.success(detail);
-            
-        } catch (Exception e) {
-            log.error("Failed to get feedback detail: {}", id, e);
-            return Result.error("Failed to get feedback detail: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -136,25 +123,11 @@ public class FeedbackController {
      */
     @PostMapping("/{id}/process")
     public Result<Void> processFeedback(@PathVariable Long id, @RequestBody ProcessFeedbackRequest request) {
-        log.info("POST /feedbacks/{}/process - handler: {}", 
-                 id, request.getHandlerName());
-        
-        try {
+
             feedbackService.processFeedback(id, request);
             return Result.success();
             
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid process request: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (IllegalStateException e) {
-            log.warn("Invalid state for processing: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (Exception e) {
-            log.error("Failed to process feedback: {}", id, e);
-            return Result.error("Failed to process feedback: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -166,24 +139,9 @@ public class FeedbackController {
      */
     @PostMapping("/{id}/close")
     public Result<Void> closeFeedback(@PathVariable Long id, @RequestBody CloseFeedbackRequest request) {
-        log.info("POST /feedbacks/{}/close - handler: {}", 
-                 id, request.getHandlerName());
-        
-        try {
+
             feedbackService.closeFeedback(id, request);
             return Result.success();
-            
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid close request: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (IllegalStateException e) {
-            log.warn("Invalid state for closing: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (Exception e) {
-            log.error("Failed to close feedback: {}", id, e);
-            return Result.error("Failed to close feedback: " + e.getMessage());
-        }
+
     }
 }

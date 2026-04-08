@@ -1,15 +1,15 @@
 var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
   "use strict";
   var __vite_style__ = document.createElement("style");
-  __vite_style__.textContent = '@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.9);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n:root {\n  --primary: #6366f1;\n  --primary-light: #818cf8;\n  --primary-lighter: #a5b4fc;\n  --primary-lightest: #e0e7ff;\n  --primary-dark: #4f46e5;\n  --primary-darker: #4338ca;\n  --secondary: #8b5cf6;\n  --secondary-light: #a78bfa;\n  --secondary-lighter: #c4b5fd;\n  --secondary-lightest: #ede9fe;\n  --secondary-dark: #7c3aed;\n  --success: #10b981;\n  --success-light: #34d399;\n  --success-lighter: #6ee7b7;\n  --success-lightest: #d1fae5;\n  --success-dark: #059669;\n  --warning: #f59e0b;\n  --warning-light: #fbbf24;\n  --warning-lighter: #fcd34d;\n  --warning-lightest: #fef3c7;\n  --warning-dark: #d97706;\n  --error: #ef4444;\n  --error-light: #f87171;\n  --error-lighter: #fca5a5;\n  --error-lightest: #fee2e2;\n  --error-dark: #dc2626;\n  --info: #3b82f6;\n  --info-light: #60a5fa;\n  --info-lighter: #93c5fd;\n  --info-lightest: #dbeafe;\n  --info-dark: #2563eb;\n  --gray-50: #fafafa;\n  --gray-100: #f5f5f5;\n  --gray-200: #e5e5e5;\n  --gray-300: #d4d4d4;\n  --gray-400: #a3a3a3;\n  --gray-500: #737373;\n  --gray-600: #525252;\n  --gray-700: #404040;\n  --gray-800: #262626;\n  --gray-900: #171717;\n  --text-primary: #1f2329;\n  --text-secondary: #4e5969;\n  --text-tertiary: #86909c;\n  --text-quaternary: #c9cdd4;\n  --text-disabled: #e5e6eb;\n  --text-white: #ffffff;\n  --bg-primary: #ffffff;\n  --bg-secondary: #f7f8fa;\n  --bg-tertiary: #f2f3f5;\n  --bg-quaternary: #e5e6eb;\n  --bg-overlay: rgba(0, 0, 0, 0.6);\n  --bg-mask: rgba(0, 0, 0, 0.4);\n  --border-primary: #e5e6eb;\n  --border-secondary: #f0f2f5;\n  --border-tertiary: #dcdfe6;\n  --border-focus: #6366f1;\n  --spacing-xs: 4px;\n  --spacing-sm: 8px;\n  --spacing-md: 12px;\n  --spacing-lg: 16px;\n  --spacing-xl: 20px;\n  --spacing-2xl: 24px;\n  --spacing-3xl: 32px;\n  --spacing-4xl: 40px;\n  --spacing-5xl: 48px;\n  --spacing-6xl: 64px;\n  --radius-xs: 4px;\n  --radius-sm: 6px;\n  --radius-md: 8px;\n  --radius-lg: 12px;\n  --radius-xl: 16px;\n  --radius-2xl: 20px;\n  --radius-3xl: 24px;\n  --radius-full: 9999px;\n  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);\n  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);\n  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);\n  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);\n  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.12);\n  --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.14);\n  --shadow-3xl: 0 24px 48px rgba(0, 0, 0, 0.16);\n  --shadow-primary: 0 4px 12px rgba(99, 102, 241, 0.25);\n  --shadow-primary-lg: 0 8px 20px rgba(99, 102, 241, 0.3);\n  --shadow-success: 0 4px 12px rgba(16, 185, 129, 0.25);\n  --shadow-warning: 0 4px 12px rgba(245, 158, 11, 0.25);\n  --shadow-error: 0 4px 12px rgba(239, 68, 68, 0.25);\n  --font-family-base: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;\n  --font-family-mono: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;\n  --font-size-xs: 11px;\n  --font-size-sm: 12px;\n  --font-size-base: 13px;\n  --font-size-md: 14px;\n  --font-size-lg: 16px;\n  --font-size-xl: 18px;\n  --font-size-2xl: 20px;\n  --font-size-3xl: 24px;\n  --font-size-4xl: 28px;\n  --font-size-5xl: 32px;\n  --font-weight-light: 300;\n  --font-weight-normal: 400;\n  --font-weight-medium: 500;\n  --font-weight-semibold: 600;\n  --font-weight-bold: 700;\n  --line-height-tight: 1.2;\n  --line-height-normal: 1.5;\n  --line-height-relaxed: 1.6;\n  --line-height-loose: 1.8;\n  --transition-fast: 0.15s ease;\n  --transition-base: 0.2s ease;\n  --transition-slow: 0.3s ease;\n  --transition-slower: 0.4s ease;\n  --z-index-dropdown: 1000;\n  --z-index-sticky: 1020;\n  --z-index-fixed: 1030;\n  --z-index-modal-backdrop: 1040;\n  --z-index-modal: 1050;\n  --z-index-popover: 1060;\n  --z-index-tooltip: 1070;\n  --z-index-notification: 1080;\n  --button-height-sm: 28px;\n  --button-height-md: 32px;\n  --button-height-lg: 40px;\n  --input-height-sm: 28px;\n  --input-height-md: 32px;\n  --input-height-lg: 40px;\n  --card-padding-sm: 12px;\n  --card-padding-md: 16px;\n  --card-padding-lg: 24px;\n  --card-padding-xl: 32px;\n  --node-width: 260px;\n  --node-height: 140px;\n  --node-gap: 32px;\n  --node-border-width: 2px;\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.9);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.9);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n.m-0 {\n  margin: 0 !important;\n}\n.m-xs {\n  margin: 4px !important;\n}\n.m-sm {\n  margin: 8px !important;\n}\n.m-md {\n  margin: 12px !important;\n}\n.m-lg {\n  margin: 16px !important;\n}\n.m-xl {\n  margin: 20px !important;\n}\n.m-2xl {\n  margin: 24px !important;\n}\n.m-3xl {\n  margin: 32px !important;\n}\n.mt-0 {\n  margin-top: 0 !important;\n}\n.mt-xs {\n  margin-top: 4px !important;\n}\n.mt-sm {\n  margin-top: 8px !important;\n}\n.mt-md {\n  margin-top: 12px !important;\n}\n.mt-lg {\n  margin-top: 16px !important;\n}\n.mt-xl {\n  margin-top: 20px !important;\n}\n.mt-2xl {\n  margin-top: 24px !important;\n}\n.mt-3xl {\n  margin-top: 32px !important;\n}\n.mb-0 {\n  margin-bottom: 0 !important;\n}\n.mb-xs {\n  margin-bottom: 4px !important;\n}\n.mb-sm {\n  margin-bottom: 8px !important;\n}\n.mb-md {\n  margin-bottom: 12px !important;\n}\n.mb-lg {\n  margin-bottom: 16px !important;\n}\n.mb-xl {\n  margin-bottom: 20px !important;\n}\n.mb-2xl {\n  margin-bottom: 24px !important;\n}\n.mb-3xl {\n  margin-bottom: 32px !important;\n}\n.ml-0 {\n  margin-left: 0 !important;\n}\n.ml-xs {\n  margin-left: 4px !important;\n}\n.ml-sm {\n  margin-left: 8px !important;\n}\n.ml-md {\n  margin-left: 12px !important;\n}\n.ml-lg {\n  margin-left: 16px !important;\n}\n.ml-xl {\n  margin-left: 20px !important;\n}\n.ml-2xl {\n  margin-left: 24px !important;\n}\n.ml-3xl {\n  margin-left: 32px !important;\n}\n.mr-0 {\n  margin-right: 0 !important;\n}\n.mr-xs {\n  margin-right: 4px !important;\n}\n.mr-sm {\n  margin-right: 8px !important;\n}\n.mr-md {\n  margin-right: 12px !important;\n}\n.mr-lg {\n  margin-right: 16px !important;\n}\n.mr-xl {\n  margin-right: 20px !important;\n}\n.mr-2xl {\n  margin-right: 24px !important;\n}\n.mr-3xl {\n  margin-right: 32px !important;\n}\n.p-0 {\n  padding: 0 !important;\n}\n.p-xs {\n  padding: 4px !important;\n}\n.p-sm {\n  padding: 8px !important;\n}\n.p-md {\n  padding: 12px !important;\n}\n.p-lg {\n  padding: 16px !important;\n}\n.p-xl {\n  padding: 20px !important;\n}\n.p-2xl {\n  padding: 24px !important;\n}\n.p-3xl {\n  padding: 32px !important;\n}\n.pt-0 {\n  padding-top: 0 !important;\n}\n.pt-xs {\n  padding-top: 4px !important;\n}\n.pt-sm {\n  padding-top: 8px !important;\n}\n.pt-md {\n  padding-top: 12px !important;\n}\n.pt-lg {\n  padding-top: 16px !important;\n}\n.pt-xl {\n  padding-top: 20px !important;\n}\n.pt-2xl {\n  padding-top: 24px !important;\n}\n.pt-3xl {\n  padding-top: 32px !important;\n}\n.pb-0 {\n  padding-bottom: 0 !important;\n}\n.pb-xs {\n  padding-bottom: 4px !important;\n}\n.pb-sm {\n  padding-bottom: 8px !important;\n}\n.pb-md {\n  padding-bottom: 12px !important;\n}\n.pb-lg {\n  padding-bottom: 16px !important;\n}\n.pb-xl {\n  padding-bottom: 20px !important;\n}\n.pb-2xl {\n  padding-bottom: 24px !important;\n}\n.pb-3xl {\n  padding-bottom: 32px !important;\n}\n.text-left {\n  text-align: left !important;\n}\n.text-center {\n  text-align: center !important;\n}\n.text-right {\n  text-align: right !important;\n}\n.text-justify {\n  text-align: justify !important;\n}\n.text-primary {\n  color: #1f2329 !important;\n}\n.text-secondary {\n  color: #4e5969 !important;\n}\n.text-tertiary {\n  color: #86909c !important;\n}\n.text-white {\n  color: #ffffff !important;\n}\n.text-success {\n  color: #10b981 !important;\n}\n.text-warning {\n  color: #f59e0b !important;\n}\n.text-error {\n  color: #ef4444 !important;\n}\n.text-info {\n  color: #3b82f6 !important;\n}\n.text-xs {\n  font-size: 11px !important;\n}\n.text-sm {\n  font-size: 12px !important;\n}\n.text-base {\n  font-size: 13px !important;\n}\n.text-md {\n  font-size: 14px !important;\n}\n.text-lg {\n  font-size: 16px !important;\n}\n.text-xl {\n  font-size: 18px !important;\n}\n.text-2xl {\n  font-size: 20px !important;\n}\n.text-3xl {\n  font-size: 24px !important;\n}\n.font-light {\n  font-weight: 300 !important;\n}\n.font-normal {\n  font-weight: 400 !important;\n}\n.font-medium {\n  font-weight: 500 !important;\n}\n.font-semibold {\n  font-weight: 600 !important;\n}\n.font-bold {\n  font-weight: 700 !important;\n}\n.text-ellipsis {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.text-no-select {\n  user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n.d-none {\n  display: none !important;\n}\n.d-block {\n  display: block !important;\n}\n.d-inline {\n  display: inline !important;\n}\n.d-inline-block {\n  display: inline-block !important;\n}\n.d-flex {\n  display: flex !important;\n}\n.d-inline-flex {\n  display: inline-flex !important;\n}\n.d-grid {\n  display: grid !important;\n}\n.flex-row {\n  flex-direction: row !important;\n}\n.flex-column {\n  flex-direction: column !important;\n}\n.flex-wrap {\n  flex-wrap: wrap !important;\n}\n.flex-nowrap {\n  flex-wrap: nowrap !important;\n}\n.flex-1 {\n  flex: 1 !important;\n}\n.flex-auto {\n  flex: auto !important;\n}\n.flex-none {\n  flex: none !important;\n}\n.align-start {\n  align-items: flex-start !important;\n}\n.align-center {\n  align-items: center !important;\n}\n.align-end {\n  align-items: flex-end !important;\n}\n.align-stretch {\n  align-items: stretch !important;\n}\n.justify-start {\n  justify-content: flex-start !important;\n}\n.justify-center {\n  justify-content: center !important;\n}\n.justify-end {\n  justify-content: flex-end !important;\n}\n.justify-between {\n  justify-content: space-between !important;\n}\n.justify-around {\n  justify-content: space-around !important;\n}\n.gap-xs {\n  gap: 4px !important;\n}\n.gap-sm {\n  gap: 8px !important;\n}\n.gap-md {\n  gap: 12px !important;\n}\n.gap-lg {\n  gap: 16px !important;\n}\n.gap-xl {\n  gap: 20px !important;\n}\n.gap-2xl {\n  gap: 24px !important;\n}\n.position-relative {\n  position: relative !important;\n}\n.position-absolute {\n  position: absolute !important;\n}\n.position-fixed {\n  position: fixed !important;\n}\n.position-sticky {\n  position: sticky !important;\n}\n.w-full {\n  width: 100% !important;\n}\n.w-auto {\n  width: auto !important;\n}\n.w-screen {\n  width: 100vw !important;\n}\n.h-full {\n  height: 100% !important;\n}\n.h-auto {\n  height: auto !important;\n}\n.h-screen {\n  height: 100vh !important;\n}\n.min-w-0 {\n  min-width: 0 !important;\n}\n.max-w-full {\n  max-width: 100% !important;\n}\n.min-h-0 {\n  min-height: 0 !important;\n}\n.max-h-full {\n  max-height: 100% !important;\n}\n.bg-primary {\n  background-color: #ffffff !important;\n}\n.bg-secondary {\n  background-color: #f7f8fa !important;\n}\n.bg-tertiary {\n  background-color: #f2f3f5 !important;\n}\n.bg-transparent {\n  background-color: transparent !important;\n}\n.bg-gradient-primary {\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n}\n.bg-gradient-success {\n  background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);\n}\n.bg-gradient-warning {\n  background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);\n}\n.bg-gradient-error {\n  background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%);\n}\n.border {\n  border: 1px solid #e5e6eb !important;\n}\n.border-0 {\n  border: none !important;\n}\n.border-t {\n  border-top: 1px solid #e5e6eb !important;\n}\n.border-b {\n  border-bottom: 1px solid #e5e6eb !important;\n}\n.border-l {\n  border-left: 1px solid #e5e6eb !important;\n}\n.border-r {\n  border-right: 1px solid #e5e6eb !important;\n}\n.rounded-none {\n  border-radius: 0 !important;\n}\n.rounded-xs {\n  border-radius: 4px !important;\n}\n.rounded-sm {\n  border-radius: 6px !important;\n}\n.rounded-md {\n  border-radius: 8px !important;\n}\n.rounded-lg {\n  border-radius: 12px !important;\n}\n.rounded-xl {\n  border-radius: 16px !important;\n}\n.rounded-2xl {\n  border-radius: 20px !important;\n}\n.rounded-full {\n  border-radius: 9999px !important;\n}\n.shadow-none {\n  box-shadow: none !important;\n}\n.shadow-xs {\n  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;\n}\n.shadow-sm {\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06) !important;\n}\n.shadow-md {\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;\n}\n.shadow-lg {\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;\n}\n.shadow-xl {\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;\n}\n.shadow-2xl {\n  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.14) !important;\n}\n.shadow-primary {\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25) !important;\n}\n.overflow-hidden {\n  overflow: hidden !important;\n}\n.overflow-auto {\n  overflow: auto !important;\n}\n.overflow-scroll {\n  overflow: scroll !important;\n}\n.overflow-x-auto {\n  overflow-x: auto !important;\n}\n.overflow-y-auto {\n  overflow-y: auto !important;\n}\n.cursor-pointer {\n  cursor: pointer !important;\n}\n.cursor-default {\n  cursor: default !important;\n}\n.cursor-not-allowed {\n  cursor: not-allowed !important;\n}\n.opacity-0 {\n  opacity: 0 !important;\n}\n.opacity-25 {\n  opacity: 0.25 !important;\n}\n.opacity-50 {\n  opacity: 0.5 !important;\n}\n.opacity-75 {\n  opacity: 0.75 !important;\n}\n.opacity-100 {\n  opacity: 1 !important;\n}\n.z-0 {\n  z-index: 0 !important;\n}\n.z-10 {\n  z-index: 10 !important;\n}\n.z-20 {\n  z-index: 20 !important;\n}\n.z-30 {\n  z-index: 30 !important;\n}\n.z-40 {\n  z-index: 40 !important;\n}\n.z-50 {\n  z-index: 50 !important;\n}\n.pointer-events-none {\n  pointer-events: none !important;\n}\n.pointer-events-auto {\n  pointer-events: auto !important;\n}\n.transition-fast {\n  transition: all 0.15s ease !important;\n}\n.transition-base {\n  transition: all 0.2s ease !important;\n}\n.transition-slow {\n  transition: all 0.3s ease !important;\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.9);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n.gress-button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 8px;\n  border: none;\n  border-radius: 8px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  white-space: nowrap;\n  user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n.gress-button:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.gress-button {\n  height: 32px;\n  padding: 0 16px;\n  font-size: 13px;\n}\n.gress-button--primary {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 8px;\n  border: none;\n  border-radius: 8px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  white-space: nowrap;\n  user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n.gress-button--primary:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.gress-button--primary {\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);\n}\n.gress-button--primary:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n  transform: translateY(-1px);\n}\n.gress-button--primary:active:not(:disabled) {\n  transform: translateY(0);\n}\n.gress-button--secondary {\n  background: #f7f8fa;\n  color: #1f2329;\n  border: 1px solid #e5e6eb;\n}\n.gress-button--secondary:hover:not(:disabled) {\n  background: #f2f3f5;\n  border-color: #dcdfe6;\n}\n.gress-button--success {\n  background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);\n}\n.gress-button--success:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);\n  transform: translateY(-1px);\n}\n.gress-button--warning {\n  background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);\n}\n.gress-button--warning:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);\n  transform: translateY(-1px);\n}\n.gress-button--error {\n  background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);\n}\n.gress-button--error:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);\n  transform: translateY(-1px);\n}\n.gress-button--text {\n  background: transparent;\n  color: #6366f1;\n}\n.gress-button--text:hover:not(:disabled) {\n  background: rgba(99, 102, 241, 0.08);\n}\n.gress-button--sm {\n  height: 28px;\n  padding: 0 12px;\n  font-size: 12px;\n}\n.gress-button--lg {\n  height: 40px;\n  padding: 0 20px;\n  font-size: 14px;\n}\n.gress-button--block {\n  width: 100%;\n}\n.gress-button--icon {\n  width: 32px;\n  padding: 0;\n}\n.gress-button--icon.gress-button--sm {\n  width: 28px;\n}\n.gress-button--icon.gress-button--lg {\n  width: 40px;\n}\n.gress-card {\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);\n  padding: 16px;\n  border: 1px solid #f0f2f5;\n}\n.gress-card--hover {\n  transition: all 0.2s ease;\n}\n.gress-card--hover:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);\n}\n.gress-card--sm {\n  padding: 12px;\n}\n.gress-card--lg {\n  padding: 24px;\n}\n.gress-card--xl {\n  padding: 32px;\n}\n.gress-card--gradient {\n  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);\n  border: 1px solid rgba(99, 102, 241, 0.1);\n}\n.gress-card__header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 16px;\n  padding-bottom: 16px;\n  border-bottom: 1px solid #f0f2f5;\n}\n.gress-card__title {\n  font-size: 16px;\n  font-weight: 600;\n  color: #1f2329;\n}\n.gress-card__subtitle {\n  font-size: 12px;\n  color: #86909c;\n  margin-top: 4px;\n}\n.gress-card__body {\n  flex: 1;\n}\n.gress-card__footer {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f2f5;\n}\n.gress-input {\n  width: 100%;\n  border: 1px solid #e5e6eb;\n  border-radius: 8px;\n  background: #ffffff;\n  color: #1f2329;\n  font-size: 13px;\n  transition: all 0.2s ease;\n}\n.gress-input:hover {\n  border-color: #dcdfe6;\n}\n.gress-input:focus {\n  outline: none;\n  border-color: #6366f1;\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}\n.gress-input:disabled {\n  background: #f2f3f5;\n  color: #e5e6eb;\n  cursor: not-allowed;\n}\n.gress-input::placeholder {\n  color: #86909c;\n}\n.gress-input {\n  height: 32px;\n  padding: 0 12px;\n}\n.gress-input--sm {\n  height: 28px;\n  padding: 0 8px;\n  font-size: 12px;\n}\n.gress-input--lg {\n  height: 40px;\n  padding: 0 16px;\n  font-size: 14px;\n}\n.gress-input--error {\n  border-color: #ef4444;\n}\n.gress-input--error:focus {\n  border-color: #ef4444;\n  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);\n}\n.gress-input--success {\n  border-color: #10b981;\n}\n.gress-input--success:focus {\n  border-color: #10b981;\n  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);\n}\n.gress-badge {\n  display: inline-flex;\n  align-items: center;\n  padding: 2px 8px;\n  border-radius: 6px;\n  background: #6366f1;\n  color: #ffffff;\n  font-size: 11px;\n  font-weight: 500;\n  line-height: 1.2;\n}\n.gress-badge--primary {\n  background: rgba(99, 102, 241, 0.1);\n  color: #6366f1;\n}\n.gress-badge--success {\n  background: rgba(16, 185, 129, 0.1);\n  color: #10b981;\n}\n.gress-badge--warning {\n  background: rgba(245, 158, 11, 0.1);\n  color: #f59e0b;\n}\n.gress-badge--error {\n  background: rgba(239, 68, 68, 0.1);\n  color: #ef4444;\n}\n.gress-badge--info {\n  background: rgba(59, 130, 246, 0.1);\n  color: #3b82f6;\n}\n.gress-badge--gradient {\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n  color: #ffffff;\n}\n.gress-tabs__nav {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  border-bottom: 2px solid #f0f2f5;\n  margin-bottom: 24px;\n}\n.gress-tabs__item {\n  background: none;\n  border: none;\n  padding: 0;\n  margin: 0;\n  font: inherit;\n  color: inherit;\n  cursor: pointer;\n  outline: none;\n  padding: 12px 16px;\n  font-size: 13px;\n  font-weight: 500;\n  color: #4e5969;\n  border-bottom: 2px solid transparent;\n  margin-bottom: -2px;\n  transition: all 0.2s ease;\n}\n.gress-tabs__item:hover {\n  color: #6366f1;\n}\n.gress-tabs__item--active {\n  color: #6366f1;\n  border-bottom-color: #6366f1;\n}\n.gress-modal__overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  background: rgba(0, 0, 0, 0.6);\n  z-index: 1040;\n  animation: fadeIn 0.2s ease;\n}\n.gress-modal__container {\n  background: #ffffff;\n  border-radius: 20px;\n  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);\n  padding: 32px;\n  border: 1px solid #f0f2f5;\n  max-width: 90vw;\n  max-height: 90vh;\n  overflow: auto;\n  animation: scaleIn 0.2s ease;\n}\n.gress-modal__header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 24px;\n}\n.gress-modal__title {\n  font-size: 20px;\n  font-weight: 600;\n  color: #1f2329;\n}\n.gress-modal__close {\n  background: none;\n  border: none;\n  padding: 0;\n  margin: 0;\n  font: inherit;\n  color: inherit;\n  cursor: pointer;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 32px;\n  height: 32px;\n  border-radius: 9999px;\n  color: #86909c;\n  transition: all 0.2s ease;\n}\n.gress-modal__close:hover {\n  background: #f7f8fa;\n  color: #1f2329;\n}\n.gress-modal__body {\n  margin-bottom: 24px;\n}\n.gress-modal__footer {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n}\n.gress-dropdown {\n  position: relative;\n}\n.gress-dropdown__menu {\n  background: #ffffff;\n  border-radius: 12px;\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);\n  padding: 8px;\n  border: 1px solid #f0f2f5;\n  position: absolute;\n  top: 100%;\n  left: 0;\n  margin-top: 8px;\n  min-width: 160px;\n  z-index: 1000;\n  animation: slideInUp 0.2s ease;\n}\n.gress-dropdown__item {\n  background: none;\n  border: none;\n  padding: 0;\n  margin: 0;\n  font: inherit;\n  color: inherit;\n  cursor: pointer;\n  outline: none;\n  display: flex;\n  align-items: center;\n  width: 100%;\n  padding: 12px;\n  gap: 12px;\n  font-size: 13px;\n  color: #1f2329;\n  border-radius: 8px;\n  transition: all 0.2s ease;\n  text-align: left;\n}\n.gress-dropdown__item:hover {\n  background: #f7f8fa;\n}\n.gress-dropdown__item--active {\n  background: rgba(99, 102, 241, 0.1);\n  color: #6366f1;\n}\n.gress-dropdown__item--danger {\n  color: #ef4444;\n}\n.gress-dropdown__item--danger:hover {\n  background: rgba(239, 68, 68, 0.1);\n}\n.gress-dropdown__divider {\n  height: 1px;\n  background: #f0f2f5;\n  margin: 8px 0;\n}\n.gress-notification {\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);\n  padding: 16px;\n  border: 1px solid #f0f2f5;\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  min-width: 320px;\n  max-width: 480px;\n  animation: slideInUp 0.2s ease;\n}\n.gress-notification__icon {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 40px;\n  height: 40px;\n  border-radius: 9999px;\n  flex-shrink: 0;\n}\n.gress-notification__content {\n  flex: 1;\n}\n.gress-notification__title {\n  font-size: 14px;\n  font-weight: 600;\n  color: #1f2329;\n  margin-bottom: 4px;\n}\n.gress-notification__message {\n  font-size: 12px;\n  color: #4e5969;\n  line-height: 1.6;\n}\n.gress-notification__close {\n  background: none;\n  border: none;\n  padding: 0;\n  margin: 0;\n  font: inherit;\n  color: inherit;\n  cursor: pointer;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 24px;\n  height: 24px;\n  border-radius: 9999px;\n  color: #86909c;\n  flex-shrink: 0;\n  transition: all 0.2s ease;\n}\n.gress-notification__close:hover {\n  background: #f7f8fa;\n  color: #1f2329;\n}\n.gress-notification--success .gress-notification__icon {\n  background: rgba(16, 185, 129, 0.1);\n  color: #10b981;\n}\n.gress-notification--warning .gress-notification__icon {\n  background: rgba(245, 158, 11, 0.1);\n  color: #f59e0b;\n}\n.gress-notification--error .gress-notification__icon {\n  background: rgba(239, 68, 68, 0.1);\n  color: #ef4444;\n}\n.gress-notification--info .gress-notification__icon {\n  background: rgba(59, 130, 246, 0.1);\n  color: #3b82f6;\n}\n.gress-loading {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.gress-loading__spinner {\n  width: 40px;\n  height: 40px;\n  border: 3px solid #f0f2f5;\n  border-top-color: #6366f1;\n  border-radius: 9999px;\n  animation: spin 0.8s linear infinite;\n}\n.gress-loading--sm .gress-loading__spinner {\n  width: 24px;\n  height: 24px;\n  border-width: 2px;\n}\n.gress-loading--lg .gress-loading__spinner {\n  width: 56px;\n  height: 56px;\n  border-width: 4px;\n}\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n.gress-empty {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n  gap: 16px;\n  padding: 48px 24px;\n  text-align: center;\n}\n.gress-empty__icon {\n  font-size: 64px;\n  color: #c9cdd4;\n}\n.gress-empty__title {\n  font-size: 16px;\n  font-weight: 600;\n  color: #4e5969;\n}\n.gress-empty__description {\n  font-size: 13px;\n  color: #86909c;\n  max-width: 400px;\n}\n.gress-divider {\n  height: 1px;\n  background: #f0f2f5;\n  margin: 24px 0;\n}\n.gress-divider--vertical {\n  width: 1px;\n  height: auto;\n  margin: 0 16px;\n}\n.gress-divider--dashed {\n  border-top: 1px dashed #e5e6eb;\n  background: none;\n}\n* {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n}\nhtml {\n  font-size: 16px;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-rendering: optimizeLegibility;\n}\nbody {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n  font-size: 13px;\n  line-height: 1.5;\n  color: #1f2329;\n  background: #f7f8fa;\n  min-height: 100vh;\n}\n::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n::-webkit-scrollbar-track {\n  background: transparent;\n}\n::-webkit-scrollbar-thumb {\n  background: #d4d4d4;\n  border-radius: 9999px;\n}\n::-webkit-scrollbar-thumb:hover {\n  background: #a3a3a3;\n}\n::selection {\n  background: rgba(99, 102, 241, 0.2);\n  color: #1f2329;\n}\na {\n  color: #6366f1;\n  text-decoration: none;\n  transition: color 0.2s ease;\n}\na:hover {\n  color: #4f46e5;\n}\ncode {\n  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;\n  font-size: 0.9em;\n  padding: 2px 6px;\n  background: rgba(99, 102, 241, 0.08);\n  border-radius: 6px;\n  color: #6366f1;\n}\npre {\n  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;\n  padding: 16px;\n  background: #f2f3f5;\n  border-radius: 12px;\n  overflow-x: auto;\n}\npre code {\n  padding: 0;\n  background: none;\n}\n.workflow-editor {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  background: #f7f8fa;\n  overflow: hidden;\n}\n.workflow-canvas {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  background-color: #f7f8fa;\n  background-image: linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);\n  background-size: 24px 24px;\n}\n.workflow-node {\n  position: absolute;\n  min-width: 260px;\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);\n  cursor: move;\n  transition: all 0.2s ease;\n  border: 2px solid transparent;\n}\n.workflow-node:hover {\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);\n  transform: translateY(-2px);\n}\n.workflow-node.selected {\n  border-color: #6366f1;\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n}\n.workflow-node.error {\n  border-color: #ef4444;\n}\n.workflow-node.success {\n  border-color: #10b981;\n}\n.workflow-connection {\n  position: absolute;\n  pointer-events: none;\n  z-index: 1;\n}\n.workflow-connection.selected {\n  stroke: #6366f1 !important;\n  stroke-width: 3px !important;\n}\n.chat-container {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #ffffff;\n}\n.chat-messages {\n  flex: 1;\n  overflow-y: auto;\n  padding: 24px;\n}\n.chat-messages::-webkit-scrollbar {\n  width: 6px;\n  height: 6px;\n}\n.chat-messages::-webkit-scrollbar-track {\n  background: transparent;\n  border-radius: 9999px;\n}\n.chat-messages::-webkit-scrollbar-thumb {\n  background: #d4d4d4;\n  border-radius: 9999px;\n}\n.chat-messages::-webkit-scrollbar-thumb:hover {\n  background: rgb(186.5, 186.5, 186.5);\n}\n.chat-messages .chat-message {\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);\n  padding: 16px;\n  border: 1px solid #f0f2f5;\n  margin-bottom: 16px;\n  max-width: 80%;\n}\n.chat-messages .chat-message--user {\n  margin-left: auto;\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n  color: #ffffff;\n}\n.chat-messages .chat-message--assistant {\n  margin-right: auto;\n  background: #ffffff;\n}\n.chat-messages .chat-message--system {\n  margin: 0 auto;\n  background: #f2f3f5;\n  color: #4e5969;\n  text-align: center;\n  max-width: 60%;\n}\n.chat-input {\n  border-top: 1px solid #f0f2f5;\n  padding: 24px;\n  background: #ffffff;\n}\n.chat-input__wrapper {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n}\n.chat-input__field {\n  width: 100%;\n  border: 1px solid #e5e6eb;\n  border-radius: 8px;\n  background: #ffffff;\n  color: #1f2329;\n  font-size: 13px;\n  transition: all 0.2s ease;\n}\n.chat-input__field:hover {\n  border-color: #dcdfe6;\n}\n.chat-input__field:focus {\n  outline: none;\n  border-color: #6366f1;\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}\n.chat-input__field:disabled {\n  background: #f2f3f5;\n  color: #e5e6eb;\n  cursor: not-allowed;\n}\n.chat-input__field::placeholder {\n  color: #86909c;\n}\n.chat-input__field {\n  flex: 1;\n  height: 40px;\n  padding: 0 16px;\n}\n.chat-input__button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 8px;\n  border: none;\n  border-radius: 8px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  white-space: nowrap;\n  user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n.chat-input__button:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.chat-input__button {\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);\n}\n.chat-input__button:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n  transform: translateY(-1px);\n}\n.chat-input__button:active:not(:disabled) {\n  transform: translateY(0);\n}\n.chat-input__button {\n  height: 40px;\n  padding: 0 20px;\n}\n.workflow-list {\n  padding: 32px;\n}\n.workflow-list__header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 32px;\n}\n.workflow-list__title {\n  font-size: 24px;\n  font-weight: 700;\n  color: #1f2329;\n}\n.workflow-list__grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  gap: 24px;\n}\n.workflow-list__item {\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);\n  padding: 24px;\n  border: 1px solid #f0f2f5;\n  transition: all 0.2s ease;\n}\n.workflow-list__item:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);\n}\n.workflow-list__item {\n  cursor: pointer;\n}\n.workflow-list__item:hover {\n  border-color: #6366f1;\n}\n.workflow-list__item-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 12px;\n}\n.workflow-list__item-title {\n  font-size: 16px;\n  font-weight: 600;\n  color: #1f2329;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.workflow-list__item-desc {\n  font-size: 12px;\n  color: #86909c;\n  line-height: 1.6;\n  margin-bottom: 16px;\n  display: -webkit-box;\n  -webkit-line-clamp: 2;\n  -webkit-box-orient: vertical;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.workflow-list__item-footer {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding-top: 12px;\n  border-top: 1px solid #f0f2f5;\n}\n.workflow-list__item-meta {\n  font-size: 11px;\n  color: #86909c;\n}\n@media (max-width: 767px) {\n  .workflow-list {\n    padding: 24px;\n  }\n  .workflow-list__grid {\n    grid-template-columns: 1fr;\n  }\n  .chat-messages .chat-message {\n    max-width: 90%;\n  }\n}\n@media (max-width: 639px) {\n  .workflow-list {\n    padding: 16px;\n  }\n  .chat-input {\n    padding: 16px;\n  }\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.95);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@media print {\n  body {\n    background: white;\n  }\n  .workflow-canvas {\n    background: white;\n  }\n  .workflow-node {\n    box-shadow: none;\n    border: 1px solid #e5e6eb;\n  }\n}@keyframes fadeIn-65bd80d8 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-65bd80d8 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-65bd80d8 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-65bd80d8 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.page-container[data-v-65bd80d8] {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  background: var(--bg-secondary, #f7f8fa);\n}@keyframes fadeIn-7bbf9d25 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-7bbf9d25 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-7bbf9d25 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-7bbf9d25 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.page-content[data-v-7bbf9d25] {\n  flex: 1;\n  overflow-y: auto;\n  padding: var(--spacing-2xl, 24px);\n  display: flex;\n  flex-direction: column;\n  gap: var(--spacing-lg, 16px);\n}\n.page-content[data-v-7bbf9d25]::-webkit-scrollbar {\n  width: 6px;\n  height: 6px;\n}\n.page-content[data-v-7bbf9d25]::-webkit-scrollbar-track {\n  background: transparent;\n  border-radius: var(--radius-full, 9999px);\n}\n.page-content[data-v-7bbf9d25]::-webkit-scrollbar-thumb {\n  background: var(--gray-300, #d4d4d4);\n  border-radius: var(--radius-full, 9999px);\n}\n.page-content[data-v-7bbf9d25]::-webkit-scrollbar-thumb:hover {\n  background: var(--gray-400, #a3a3a3);\n}\n@media (max-width: 768px) {\n.page-content[data-v-7bbf9d25] {\n    padding: var(--spacing-lg, 16px);\n}\n}@keyframes fadeIn-4d82a654 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-4d82a654 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-4d82a654 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-4d82a654 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.page-header[data-v-4d82a654] {\n  background: var(--bg-primary, #ffffff);\n  border-bottom: 1px solid var(--border-secondary, #f0f2f5);\n  padding: 0 var(--spacing-3xl, 32px);\n  height: 64px;\n  flex-shrink: 0;\n  display: flex;\n  align-items: center;\n}\n.page-header__content[data-v-4d82a654] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  width: 100%;\n}\n.page-header__prefix[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n  flex: 1;\n}\n.page-header__left[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n}\n.page-header__breadcrumb[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n  flex-wrap: wrap;\n}\n.page-header .breadcrumb-item[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-xs, 4px);\n  color: var(--text-tertiary, #86909c);\n  font-size: var(--font-size-base, 13px);\n  font-weight: var(--font-weight-medium, 500);\n  transition: color 0.2s ease;\n}\n.page-header .breadcrumb-item[data-v-4d82a654]:hover {\n  color: var(--text-secondary, #4e5969);\n}\n.page-header .breadcrumb-item--current[data-v-4d82a654] {\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-lg, 16px);\n  font-weight: var(--font-weight-semibold, 600);\n}\n.page-header .breadcrumb-separator[data-v-4d82a654] {\n  color: var(--text-quaternary, #c9cdd4);\n  font-size: var(--font-size-base, 13px);\n  user-select: none;\n}\n.page-header__actions[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n}\n@media (max-width: 768px) {\n.page-header[data-v-4d82a654] {\n    padding: var(--spacing-md, 12px);\n}\n.page-header__content[data-v-4d82a654] {\n    flex-direction: column;\n    align-items: flex-start;\n    gap: var(--spacing-md, 12px);\n}\n.page-header__prefix[data-v-4d82a654] {\n    width: 100%;\n}\n.page-header__actions[data-v-4d82a654] {\n    width: 100%;\n    justify-content: flex-end;\n}\n}\n@media (max-width: 640px) {\n.page-header[data-v-4d82a654] {\n    padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);\n}\n.page-header .breadcrumb-item[data-v-4d82a654] {\n    font-size: var(--font-size-sm, 12px);\n}\n.page-header .breadcrumb-item--current[data-v-4d82a654] {\n    font-size: var(--font-size-base, 13px);\n}\n.page-header .breadcrumb-separator[data-v-4d82a654] {\n    font-size: var(--font-size-sm, 12px);\n}\n}@keyframes fadeIn-f199a048 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-f199a048 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-f199a048 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-f199a048 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.card-list[data-v-f199a048] {\n  display: grid;\n  gap: var(--spacing-lg, 16px);\n}\n.card-list--medium[data-v-f199a048] {\n  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));\n}\n.card-list--small[data-v-f199a048] {\n  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));\n}\n.card-list--large[data-v-f199a048] {\n  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));\n}\n@media (max-width: 768px) {\n.card-list[data-v-f199a048] {\n    grid-template-columns: 1fr;\n}\n}@keyframes fadeIn-bf918fa3 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-bf918fa3 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-bf918fa3 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-bf918fa3 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.page-pagination[data-v-bf918fa3] {\n  display: flex;\n  justify-content: flex-end;\n  padding: var(--spacing-lg, 16px) 0;\n  margin-top: var(--spacing-lg, 16px);\n}\n.pagination-controls[data-v-bf918fa3] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n}\n.pagination-btn[data-v-bf918fa3] {\n  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);\n  background: var(--bg-primary, #ffffff);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.pagination-btn[data-v-bf918fa3]:hover:not(:disabled) {\n  background: var(--bg-secondary, #f7f8fa);\n  border-color: var(--primary, #6366f1);\n  color: var(--primary, #6366f1);\n}\n.pagination-btn[data-v-bf918fa3]:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.pagination-info[data-v-bf918fa3] {\n  color: var(--text-secondary, #4e5969);\n  font-size: var(--font-size-sm, 12px);\n  white-space: nowrap;\n}\n.pagination-select[data-v-bf918fa3] {\n  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);\n  background: var(--bg-primary, #ffffff);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.pagination-select[data-v-bf918fa3]:hover {\n  border-color: var(--primary, #6366f1);\n}\n.pagination-select[data-v-bf918fa3]:focus {\n  outline: none;\n  border-color: var(--primary, #6366f1);\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}@keyframes fadeIn-c4c4657a {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-c4c4657a {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-c4c4657a {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-c4c4657a {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.log-viewer[data-v-c4c4657a] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: var(--bg-secondary, #f8f9fa);\n  border-radius: var(--radius-md, 8px);\n  overflow: hidden;\n  border: 1px solid var(--border-secondary, #e8e8e8);\n}\n.log-viewer.log-viewer--dark[data-v-c4c4657a] {\n  background: #1e1e1e;\n  border-color: #3e3e3e;\n}\n.log-viewer.log-viewer--dark .log-toolbar[data-v-c4c4657a] {\n  background: #2d2d2d;\n  border-bottom-color: #3e3e3e;\n}\n.log-viewer.log-viewer--dark .log-content[data-v-c4c4657a] {\n  background: #1e1e1e;\n}\n.log-viewer.log-viewer--dark .log-line[data-v-c4c4657a]:hover {\n  background: rgba(255, 255, 255, 0.05);\n}\n.log-viewer.log-viewer--dark .log-timestamp[data-v-c4c4657a] {\n  color: #8c8c8c;\n}\n.log-viewer.log-viewer--dark .log-thread[data-v-c4c4657a] {\n  color: #69c0ff;\n}\n.log-viewer.log-viewer--dark .log-class[data-v-c4c4657a] {\n  color: #b37feb;\n}\n.log-viewer.log-viewer--dark .log-message[data-v-c4c4657a] {\n  color: #d4d4d4;\n}\n.log-viewer.log-viewer--dark .log-empty[data-v-c4c4657a] {\n  color: #8c8c8c;\n}\n.log-viewer.log-viewer--dark .toolbar-btn[data-v-c4c4657a] {\n  background: #3e3e3e;\n  color: #d4d4d4;\n  border-color: #4e4e4e;\n}\n.log-viewer.log-viewer--dark .toolbar-btn[data-v-c4c4657a]:hover {\n  background: #4e4e4e;\n}\n.log-viewer.log-viewer--dark .toolbar-select[data-v-c4c4657a] {\n  background: #3e3e3e;\n  color: #d4d4d4;\n  border-color: #4e4e4e;\n}\n.log-toolbar[data-v-c4c4657a] {\n  padding: 12px;\n  background: var(--bg-primary, #ffffff);\n  border-bottom: 1px solid var(--border-secondary, #e8e8e8);\n  flex-shrink: 0;\n}\n.toolbar-group[data-v-c4c4657a] {\n  display: flex;\n  gap: 8px;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.toolbar-btn[data-v-c4c4657a] {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n  padding: 6px 12px;\n  background: var(--bg-primary, #ffffff);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.toolbar-btn[data-v-c4c4657a]:hover {\n  background: var(--bg-secondary, #f7f8fa);\n  border-color: var(--primary, #6366f1);\n}\n.toolbar-btn .btn-icon[data-v-c4c4657a] {\n  font-size: 14px;\n}\n.toolbar-select[data-v-c4c4657a] {\n  padding: 6px 12px;\n  background: var(--bg-primary, #ffffff);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.toolbar-select[data-v-c4c4657a]:hover {\n  border-color: var(--primary, #6366f1);\n}\n.toolbar-select[data-v-c4c4657a]:focus {\n  outline: none;\n  border-color: var(--primary, #6366f1);\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}\n.log-content[data-v-c4c4657a] {\n  flex: 1;\n  padding: 12px;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.log-content[data-v-c4c4657a]::-webkit-scrollbar {\n  width: 6px;\n}\n.log-content[data-v-c4c4657a]::-webkit-scrollbar-thumb {\n  background: var(--gray-300, #d4d4d4);\n  border-radius: var(--radius-full, 9999px);\n}\n.log-content[data-v-c4c4657a]::-webkit-scrollbar-thumb:hover {\n  background: var(--gray-400, #a3a3a3);\n}\n.log-loading[data-v-c4c4657a] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  height: 200px;\n  gap: 12px;\n  color: var(--text-tertiary, #86909c);\n}\n.loading-spinner[data-v-c4c4657a] {\n  width: 32px;\n  height: 32px;\n  border: 3px solid var(--border-secondary, #f0f2f5);\n  border-top-color: var(--primary, #6366f1);\n  border-radius: var(--radius-full, 9999px);\n  animation: spin-c4c4657a 0.8s linear infinite;\n}\n@keyframes spin-c4c4657a {\nto {\n    transform: rotate(360deg);\n}\n}\n.log-list[data-v-c4c4657a] {\n  display: flex;\n  flex-direction: column;\n  gap: 0;\n}\n.log-line[data-v-c4c4657a] {\n  padding: 4px 8px;\n  font-family: "Consolas", "Monaco", "Courier New", monospace;\n  font-size: 12px;\n  line-height: 1.6;\n  white-space: pre-wrap;\n  word-break: break-word;\n  border-left: 2px solid transparent;\n  transition: all 0.15s ease;\n}\n.log-line[data-v-c4c4657a]:hover {\n  background: rgba(0, 0, 0, 0.03);\n  border-left-color: var(--primary, #6366f1);\n}\n.log-line.log-level-trace .log-level[data-v-c4c4657a] {\n  color: #8c8c8c;\n}\n.log-line.log-level-debug .log-level[data-v-c4c4657a] {\n  color: #1890ff;\n}\n.log-line.log-level-info .log-level[data-v-c4c4657a] {\n  color: #52c41a;\n}\n.log-line.log-level-warn[data-v-c4c4657a] {\n  background: rgba(250, 173, 20, 0.05);\n}\n.log-line.log-level-warn .log-level[data-v-c4c4657a] {\n  color: #faad14;\n}\n.log-line.log-level-error[data-v-c4c4657a], .log-line.log-level-fatal[data-v-c4c4657a] {\n  background: rgba(245, 34, 45, 0.05);\n}\n.log-line.log-level-error .log-level[data-v-c4c4657a], .log-line.log-level-fatal .log-level[data-v-c4c4657a] {\n  color: #f5222d;\n  font-weight: 600;\n}\n.log-timestamp[data-v-c4c4657a] {\n  color: #8c8c8c;\n  margin-right: 8px;\n  font-weight: 500;\n}\n.log-thread[data-v-c4c4657a] {\n  color: #1890ff;\n  margin-right: 8px;\n  font-style: italic;\n}\n.log-level[data-v-c4c4657a] {\n  display: inline-block;\n  min-width: 50px;\n  margin-right: 8px;\n  font-weight: 600;\n  text-align: left;\n}\n.log-class[data-v-c4c4657a] {\n  color: #722ed1;\n  margin-right: 8px;\n}\n.log-separator[data-v-c4c4657a] {\n  color: #8c8c8c;\n  margin-right: 8px;\n}\n.log-message[data-v-c4c4657a] {\n  color: var(--text-primary, #262626);\n  flex: 1;\n}\n.log-error-detail[data-v-c4c4657a] {\n  display: block;\n  margin-top: 4px;\n  padding-left: 24px;\n  color: #f5222d;\n}\n.log-error-label[data-v-c4c4657a] {\n  font-weight: 600;\n  margin-right: 8px;\n}\n.log-error-message[data-v-c4c4657a] {\n  font-style: italic;\n}\n.log-empty[data-v-c4c4657a] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  height: 200px;\n  gap: 12px;\n  color: var(--text-tertiary, #86909c);\n}\n.empty-icon[data-v-c4c4657a] {\n  font-size: 48px;\n  opacity: 0.5;\n}\n.empty-text[data-v-c4c4657a] {\n  font-size: var(--font-size-base, 13px);\n}@keyframes fadeIn-8db9aa68 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-8db9aa68 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-8db9aa68 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-8db9aa68 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.filter-card[data-v-8db9aa68] {\n  background: var(--bg-primary, #ffffff);\n  border-radius: var(--radius-lg, 12px);\n  padding: var(--spacing-lg, 16px);\n  display: flex;\n  flex-direction: column;\n  gap: var(--spacing-md, 12px);\n}\n.filter-inline[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--spacing-lg, 16px);\n  flex-wrap: wrap;\n}\n.filter-inline__fields[data-v-8db9aa68] {\n  display: flex;\n  gap: var(--spacing-lg, 16px);\n  flex: 1;\n  min-width: 240px;\n  flex-wrap: wrap;\n}\n.filter-inline__field[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-sm, 8px);\n  min-width: 220px;\n}\n.field-label[data-v-8db9aa68] {\n  color: var(--text-secondary, #4e5969);\n  font-size: var(--font-size-sm, 12px);\n  white-space: nowrap;\n}\n.filter-input[data-v-8db9aa68] {\n  flex: 1;\n  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  background: var(--bg-primary, #ffffff);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-base, 13px);\n  transition: all 0.2s ease;\n}\n.filter-input[data-v-8db9aa68]:hover {\n  border-color: var(--border-tertiary, #dcdfe6);\n}\n.filter-input[data-v-8db9aa68]:focus {\n  outline: none;\n  border-color: var(--primary, #6366f1);\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}\n.filter-input[data-v-8db9aa68]::placeholder {\n  color: var(--text-tertiary, #86909c);\n}\n.filter-inline__actions[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-sm, 8px);\n}\n.filter-inline__actions.align-left[data-v-8db9aa68] {\n  justify-content: flex-start;\n}\n.filter-inline__actions.align-right[data-v-8db9aa68] {\n  justify-content: flex-end;\n}\n.filter-btn[data-v-8db9aa68] {\n  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);\n  border: none;\n  border-radius: var(--radius-md, 8px);\n  font-size: var(--font-size-sm, 12px);\n  font-weight: var(--font-weight-medium, 500);\n  cursor: pointer;\n  transition: all 0.2s ease;\n  white-space: nowrap;\n}\n.filter-btn--primary[data-v-8db9aa68] {\n  background: linear-gradient(135deg, var(--primary, #6366f1) 0%, var(--secondary, #8b5cf6) 100%);\n  color: var(--text-white, #ffffff);\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);\n}\n.filter-btn--primary[data-v-8db9aa68]:hover {\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n  transform: translateY(-1px);\n}\n.filter-btn--secondary[data-v-8db9aa68] {\n  background: var(--bg-secondary, #f7f8fa);\n  color: var(--text-primary, #1f2329);\n  border: 1px solid var(--border-primary, #e5e6eb);\n}\n.filter-btn--secondary[data-v-8db9aa68]:hover {\n  background: var(--bg-tertiary, #f2f3f5);\n  border-color: var(--border-tertiary, #dcdfe6);\n}\n.inline-toggle[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-xs, 4px);\n  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);\n  background: none;\n  border: 1px solid rgba(99, 102, 241, 0.3);\n  border-radius: var(--radius-full, 9999px);\n  color: var(--primary, #6366f1);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.inline-toggle[data-v-8db9aa68]:hover {\n  background: rgba(99, 102, 241, 0.08);\n}\n.inline-toggle .toggle-icon[data-v-8db9aa68] {\n  font-size: 10px;\n}\n.filter-grid[data-v-8db9aa68] {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: var(--spacing-md, 12px);\n  padding-top: var(--spacing-sm, 8px);\n  border-top: 1px dashed var(--border-secondary, #f0f2f5);\n  overflow: hidden;\n}\n.filter-grid__field[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-sm, 8px);\n}\n.filter-grid__hint[data-v-8db9aa68] {\n  grid-column: 1/-1;\n  font-size: var(--font-size-xs, 11px);\n  color: var(--text-tertiary, #86909c);\n}@keyframes fadeIn-c1a551dc {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-c1a551dc {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-c1a551dc {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-c1a551dc {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.fade-scale-enter-active[data-v-c1a551dc],\n.fade-scale-leave-active[data-v-c1a551dc] {\n  transition: opacity 0.25s ease, transform 0.25s ease;\n}\n.fade-scale-enter-from[data-v-c1a551dc],\n.fade-scale-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: scale(0.95);\n}\n.slide-left-enter-active[data-v-c1a551dc],\n.slide-left-leave-active[data-v-c1a551dc],\n.slide-right-enter-active[data-v-c1a551dc],\n.slide-right-leave-active[data-v-c1a551dc],\n.slide-top-enter-active[data-v-c1a551dc],\n.slide-top-leave-active[data-v-c1a551dc],\n.slide-bottom-enter-active[data-v-c1a551dc],\n.slide-bottom-leave-active[data-v-c1a551dc] {\n  transition: opacity 0.25s ease, transform 0.25s ease;\n}\n.slide-left-enter-from[data-v-c1a551dc],\n.slide-left-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: translateX(-20px);\n}\n.slide-right-enter-from[data-v-c1a551dc],\n.slide-right-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: translateX(20px);\n}\n.slide-top-enter-from[data-v-c1a551dc],\n.slide-top-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: translateY(-20px);\n}\n.slide-bottom-enter-from[data-v-c1a551dc],\n.slide-bottom-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: translateY(20px);\n}\n.universal-modal-wrapper[data-v-c1a551dc] {\n  position: fixed;\n  inset: 0;\n  display: flex;\n  z-index: 1000;\n}\n.universal-modal-wrapper.with-mask[data-v-c1a551dc] {\n  background: rgba(0, 0, 0, 0.45);\n}\n.universal-modal-wrapper.no-mask[data-v-c1a551dc] {\n  background: transparent;\n  pointer-events: none;\n}\n.universal-modal-wrapper.position-center[data-v-c1a551dc] {\n  align-items: center;\n  justify-content: center;\n  padding: 24px;\n}\n.universal-modal-wrapper.position-left[data-v-c1a551dc] {\n  justify-content: flex-start;\n}\n.universal-modal-wrapper.position-right[data-v-c1a551dc] {\n  justify-content: flex-end;\n}\n.universal-modal-wrapper.position-top[data-v-c1a551dc] {\n  align-items: flex-start;\n}\n.universal-modal-wrapper.position-bottom[data-v-c1a551dc] {\n  align-items: flex-end;\n}\n.universal-modal-wrapper.fullscreen[data-v-c1a551dc] {\n  padding: 0;\n}\n.universal-modal[data-v-c1a551dc] {\n  position: relative;\n  background: var(--bg-primary, #ffffff);\n  border-radius: var(--radius-xl, 16px);\n  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.14);\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  pointer-events: auto;\n  height: 100%;\n}\n.universal-modal.modal-center[data-v-c1a551dc] {\n  margin: auto;\n  height: auto;\n}\n.universal-modal.modal-left[data-v-c1a551dc], .universal-modal.modal-right[data-v-c1a551dc] {\n  position: absolute;\n}\n.universal-modal.modal-top[data-v-c1a551dc], .universal-modal.modal-bottom[data-v-c1a551dc] {\n  position: absolute;\n  max-width: calc(100vw - 48px);\n  height: auto;\n}\n.universal-modal.modal-fullscreen[data-v-c1a551dc] {\n  width: 100vw !important;\n  height: 100vh !important;\n  max-width: 100vw !important;\n  max-height: 100vh !important;\n  border-radius: 0;\n  top: 0 !important;\n  left: 0 !important;\n  right: 0 !important;\n  bottom: 0 !important;\n}\n.resize-handle[data-v-c1a551dc] {\n  position: absolute;\n  z-index: 10;\n}\n.resize-handle-top[data-v-c1a551dc], .resize-handle-bottom[data-v-c1a551dc] {\n  left: 0;\n  right: 0;\n  height: 4px;\n  cursor: ns-resize;\n}\n.resize-handle-top[data-v-c1a551dc]:hover, .resize-handle-bottom[data-v-c1a551dc]:hover {\n  background: rgba(99, 102, 241, 0.3);\n}\n.resize-handle-top[data-v-c1a551dc] {\n  top: 0;\n}\n.resize-handle-bottom[data-v-c1a551dc] {\n  bottom: 0;\n}\n.resize-handle-left[data-v-c1a551dc], .resize-handle-right[data-v-c1a551dc] {\n  top: 0;\n  bottom: 0;\n  width: 4px;\n  cursor: ew-resize;\n}\n.resize-handle-left[data-v-c1a551dc]:hover, .resize-handle-right[data-v-c1a551dc]:hover {\n  background: rgba(99, 102, 241, 0.3);\n}\n.resize-handle-left[data-v-c1a551dc] {\n  left: 0;\n}\n.resize-handle-right[data-v-c1a551dc] {\n  right: 0;\n}\n.modal-header[data-v-c1a551dc] {\n  padding: 16px 20px 12px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-start;\n  gap: 12px;\n  border-bottom: 1px solid var(--border-secondary, #f2f3f5);\n  background: linear-gradient(180deg, rgba(248, 249, 255, 0.8), #fff);\n  flex-shrink: 0;\n}\n.header-content[data-v-c1a551dc] {\n  display: flex;\n  gap: 12px;\n  align-items: flex-start;\n  flex: 1;\n  min-width: 0;\n}\n.header-icon[data-v-c1a551dc] {\n  width: 32px;\n  height: 32px;\n  border-radius: 10px;\n  background: radial-gradient(circle at 30% 20%, #e6e8ff, #cdcfff);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.header-icon .header-icon-img[data-v-c1a551dc] {\n  width: 24px;\n  height: 24px;\n  object-fit: contain;\n}\n.header-info[data-v-c1a551dc] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n  min-width: 0;\n}\n.header-subtitle[data-v-c1a551dc] {\n  font-size: var(--font-size-sm, 12px);\n  color: var(--text-tertiary, #86909c);\n  line-height: 1.3;\n}\n.header-title[data-v-c1a551dc] {\n  font-size: var(--font-size-lg, 16px);\n  font-weight: var(--font-weight-semibold, 600);\n  color: var(--text-primary, #1f2329);\n  line-height: 1.3;\n  word-break: break-word;\n}\n.header-actions[data-v-c1a551dc] {\n  display: flex;\n  gap: 8px;\n  align-items: center;\n  flex-shrink: 0;\n}\n.header-btn[data-v-c1a551dc] {\n  width: 28px;\n  height: 28px;\n  border: none;\n  background: transparent;\n  border-radius: var(--radius-full, 9999px);\n  color: var(--text-tertiary, #86909c);\n  cursor: pointer;\n  transition: all 0.2s ease;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 16px;\n}\n.header-btn[data-v-c1a551dc]:hover {\n  background: var(--bg-secondary, #f7f8fa);\n  color: var(--text-primary, #1f2329);\n}\n.modal-body[data-v-c1a551dc] {\n  flex: 1;\n  padding: 20px 24px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  min-height: 0;\n  max-height: 100%;\n}\n.modal-body[data-v-c1a551dc]::-webkit-scrollbar {\n  width: 6px;\n}\n.modal-body[data-v-c1a551dc]::-webkit-scrollbar-thumb {\n  background: var(--gray-300, #d4d4d4);\n  border-radius: var(--radius-full, 9999px);\n}\n.modal-body[data-v-c1a551dc]::-webkit-scrollbar-thumb:hover {\n  background: var(--gray-400, #a3a3a3);\n}\n.modal-footer[data-v-c1a551dc] {\n  padding: 16px 24px;\n  border-top: 1px solid var(--border-secondary, #f2f3f5);\n  background: var(--bg-secondary, #f7f8fa);\n  flex-shrink: 0;\n}\n.footer-actions[data-v-c1a551dc] {\n  display: flex;\n  justify-content: flex-end;\n  gap: 12px;\n}\n.footer-btn[data-v-c1a551dc] {\n  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);\n  border: none;\n  border-radius: var(--radius-md, 8px);\n  font-size: var(--font-size-sm, 12px);\n  font-weight: var(--font-weight-medium, 500);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.footer-btn--cancel[data-v-c1a551dc] {\n  background: var(--bg-secondary, #f7f8fa);\n  color: var(--text-primary, #1f2329);\n  border: 1px solid var(--border-primary, #e5e6eb);\n}\n.footer-btn--cancel[data-v-c1a551dc]:hover {\n  background: var(--bg-tertiary, #f2f3f5);\n}\n.footer-btn--confirm[data-v-c1a551dc] {\n  background: linear-gradient(135deg, var(--primary, #6366f1) 0%, var(--secondary, #8b5cf6) 100%);\n  color: var(--text-white, #ffffff);\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);\n}\n.footer-btn--confirm[data-v-c1a551dc]:hover {\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n  transform: translateY(-1px);\n}\n@media (max-width: 768px) {\n.universal-modal-wrapper.position-center[data-v-c1a551dc] {\n    padding: 16px;\n}\n.universal-modal.modal-left[data-v-c1a551dc], .universal-modal.modal-right[data-v-c1a551dc] {\n    max-height: calc(100vh - 32px);\n}\n.universal-modal.modal-top[data-v-c1a551dc], .universal-modal.modal-bottom[data-v-c1a551dc] {\n    max-width: calc(100vw - 32px);\n}\n.modal-header[data-v-c1a551dc] {\n    padding: 14px 16px 10px;\n}\n.modal-body[data-v-c1a551dc] {\n    padding: 16px 20px;\n}\n.modal-footer[data-v-c1a551dc] {\n    padding: 12px 20px;\n}\n}\n.loading-container[data-v-d3a7a28f] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 200px;\n  padding: var(--spacing-4xl, 40px);\n}\n.loading-spinner[data-v-d3a7a28f] {\n  width: 40px;\n  height: 40px;\n  border: 3px solid var(--border-secondary, #f0f2f5);\n  border-top-color: var(--primary, #6366f1);\n  border-radius: var(--radius-full, 9999px);\n  animation: spin-d3a7a28f 0.8s linear infinite;\n}\n@keyframes spin-d3a7a28f {\nto {\n    transform: rotate(360deg);\n}\n}\n.loading-message[data-v-d3a7a28f] {\n  margin-top: var(--spacing-lg, 16px);\n  font-size: var(--font-size-sm, 12px);\n  color: var(--text-secondary, #4e5969);\n}\n\n.empty-state[data-v-a29f92b8] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  padding: var(--spacing-5xl, 48px) var(--spacing-2xl, 24px);\n  text-align: center;\n}\n.empty-icon[data-v-a29f92b8] {\n  font-size: 48px;\n  color: var(--text-quaternary, #c9cdd4);\n  margin-bottom: var(--spacing-lg, 16px);\n}\n.empty-title[data-v-a29f92b8] {\n  font-size: var(--font-size-lg, 16px);\n  font-weight: var(--font-weight-medium, 500);\n  color: var(--text-secondary, #4e5969);\n  margin-bottom: var(--spacing-sm, 8px);\n}\n.empty-description[data-v-a29f92b8] {\n  font-size: var(--font-size-sm, 12px);\n  color: var(--text-tertiary, #86909c);\n  max-width: 400px;\n  margin: 0;\n}\n.empty-action[data-v-a29f92b8] {\n  margin-top: var(--spacing-lg, 16px);\n}\n\n.error-container[data-v-c6d5c909] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  padding: var(--spacing-4xl, 40px) var(--spacing-2xl, 24px);\n  text-align: center;\n}\n.error-icon[data-v-c6d5c909] {\n  font-size: 48px;\n  color: var(--error, #ef4444);\n  margin-bottom: var(--spacing-lg, 16px);\n}\n.error-title[data-v-c6d5c909] {\n  font-size: var(--font-size-lg, 16px);\n  font-weight: var(--font-weight-semibold, 600);\n  color: var(--error, #ef4444);\n  margin-bottom: var(--spacing-sm, 8px);\n}\n.error-message[data-v-c6d5c909] {\n  font-size: var(--font-size-sm, 12px);\n  color: var(--text-secondary, #4e5969);\n  max-width: 500px;\n  margin: 0 0 var(--spacing-lg, 16px);\n}\n.error-action[data-v-c6d5c909] {\n  margin-top: var(--spacing-lg, 16px);\n}\n.error-retry-btn[data-v-c6d5c909] {\n  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);\n  font-size: var(--font-size-sm, 12px);\n  color: white;\n  background-color: var(--primary, #6366f1);\n  border: none;\n  border-radius: var(--radius-md, 8px);\n  cursor: pointer;\n  transition: opacity var(--transition-fast, 0.15s) ease;\n}\n.error-retry-btn[data-v-c6d5c909]:hover {\n  opacity: 0.8;\n}\n.error-retry-btn[data-v-c6d5c909]:active {\n  opacity: 0.6;\n}\n\n.plugin-admin-layout[data-v-fb377eb7] {\n  width: 100%;\n  height: 100%;\n}\n\n.plugin-submission-detail[data-v-a7d31ce5] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-card[data-v-a7d31ce5] {\n  margin-bottom: 0;\n}\n.description-content[data-v-a7d31ce5] {\n  color: #666;\n  line-height: 1.6;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n.icon-preview {\n&[data-v-a7d31ce5] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 20px;\n  }\nimg[data-v-a7d31ce5] {\n    max-width: 200px;\n    max-height: 200px;\n    object-fit: contain;\n}\n}\n.empty-text[data-v-a7d31ce5] {\n  color: #999;\n  font-size: 14px;\n}\n.action-buttons[data-v-a7d31ce5] {\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.plugin-submissions-page[data-v-50381363] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-50381363] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-50381363] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-50381363] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-50381363] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.plugin-detail[data-v-3e715355] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-card[data-v-3e715355] {\n  margin-bottom: 0;\n}\n.description-content[data-v-3e715355] {\n  color: #666;\n  line-height: 1.6;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n.version-list[data-v-3e715355] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.version-item[data-v-3e715355] {\n  padding: 12px;\n  background: #fafafa;\n  border-radius: 4px;\n  border: 1px solid #f0f0f0;\n}\n.version-header[data-v-3e715355] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 8px;\n}\n.version-info[data-v-3e715355] {\n  display: flex;\n  align-items: center;\n}\n.version-number[data-v-3e715355] {\n  font-size: 16px;\n  font-weight: 600;\n  color: #333;\n}\n.version-time[data-v-3e715355] {\n  font-size: 13px;\n  color: #999;\n}\n.version-notes[data-v-3e715355] {\n  margin-bottom: 8px;\n  padding: 8px;\n  background: white;\n  border-radius: 4px;\n  font-size: 14px;\n  color: #666;\n  line-height: 1.5;\n}\n.version-meta[data-v-3e715355] {\n  font-size: 13px;\n  color: #999;\n}\n.icon-preview {\n&[data-v-3e715355] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 20px;\n  }\nimg[data-v-3e715355] {\n    max-width: 200px;\n    max-height: 200px;\n    object-fit: contain;\n}\n}\n.empty-text[data-v-3e715355] {\n  color: #999;\n  font-size: 14px;\n}\n.rating-text[data-v-3e715355] {\n  margin-left: 8px;\n  color: #666;\n  font-size: 14px;\n}\n.action-buttons[data-v-3e715355] {\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.plugin-management-page[data-v-f7880059] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-f7880059] {\n  /* 页面头部撑满宽度，无 padding */\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-f7880059] {\n  /* 内容区域有 padding */\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-f7880059] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-f7880059] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.statistics-analysis-page[data-v-cb00e5b0] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-cb00e5b0] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-cb00e5b0] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.filter-card {\n&[data-v-cb00e5b0] {\n  margin-bottom: 24px;\n  }\n.filter-label[data-v-cb00e5b0] {\n    font-weight: 500;\n    color: var(--n-text-color);\n}\n}\n.overview-cards {\n&[data-v-cb00e5b0] {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 16px;\n  margin-bottom: 24px;\n  }\n.stat-card {\n.stat-content {\n&[data-v-cb00e5b0] {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      }\n.stat-icon[data-v-cb00e5b0] {\n        width: 64px;\n        height: 64px;\n        border-radius: 12px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        color: white;\n}\n.stat-info {\n&[data-v-cb00e5b0] {\n        flex: 1;\n        }\n.stat-label[data-v-cb00e5b0] {\n          font-size: 14px;\n          color: var(--n-text-color-3);\n          margin-bottom: 8px;\n}\n.stat-value[data-v-cb00e5b0] {\n          font-size: 28px;\n          font-weight: 600;\n          color: var(--n-text-color);\n}\n}\n}\n}\n}\n.today-stats {\n&[data-v-cb00e5b0] {\n  margin-bottom: 24px;\n  }\n.stat-unit[data-v-cb00e5b0] {\n    font-size: 14px;\n    color: var(--n-text-color-3);\n    margin-left: 4px;\n}\n}\n.trend-charts {\n&[data-v-cb00e5b0] {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));\n  gap: 16px;\n  margin-bottom: 24px;\n  }\n.chart-card {\n.chart-container {\n&[data-v-cb00e5b0] {\n      height: 300px;\n      padding: 20px 0;\n      position: relative;\n      }\n.simple-chart {\n&[data-v-cb00e5b0] {\n        display: flex;\n        align-items: flex-end;\n        justify-content: space-around;\n        height: 100%;\n        gap: 8px;\n        }\n.chart-bar {\n&[data-v-cb00e5b0] {\n          flex: 1;\n          background: linear-gradient(180deg, #2080f0 0%, #4098fc 100%);\n          border-radius: 4px 4px 0 0;\n          min-height: 20px;\n          position: relative;\n          cursor: pointer;\n          transition: all 0.3s;\n          }\n&[data-v-cb00e5b0]:hover {\n            opacity: 0.8;\n            transform: translateY(-2px);\n}\n.bar-value[data-v-cb00e5b0] {\n            position: absolute;\n            top: -24px;\n            left: 50%;\n            transform: translateX(-50%);\n            font-size: 12px;\n            color: var(--n-text-color);\n            white-space: nowrap;\n}\n}\n}\n.empty-chart[data-v-cb00e5b0] {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        height: 100%;\n        color: var(--n-text-color-3);\n        font-size: 14px;\n}\n}\n.chart-labels {\n&[data-v-cb00e5b0] {\n      display: flex;\n      justify-content: space-around;\n      margin-top: 12px;\n      padding: 0 4px;\n      }\n.chart-label[data-v-cb00e5b0] {\n        font-size: 12px;\n        color: var(--n-text-color-3);\n        text-align: center;\n        flex: 1;\n}\n}\n}\n}\n.top-plugins {\n.rank-badge[data-v-cb00e5b0] {\n    display: flex;\n    align-items: center;\n}\n}\n\n.category-management-page[data-v-cb59b69e] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-cb59b69e] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-cb59b69e] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-cb59b69e] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-cb59b69e] {\n  margin-top: 16px;\n}\n.category-detail[data-v-cb59b69e] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-cb59b69e] {\n  margin-bottom: 16px;\n}\n\n.tag-management-page[data-v-cacd4f23] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-cacd4f23] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-cacd4f23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-cacd4f23] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n}\n.tag-detail[data-v-cacd4f23] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-cacd4f23] {\n  margin-bottom: 16px;\n}\n\n.developer-management-page[data-v-70519d49] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-70519d49] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-70519d49] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-70519d49] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-70519d49] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n.developer-detail[data-v-70519d49] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-70519d49] {\n  margin-bottom: 16px;\n}\n.text-secondary[data-v-70519d49] {\n  color: #999;\n  font-size: 12px;\n}\n\n.audit-log-page[data-v-687b2df6] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-687b2df6] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-687b2df6] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-687b2df6] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-687b2df6] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n.log-detail[data-v-687b2df6] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-687b2df6] {\n  margin-bottom: 16px;\n}\n\n.review-rules-page[data-v-0ef816e9] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-0ef816e9] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-0ef816e9] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-0ef816e9] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-0ef816e9] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n.conditions-container[data-v-0ef816e9],\n.actions-container[data-v-0ef816e9] {\n  width: 100%;\n}\n.condition-item[data-v-0ef816e9],\n.action-item[data-v-0ef816e9] {\n  margin-bottom: 8px;\n}\n\n.feedback-management-page[data-v-bf346ffe] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-bf346ffe] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-bf346ffe] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-bf346ffe] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-bf346ffe] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n.feedback-detail[data-v-bf346ffe] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-bf346ffe] {\n  margin-bottom: 16px;\n}\n.feedback-content[data-v-bf346ffe],\n.handle-comment[data-v-bf346ffe] {\n  white-space: pre-wrap;\n  word-break: break-word;\n  line-height: 1.6;\n  padding: 12px;\n  background: #f5f5f5;\n  border-radius: 4px;\n}\n\n.permission-request-review-page[data-v-eb0bd909] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-eb0bd909] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-eb0bd909] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-eb0bd909] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-eb0bd909] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.plugin-table-permission-management-page[data-v-d2eaf243] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-d2eaf243] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-d2eaf243] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-d2eaf243] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-d2eaf243] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n/*$vite$:1*/';
+  __vite_style__.textContent = '@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.9);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n:root {\n  --primary: #6366f1;\n  --primary-light: #818cf8;\n  --primary-lighter: #a5b4fc;\n  --primary-lightest: #e0e7ff;\n  --primary-dark: #4f46e5;\n  --primary-darker: #4338ca;\n  --secondary: #8b5cf6;\n  --secondary-light: #a78bfa;\n  --secondary-lighter: #c4b5fd;\n  --secondary-lightest: #ede9fe;\n  --secondary-dark: #7c3aed;\n  --success: #10b981;\n  --success-light: #34d399;\n  --success-lighter: #6ee7b7;\n  --success-lightest: #d1fae5;\n  --success-dark: #059669;\n  --warning: #f59e0b;\n  --warning-light: #fbbf24;\n  --warning-lighter: #fcd34d;\n  --warning-lightest: #fef3c7;\n  --warning-dark: #d97706;\n  --error: #ef4444;\n  --error-light: #f87171;\n  --error-lighter: #fca5a5;\n  --error-lightest: #fee2e2;\n  --error-dark: #dc2626;\n  --info: #3b82f6;\n  --info-light: #60a5fa;\n  --info-lighter: #93c5fd;\n  --info-lightest: #dbeafe;\n  --info-dark: #2563eb;\n  --gray-50: #fafafa;\n  --gray-100: #f5f5f5;\n  --gray-200: #e5e5e5;\n  --gray-300: #d4d4d4;\n  --gray-400: #a3a3a3;\n  --gray-500: #737373;\n  --gray-600: #525252;\n  --gray-700: #404040;\n  --gray-800: #262626;\n  --gray-900: #171717;\n  --text-primary: #1f2329;\n  --text-secondary: #4e5969;\n  --text-tertiary: #86909c;\n  --text-quaternary: #c9cdd4;\n  --text-disabled: #e5e6eb;\n  --text-white: #ffffff;\n  --bg-primary: #ffffff;\n  --bg-secondary: #f7f8fa;\n  --bg-tertiary: #f2f3f5;\n  --bg-quaternary: #e5e6eb;\n  --bg-overlay: rgba(0, 0, 0, 0.6);\n  --bg-mask: rgba(0, 0, 0, 0.4);\n  --border-primary: #e5e6eb;\n  --border-secondary: #f0f2f5;\n  --border-tertiary: #dcdfe6;\n  --border-focus: #6366f1;\n  --spacing-xs: 4px;\n  --spacing-sm: 8px;\n  --spacing-md: 12px;\n  --spacing-lg: 16px;\n  --spacing-xl: 20px;\n  --spacing-2xl: 24px;\n  --spacing-3xl: 32px;\n  --spacing-4xl: 40px;\n  --spacing-5xl: 48px;\n  --spacing-6xl: 64px;\n  --radius-xs: 4px;\n  --radius-sm: 6px;\n  --radius-md: 8px;\n  --radius-lg: 12px;\n  --radius-xl: 16px;\n  --radius-2xl: 20px;\n  --radius-3xl: 24px;\n  --radius-full: 9999px;\n  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);\n  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);\n  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);\n  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);\n  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.12);\n  --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.14);\n  --shadow-3xl: 0 24px 48px rgba(0, 0, 0, 0.16);\n  --shadow-primary: 0 4px 12px rgba(99, 102, 241, 0.25);\n  --shadow-primary-lg: 0 8px 20px rgba(99, 102, 241, 0.3);\n  --shadow-success: 0 4px 12px rgba(16, 185, 129, 0.25);\n  --shadow-warning: 0 4px 12px rgba(245, 158, 11, 0.25);\n  --shadow-error: 0 4px 12px rgba(239, 68, 68, 0.25);\n  --font-family-base: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;\n  --font-family-mono: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;\n  --font-size-xs: 11px;\n  --font-size-sm: 12px;\n  --font-size-base: 13px;\n  --font-size-md: 14px;\n  --font-size-lg: 16px;\n  --font-size-xl: 18px;\n  --font-size-2xl: 20px;\n  --font-size-3xl: 24px;\n  --font-size-4xl: 28px;\n  --font-size-5xl: 32px;\n  --font-weight-light: 300;\n  --font-weight-normal: 400;\n  --font-weight-medium: 500;\n  --font-weight-semibold: 600;\n  --font-weight-bold: 700;\n  --line-height-tight: 1.2;\n  --line-height-normal: 1.5;\n  --line-height-relaxed: 1.6;\n  --line-height-loose: 1.8;\n  --transition-fast: 0.15s ease;\n  --transition-base: 0.2s ease;\n  --transition-slow: 0.3s ease;\n  --transition-slower: 0.4s ease;\n  --z-index-dropdown: 1000;\n  --z-index-sticky: 1020;\n  --z-index-fixed: 1030;\n  --z-index-modal-backdrop: 1040;\n  --z-index-modal: 1050;\n  --z-index-popover: 1060;\n  --z-index-tooltip: 1070;\n  --z-index-notification: 1080;\n  --button-height-sm: 28px;\n  --button-height-md: 32px;\n  --button-height-lg: 40px;\n  --input-height-sm: 28px;\n  --input-height-md: 32px;\n  --input-height-lg: 40px;\n  --card-padding-sm: 12px;\n  --card-padding-md: 16px;\n  --card-padding-lg: 24px;\n  --card-padding-xl: 32px;\n  --node-width: 260px;\n  --node-height: 140px;\n  --node-gap: 32px;\n  --node-border-width: 2px;\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.9);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.9);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n.m-0 {\n  margin: 0 !important;\n}\n.m-xs {\n  margin: 4px !important;\n}\n.m-sm {\n  margin: 8px !important;\n}\n.m-md {\n  margin: 12px !important;\n}\n.m-lg {\n  margin: 16px !important;\n}\n.m-xl {\n  margin: 20px !important;\n}\n.m-2xl {\n  margin: 24px !important;\n}\n.m-3xl {\n  margin: 32px !important;\n}\n.mt-0 {\n  margin-top: 0 !important;\n}\n.mt-xs {\n  margin-top: 4px !important;\n}\n.mt-sm {\n  margin-top: 8px !important;\n}\n.mt-md {\n  margin-top: 12px !important;\n}\n.mt-lg {\n  margin-top: 16px !important;\n}\n.mt-xl {\n  margin-top: 20px !important;\n}\n.mt-2xl {\n  margin-top: 24px !important;\n}\n.mt-3xl {\n  margin-top: 32px !important;\n}\n.mb-0 {\n  margin-bottom: 0 !important;\n}\n.mb-xs {\n  margin-bottom: 4px !important;\n}\n.mb-sm {\n  margin-bottom: 8px !important;\n}\n.mb-md {\n  margin-bottom: 12px !important;\n}\n.mb-lg {\n  margin-bottom: 16px !important;\n}\n.mb-xl {\n  margin-bottom: 20px !important;\n}\n.mb-2xl {\n  margin-bottom: 24px !important;\n}\n.mb-3xl {\n  margin-bottom: 32px !important;\n}\n.ml-0 {\n  margin-left: 0 !important;\n}\n.ml-xs {\n  margin-left: 4px !important;\n}\n.ml-sm {\n  margin-left: 8px !important;\n}\n.ml-md {\n  margin-left: 12px !important;\n}\n.ml-lg {\n  margin-left: 16px !important;\n}\n.ml-xl {\n  margin-left: 20px !important;\n}\n.ml-2xl {\n  margin-left: 24px !important;\n}\n.ml-3xl {\n  margin-left: 32px !important;\n}\n.mr-0 {\n  margin-right: 0 !important;\n}\n.mr-xs {\n  margin-right: 4px !important;\n}\n.mr-sm {\n  margin-right: 8px !important;\n}\n.mr-md {\n  margin-right: 12px !important;\n}\n.mr-lg {\n  margin-right: 16px !important;\n}\n.mr-xl {\n  margin-right: 20px !important;\n}\n.mr-2xl {\n  margin-right: 24px !important;\n}\n.mr-3xl {\n  margin-right: 32px !important;\n}\n.p-0 {\n  padding: 0 !important;\n}\n.p-xs {\n  padding: 4px !important;\n}\n.p-sm {\n  padding: 8px !important;\n}\n.p-md {\n  padding: 12px !important;\n}\n.p-lg {\n  padding: 16px !important;\n}\n.p-xl {\n  padding: 20px !important;\n}\n.p-2xl {\n  padding: 24px !important;\n}\n.p-3xl {\n  padding: 32px !important;\n}\n.pt-0 {\n  padding-top: 0 !important;\n}\n.pt-xs {\n  padding-top: 4px !important;\n}\n.pt-sm {\n  padding-top: 8px !important;\n}\n.pt-md {\n  padding-top: 12px !important;\n}\n.pt-lg {\n  padding-top: 16px !important;\n}\n.pt-xl {\n  padding-top: 20px !important;\n}\n.pt-2xl {\n  padding-top: 24px !important;\n}\n.pt-3xl {\n  padding-top: 32px !important;\n}\n.pb-0 {\n  padding-bottom: 0 !important;\n}\n.pb-xs {\n  padding-bottom: 4px !important;\n}\n.pb-sm {\n  padding-bottom: 8px !important;\n}\n.pb-md {\n  padding-bottom: 12px !important;\n}\n.pb-lg {\n  padding-bottom: 16px !important;\n}\n.pb-xl {\n  padding-bottom: 20px !important;\n}\n.pb-2xl {\n  padding-bottom: 24px !important;\n}\n.pb-3xl {\n  padding-bottom: 32px !important;\n}\n.text-left {\n  text-align: left !important;\n}\n.text-center {\n  text-align: center !important;\n}\n.text-right {\n  text-align: right !important;\n}\n.text-justify {\n  text-align: justify !important;\n}\n.text-primary {\n  color: #1f2329 !important;\n}\n.text-secondary {\n  color: #4e5969 !important;\n}\n.text-tertiary {\n  color: #86909c !important;\n}\n.text-white {\n  color: #ffffff !important;\n}\n.text-success {\n  color: #10b981 !important;\n}\n.text-warning {\n  color: #f59e0b !important;\n}\n.text-error {\n  color: #ef4444 !important;\n}\n.text-info {\n  color: #3b82f6 !important;\n}\n.text-xs {\n  font-size: 11px !important;\n}\n.text-sm {\n  font-size: 12px !important;\n}\n.text-base {\n  font-size: 13px !important;\n}\n.text-md {\n  font-size: 14px !important;\n}\n.text-lg {\n  font-size: 16px !important;\n}\n.text-xl {\n  font-size: 18px !important;\n}\n.text-2xl {\n  font-size: 20px !important;\n}\n.text-3xl {\n  font-size: 24px !important;\n}\n.font-light {\n  font-weight: 300 !important;\n}\n.font-normal {\n  font-weight: 400 !important;\n}\n.font-medium {\n  font-weight: 500 !important;\n}\n.font-semibold {\n  font-weight: 600 !important;\n}\n.font-bold {\n  font-weight: 700 !important;\n}\n.text-ellipsis {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.text-no-select {\n  user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n.d-none {\n  display: none !important;\n}\n.d-block {\n  display: block !important;\n}\n.d-inline {\n  display: inline !important;\n}\n.d-inline-block {\n  display: inline-block !important;\n}\n.d-flex {\n  display: flex !important;\n}\n.d-inline-flex {\n  display: inline-flex !important;\n}\n.d-grid {\n  display: grid !important;\n}\n.flex-row {\n  flex-direction: row !important;\n}\n.flex-column {\n  flex-direction: column !important;\n}\n.flex-wrap {\n  flex-wrap: wrap !important;\n}\n.flex-nowrap {\n  flex-wrap: nowrap !important;\n}\n.flex-1 {\n  flex: 1 !important;\n}\n.flex-auto {\n  flex: auto !important;\n}\n.flex-none {\n  flex: none !important;\n}\n.align-start {\n  align-items: flex-start !important;\n}\n.align-center {\n  align-items: center !important;\n}\n.align-end {\n  align-items: flex-end !important;\n}\n.align-stretch {\n  align-items: stretch !important;\n}\n.justify-start {\n  justify-content: flex-start !important;\n}\n.justify-center {\n  justify-content: center !important;\n}\n.justify-end {\n  justify-content: flex-end !important;\n}\n.justify-between {\n  justify-content: space-between !important;\n}\n.justify-around {\n  justify-content: space-around !important;\n}\n.gap-xs {\n  gap: 4px !important;\n}\n.gap-sm {\n  gap: 8px !important;\n}\n.gap-md {\n  gap: 12px !important;\n}\n.gap-lg {\n  gap: 16px !important;\n}\n.gap-xl {\n  gap: 20px !important;\n}\n.gap-2xl {\n  gap: 24px !important;\n}\n.position-relative {\n  position: relative !important;\n}\n.position-absolute {\n  position: absolute !important;\n}\n.position-fixed {\n  position: fixed !important;\n}\n.position-sticky {\n  position: sticky !important;\n}\n.w-full {\n  width: 100% !important;\n}\n.w-auto {\n  width: auto !important;\n}\n.w-screen {\n  width: 100vw !important;\n}\n.h-full {\n  height: 100% !important;\n}\n.h-auto {\n  height: auto !important;\n}\n.h-screen {\n  height: 100vh !important;\n}\n.min-w-0 {\n  min-width: 0 !important;\n}\n.max-w-full {\n  max-width: 100% !important;\n}\n.min-h-0 {\n  min-height: 0 !important;\n}\n.max-h-full {\n  max-height: 100% !important;\n}\n.bg-primary {\n  background-color: #ffffff !important;\n}\n.bg-secondary {\n  background-color: #f7f8fa !important;\n}\n.bg-tertiary {\n  background-color: #f2f3f5 !important;\n}\n.bg-transparent {\n  background-color: transparent !important;\n}\n.bg-gradient-primary {\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n}\n.bg-gradient-success {\n  background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);\n}\n.bg-gradient-warning {\n  background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);\n}\n.bg-gradient-error {\n  background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%);\n}\n.border {\n  border: 1px solid #e5e6eb !important;\n}\n.border-0 {\n  border: none !important;\n}\n.border-t {\n  border-top: 1px solid #e5e6eb !important;\n}\n.border-b {\n  border-bottom: 1px solid #e5e6eb !important;\n}\n.border-l {\n  border-left: 1px solid #e5e6eb !important;\n}\n.border-r {\n  border-right: 1px solid #e5e6eb !important;\n}\n.rounded-none {\n  border-radius: 0 !important;\n}\n.rounded-xs {\n  border-radius: 4px !important;\n}\n.rounded-sm {\n  border-radius: 6px !important;\n}\n.rounded-md {\n  border-radius: 8px !important;\n}\n.rounded-lg {\n  border-radius: 12px !important;\n}\n.rounded-xl {\n  border-radius: 16px !important;\n}\n.rounded-2xl {\n  border-radius: 20px !important;\n}\n.rounded-full {\n  border-radius: 9999px !important;\n}\n.shadow-none {\n  box-shadow: none !important;\n}\n.shadow-xs {\n  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;\n}\n.shadow-sm {\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06) !important;\n}\n.shadow-md {\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;\n}\n.shadow-lg {\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;\n}\n.shadow-xl {\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;\n}\n.shadow-2xl {\n  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.14) !important;\n}\n.shadow-primary {\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25) !important;\n}\n.overflow-hidden {\n  overflow: hidden !important;\n}\n.overflow-auto {\n  overflow: auto !important;\n}\n.overflow-scroll {\n  overflow: scroll !important;\n}\n.overflow-x-auto {\n  overflow-x: auto !important;\n}\n.overflow-y-auto {\n  overflow-y: auto !important;\n}\n.cursor-pointer {\n  cursor: pointer !important;\n}\n.cursor-default {\n  cursor: default !important;\n}\n.cursor-not-allowed {\n  cursor: not-allowed !important;\n}\n.opacity-0 {\n  opacity: 0 !important;\n}\n.opacity-25 {\n  opacity: 0.25 !important;\n}\n.opacity-50 {\n  opacity: 0.5 !important;\n}\n.opacity-75 {\n  opacity: 0.75 !important;\n}\n.opacity-100 {\n  opacity: 1 !important;\n}\n.z-0 {\n  z-index: 0 !important;\n}\n.z-10 {\n  z-index: 10 !important;\n}\n.z-20 {\n  z-index: 20 !important;\n}\n.z-30 {\n  z-index: 30 !important;\n}\n.z-40 {\n  z-index: 40 !important;\n}\n.z-50 {\n  z-index: 50 !important;\n}\n.pointer-events-none {\n  pointer-events: none !important;\n}\n.pointer-events-auto {\n  pointer-events: auto !important;\n}\n.transition-fast {\n  transition: all 0.15s ease !important;\n}\n.transition-base {\n  transition: all 0.2s ease !important;\n}\n.transition-slow {\n  transition: all 0.3s ease !important;\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.9);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n.gress-button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 8px;\n  border: none;\n  border-radius: 8px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  white-space: nowrap;\n  user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n.gress-button:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.gress-button {\n  height: 32px;\n  padding: 0 16px;\n  font-size: 13px;\n}\n.gress-button--primary {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 8px;\n  border: none;\n  border-radius: 8px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  white-space: nowrap;\n  user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n.gress-button--primary:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.gress-button--primary {\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);\n}\n.gress-button--primary:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n  transform: translateY(-1px);\n}\n.gress-button--primary:active:not(:disabled) {\n  transform: translateY(0);\n}\n.gress-button--secondary {\n  background: #f7f8fa;\n  color: #1f2329;\n  border: 1px solid #e5e6eb;\n}\n.gress-button--secondary:hover:not(:disabled) {\n  background: #f2f3f5;\n  border-color: #dcdfe6;\n}\n.gress-button--success {\n  background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);\n}\n.gress-button--success:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);\n  transform: translateY(-1px);\n}\n.gress-button--warning {\n  background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);\n}\n.gress-button--warning:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);\n  transform: translateY(-1px);\n}\n.gress-button--error {\n  background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);\n}\n.gress-button--error:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);\n  transform: translateY(-1px);\n}\n.gress-button--text {\n  background: transparent;\n  color: #6366f1;\n}\n.gress-button--text:hover:not(:disabled) {\n  background: rgba(99, 102, 241, 0.08);\n}\n.gress-button--sm {\n  height: 28px;\n  padding: 0 12px;\n  font-size: 12px;\n}\n.gress-button--lg {\n  height: 40px;\n  padding: 0 20px;\n  font-size: 14px;\n}\n.gress-button--block {\n  width: 100%;\n}\n.gress-button--icon {\n  width: 32px;\n  padding: 0;\n}\n.gress-button--icon.gress-button--sm {\n  width: 28px;\n}\n.gress-button--icon.gress-button--lg {\n  width: 40px;\n}\n.gress-card {\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);\n  padding: 16px;\n  border: 1px solid #f0f2f5;\n}\n.gress-card--hover {\n  transition: all 0.2s ease;\n}\n.gress-card--hover:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);\n}\n.gress-card--sm {\n  padding: 12px;\n}\n.gress-card--lg {\n  padding: 24px;\n}\n.gress-card--xl {\n  padding: 32px;\n}\n.gress-card--gradient {\n  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);\n  border: 1px solid rgba(99, 102, 241, 0.1);\n}\n.gress-card__header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 16px;\n  padding-bottom: 16px;\n  border-bottom: 1px solid #f0f2f5;\n}\n.gress-card__title {\n  font-size: 16px;\n  font-weight: 600;\n  color: #1f2329;\n}\n.gress-card__subtitle {\n  font-size: 12px;\n  color: #86909c;\n  margin-top: 4px;\n}\n.gress-card__body {\n  flex: 1;\n}\n.gress-card__footer {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f2f5;\n}\n.gress-input {\n  width: 100%;\n  border: 1px solid #e5e6eb;\n  border-radius: 8px;\n  background: #ffffff;\n  color: #1f2329;\n  font-size: 13px;\n  transition: all 0.2s ease;\n}\n.gress-input:hover {\n  border-color: #dcdfe6;\n}\n.gress-input:focus {\n  outline: none;\n  border-color: #6366f1;\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}\n.gress-input:disabled {\n  background: #f2f3f5;\n  color: #e5e6eb;\n  cursor: not-allowed;\n}\n.gress-input::placeholder {\n  color: #86909c;\n}\n.gress-input {\n  height: 32px;\n  padding: 0 12px;\n}\n.gress-input--sm {\n  height: 28px;\n  padding: 0 8px;\n  font-size: 12px;\n}\n.gress-input--lg {\n  height: 40px;\n  padding: 0 16px;\n  font-size: 14px;\n}\n.gress-input--error {\n  border-color: #ef4444;\n}\n.gress-input--error:focus {\n  border-color: #ef4444;\n  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);\n}\n.gress-input--success {\n  border-color: #10b981;\n}\n.gress-input--success:focus {\n  border-color: #10b981;\n  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);\n}\n.gress-badge {\n  display: inline-flex;\n  align-items: center;\n  padding: 2px 8px;\n  border-radius: 6px;\n  background: #6366f1;\n  color: #ffffff;\n  font-size: 11px;\n  font-weight: 500;\n  line-height: 1.2;\n}\n.gress-badge--primary {\n  background: rgba(99, 102, 241, 0.1);\n  color: #6366f1;\n}\n.gress-badge--success {\n  background: rgba(16, 185, 129, 0.1);\n  color: #10b981;\n}\n.gress-badge--warning {\n  background: rgba(245, 158, 11, 0.1);\n  color: #f59e0b;\n}\n.gress-badge--error {\n  background: rgba(239, 68, 68, 0.1);\n  color: #ef4444;\n}\n.gress-badge--info {\n  background: rgba(59, 130, 246, 0.1);\n  color: #3b82f6;\n}\n.gress-badge--gradient {\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n  color: #ffffff;\n}\n.gress-tabs__nav {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  border-bottom: 2px solid #f0f2f5;\n  margin-bottom: 24px;\n}\n.gress-tabs__item {\n  background: none;\n  border: none;\n  padding: 0;\n  margin: 0;\n  font: inherit;\n  color: inherit;\n  cursor: pointer;\n  outline: none;\n  padding: 12px 16px;\n  font-size: 13px;\n  font-weight: 500;\n  color: #4e5969;\n  border-bottom: 2px solid transparent;\n  margin-bottom: -2px;\n  transition: all 0.2s ease;\n}\n.gress-tabs__item:hover {\n  color: #6366f1;\n}\n.gress-tabs__item--active {\n  color: #6366f1;\n  border-bottom-color: #6366f1;\n}\n.gress-modal__overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  background: rgba(0, 0, 0, 0.6);\n  z-index: 1040;\n  animation: fadeIn 0.2s ease;\n}\n.gress-modal__container {\n  background: #ffffff;\n  border-radius: 20px;\n  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);\n  padding: 32px;\n  border: 1px solid #f0f2f5;\n  max-width: 90vw;\n  max-height: 90vh;\n  overflow: auto;\n  animation: scaleIn 0.2s ease;\n}\n.gress-modal__header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 24px;\n}\n.gress-modal__title {\n  font-size: 20px;\n  font-weight: 600;\n  color: #1f2329;\n}\n.gress-modal__close {\n  background: none;\n  border: none;\n  padding: 0;\n  margin: 0;\n  font: inherit;\n  color: inherit;\n  cursor: pointer;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 32px;\n  height: 32px;\n  border-radius: 9999px;\n  color: #86909c;\n  transition: all 0.2s ease;\n}\n.gress-modal__close:hover {\n  background: #f7f8fa;\n  color: #1f2329;\n}\n.gress-modal__body {\n  margin-bottom: 24px;\n}\n.gress-modal__footer {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n}\n.gress-dropdown {\n  position: relative;\n}\n.gress-dropdown__menu {\n  background: #ffffff;\n  border-radius: 12px;\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);\n  padding: 8px;\n  border: 1px solid #f0f2f5;\n  position: absolute;\n  top: 100%;\n  left: 0;\n  margin-top: 8px;\n  min-width: 160px;\n  z-index: 1000;\n  animation: slideInUp 0.2s ease;\n}\n.gress-dropdown__item {\n  background: none;\n  border: none;\n  padding: 0;\n  margin: 0;\n  font: inherit;\n  color: inherit;\n  cursor: pointer;\n  outline: none;\n  display: flex;\n  align-items: center;\n  width: 100%;\n  padding: 12px;\n  gap: 12px;\n  font-size: 13px;\n  color: #1f2329;\n  border-radius: 8px;\n  transition: all 0.2s ease;\n  text-align: left;\n}\n.gress-dropdown__item:hover {\n  background: #f7f8fa;\n}\n.gress-dropdown__item--active {\n  background: rgba(99, 102, 241, 0.1);\n  color: #6366f1;\n}\n.gress-dropdown__item--danger {\n  color: #ef4444;\n}\n.gress-dropdown__item--danger:hover {\n  background: rgba(239, 68, 68, 0.1);\n}\n.gress-dropdown__divider {\n  height: 1px;\n  background: #f0f2f5;\n  margin: 8px 0;\n}\n.gress-notification {\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);\n  padding: 16px;\n  border: 1px solid #f0f2f5;\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  min-width: 320px;\n  max-width: 480px;\n  animation: slideInUp 0.2s ease;\n}\n.gress-notification__icon {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 40px;\n  height: 40px;\n  border-radius: 9999px;\n  flex-shrink: 0;\n}\n.gress-notification__content {\n  flex: 1;\n}\n.gress-notification__title {\n  font-size: 14px;\n  font-weight: 600;\n  color: #1f2329;\n  margin-bottom: 4px;\n}\n.gress-notification__message {\n  font-size: 12px;\n  color: #4e5969;\n  line-height: 1.6;\n}\n.gress-notification__close {\n  background: none;\n  border: none;\n  padding: 0;\n  margin: 0;\n  font: inherit;\n  color: inherit;\n  cursor: pointer;\n  outline: none;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 24px;\n  height: 24px;\n  border-radius: 9999px;\n  color: #86909c;\n  flex-shrink: 0;\n  transition: all 0.2s ease;\n}\n.gress-notification__close:hover {\n  background: #f7f8fa;\n  color: #1f2329;\n}\n.gress-notification--success .gress-notification__icon {\n  background: rgba(16, 185, 129, 0.1);\n  color: #10b981;\n}\n.gress-notification--warning .gress-notification__icon {\n  background: rgba(245, 158, 11, 0.1);\n  color: #f59e0b;\n}\n.gress-notification--error .gress-notification__icon {\n  background: rgba(239, 68, 68, 0.1);\n  color: #ef4444;\n}\n.gress-notification--info .gress-notification__icon {\n  background: rgba(59, 130, 246, 0.1);\n  color: #3b82f6;\n}\n.gress-loading {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.gress-loading__spinner {\n  width: 40px;\n  height: 40px;\n  border: 3px solid #f0f2f5;\n  border-top-color: #6366f1;\n  border-radius: 9999px;\n  animation: spin 0.8s linear infinite;\n}\n.gress-loading--sm .gress-loading__spinner {\n  width: 24px;\n  height: 24px;\n  border-width: 2px;\n}\n.gress-loading--lg .gress-loading__spinner {\n  width: 56px;\n  height: 56px;\n  border-width: 4px;\n}\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n.gress-empty {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n  gap: 16px;\n  padding: 48px 24px;\n  text-align: center;\n}\n.gress-empty__icon {\n  font-size: 64px;\n  color: #c9cdd4;\n}\n.gress-empty__title {\n  font-size: 16px;\n  font-weight: 600;\n  color: #4e5969;\n}\n.gress-empty__description {\n  font-size: 13px;\n  color: #86909c;\n  max-width: 400px;\n}\n.gress-divider {\n  height: 1px;\n  background: #f0f2f5;\n  margin: 24px 0;\n}\n.gress-divider--vertical {\n  width: 1px;\n  height: auto;\n  margin: 0 16px;\n}\n.gress-divider--dashed {\n  border-top: 1px dashed #e5e6eb;\n  background: none;\n}\n* {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n}\nhtml {\n  font-size: 16px;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-rendering: optimizeLegibility;\n}\nbody {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";\n  font-size: 13px;\n  line-height: 1.5;\n  color: #1f2329;\n  background: #f7f8fa;\n  min-height: 100vh;\n}\n::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n::-webkit-scrollbar-track {\n  background: transparent;\n}\n::-webkit-scrollbar-thumb {\n  background: #d4d4d4;\n  border-radius: 9999px;\n}\n::-webkit-scrollbar-thumb:hover {\n  background: #a3a3a3;\n}\n::selection {\n  background: rgba(99, 102, 241, 0.2);\n  color: #1f2329;\n}\na {\n  color: #6366f1;\n  text-decoration: none;\n  transition: color 0.2s ease;\n}\na:hover {\n  color: #4f46e5;\n}\ncode {\n  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;\n  font-size: 0.9em;\n  padding: 2px 6px;\n  background: rgba(99, 102, 241, 0.08);\n  border-radius: 6px;\n  color: #6366f1;\n}\npre {\n  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;\n  padding: 16px;\n  background: #f2f3f5;\n  border-radius: 12px;\n  overflow-x: auto;\n}\npre code {\n  padding: 0;\n  background: none;\n}\n.workflow-editor {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  background: #f7f8fa;\n  overflow: hidden;\n}\n.workflow-canvas {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  background-color: #f7f8fa;\n  background-image: linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);\n  background-size: 24px 24px;\n}\n.workflow-node {\n  position: absolute;\n  min-width: 260px;\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);\n  cursor: move;\n  transition: all 0.2s ease;\n  border: 2px solid transparent;\n}\n.workflow-node:hover {\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);\n  transform: translateY(-2px);\n}\n.workflow-node.selected {\n  border-color: #6366f1;\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n}\n.workflow-node.error {\n  border-color: #ef4444;\n}\n.workflow-node.success {\n  border-color: #10b981;\n}\n.workflow-connection {\n  position: absolute;\n  pointer-events: none;\n  z-index: 1;\n}\n.workflow-connection.selected {\n  stroke: #6366f1 !important;\n  stroke-width: 3px !important;\n}\n.chat-container {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #ffffff;\n}\n.chat-messages {\n  flex: 1;\n  overflow-y: auto;\n  padding: 24px;\n}\n.chat-messages::-webkit-scrollbar {\n  width: 6px;\n  height: 6px;\n}\n.chat-messages::-webkit-scrollbar-track {\n  background: transparent;\n  border-radius: 9999px;\n}\n.chat-messages::-webkit-scrollbar-thumb {\n  background: #d4d4d4;\n  border-radius: 9999px;\n}\n.chat-messages::-webkit-scrollbar-thumb:hover {\n  background: rgb(186.5, 186.5, 186.5);\n}\n.chat-messages .chat-message {\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);\n  padding: 16px;\n  border: 1px solid #f0f2f5;\n  margin-bottom: 16px;\n  max-width: 80%;\n}\n.chat-messages .chat-message--user {\n  margin-left: auto;\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n  color: #ffffff;\n}\n.chat-messages .chat-message--assistant {\n  margin-right: auto;\n  background: #ffffff;\n}\n.chat-messages .chat-message--system {\n  margin: 0 auto;\n  background: #f2f3f5;\n  color: #4e5969;\n  text-align: center;\n  max-width: 60%;\n}\n.chat-input {\n  border-top: 1px solid #f0f2f5;\n  padding: 24px;\n  background: #ffffff;\n}\n.chat-input__wrapper {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n}\n.chat-input__field {\n  width: 100%;\n  border: 1px solid #e5e6eb;\n  border-radius: 8px;\n  background: #ffffff;\n  color: #1f2329;\n  font-size: 13px;\n  transition: all 0.2s ease;\n}\n.chat-input__field:hover {\n  border-color: #dcdfe6;\n}\n.chat-input__field:focus {\n  outline: none;\n  border-color: #6366f1;\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}\n.chat-input__field:disabled {\n  background: #f2f3f5;\n  color: #e5e6eb;\n  cursor: not-allowed;\n}\n.chat-input__field::placeholder {\n  color: #86909c;\n}\n.chat-input__field {\n  flex: 1;\n  height: 40px;\n  padding: 0 16px;\n}\n.chat-input__button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 8px;\n  border: none;\n  border-radius: 8px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  white-space: nowrap;\n  user-select: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n}\n.chat-input__button:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.chat-input__button {\n  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);\n  color: #ffffff;\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);\n}\n.chat-input__button:hover:not(:disabled) {\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n  transform: translateY(-1px);\n}\n.chat-input__button:active:not(:disabled) {\n  transform: translateY(0);\n}\n.chat-input__button {\n  height: 40px;\n  padding: 0 20px;\n}\n.workflow-list {\n  padding: 32px;\n}\n.workflow-list__header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 32px;\n}\n.workflow-list__title {\n  font-size: 24px;\n  font-weight: 700;\n  color: #1f2329;\n}\n.workflow-list__grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));\n  gap: 24px;\n}\n.workflow-list__item {\n  background: #ffffff;\n  border-radius: 16px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);\n  padding: 24px;\n  border: 1px solid #f0f2f5;\n  transition: all 0.2s ease;\n}\n.workflow-list__item:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);\n}\n.workflow-list__item {\n  cursor: pointer;\n}\n.workflow-list__item:hover {\n  border-color: #6366f1;\n}\n.workflow-list__item-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: 12px;\n}\n.workflow-list__item-title {\n  font-size: 16px;\n  font-weight: 600;\n  color: #1f2329;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.workflow-list__item-desc {\n  font-size: 12px;\n  color: #86909c;\n  line-height: 1.6;\n  margin-bottom: 16px;\n  display: -webkit-box;\n  -webkit-line-clamp: 2;\n  -webkit-box-orient: vertical;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.workflow-list__item-footer {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding-top: 12px;\n  border-top: 1px solid #f0f2f5;\n}\n.workflow-list__item-meta {\n  font-size: 11px;\n  color: #86909c;\n}\n@media (max-width: 767px) {\n  .workflow-list {\n    padding: 24px;\n  }\n  .workflow-list__grid {\n    grid-template-columns: 1fr;\n  }\n  .chat-messages .chat-message {\n    max-width: 90%;\n  }\n}\n@media (max-width: 639px) {\n  .workflow-list {\n    padding: 16px;\n  }\n  .chat-input {\n    padding: 16px;\n  }\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n@keyframes slideInUp {\n  from {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes scaleIn {\n  from {\n    opacity: 0;\n    transform: scale(0.95);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n@keyframes pulse {\n  0%, 100% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 0.5;\n  }\n}\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@media print {\n  body {\n    background: white;\n  }\n  .workflow-canvas {\n    background: white;\n  }\n  .workflow-node {\n    box-shadow: none;\n    border: 1px solid #e5e6eb;\n  }\n}@keyframes fadeIn-65bd80d8 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-65bd80d8 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-65bd80d8 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-65bd80d8 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.page-container[data-v-65bd80d8] {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  background: var(--bg-secondary, #f7f8fa);\n}@keyframes fadeIn-7bbf9d25 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-7bbf9d25 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-7bbf9d25 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-7bbf9d25 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.page-content[data-v-7bbf9d25] {\n  flex: 1;\n  overflow-y: auto;\n  padding: var(--spacing-2xl, 24px);\n  display: flex;\n  flex-direction: column;\n  gap: var(--spacing-lg, 16px);\n}\n.page-content[data-v-7bbf9d25]::-webkit-scrollbar {\n  width: 6px;\n  height: 6px;\n}\n.page-content[data-v-7bbf9d25]::-webkit-scrollbar-track {\n  background: transparent;\n  border-radius: var(--radius-full, 9999px);\n}\n.page-content[data-v-7bbf9d25]::-webkit-scrollbar-thumb {\n  background: var(--gray-300, #d4d4d4);\n  border-radius: var(--radius-full, 9999px);\n}\n.page-content[data-v-7bbf9d25]::-webkit-scrollbar-thumb:hover {\n  background: var(--gray-400, #a3a3a3);\n}\n@media (max-width: 768px) {\n.page-content[data-v-7bbf9d25] {\n    padding: var(--spacing-lg, 16px);\n}\n}@keyframes fadeIn-4d82a654 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-4d82a654 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-4d82a654 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-4d82a654 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.page-header[data-v-4d82a654] {\n  background: var(--bg-primary, #ffffff);\n  border-bottom: 1px solid var(--border-secondary, #f0f2f5);\n  padding: 0 var(--spacing-3xl, 32px);\n  height: 64px;\n  flex-shrink: 0;\n  display: flex;\n  align-items: center;\n}\n.page-header__content[data-v-4d82a654] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  width: 100%;\n}\n.page-header__prefix[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n  flex: 1;\n}\n.page-header__left[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n}\n.page-header__breadcrumb[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n  flex-wrap: wrap;\n}\n.page-header .breadcrumb-item[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-xs, 4px);\n  color: var(--text-tertiary, #86909c);\n  font-size: var(--font-size-base, 13px);\n  font-weight: var(--font-weight-medium, 500);\n  transition: color 0.2s ease;\n}\n.page-header .breadcrumb-item[data-v-4d82a654]:hover {\n  color: var(--text-secondary, #4e5969);\n}\n.page-header .breadcrumb-item--current[data-v-4d82a654] {\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-lg, 16px);\n  font-weight: var(--font-weight-semibold, 600);\n}\n.page-header .breadcrumb-separator[data-v-4d82a654] {\n  color: var(--text-quaternary, #c9cdd4);\n  font-size: var(--font-size-base, 13px);\n  user-select: none;\n}\n.page-header__actions[data-v-4d82a654] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n}\n@media (max-width: 768px) {\n.page-header[data-v-4d82a654] {\n    padding: var(--spacing-md, 12px);\n}\n.page-header__content[data-v-4d82a654] {\n    flex-direction: column;\n    align-items: flex-start;\n    gap: var(--spacing-md, 12px);\n}\n.page-header__prefix[data-v-4d82a654] {\n    width: 100%;\n}\n.page-header__actions[data-v-4d82a654] {\n    width: 100%;\n    justify-content: flex-end;\n}\n}\n@media (max-width: 640px) {\n.page-header[data-v-4d82a654] {\n    padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);\n}\n.page-header .breadcrumb-item[data-v-4d82a654] {\n    font-size: var(--font-size-sm, 12px);\n}\n.page-header .breadcrumb-item--current[data-v-4d82a654] {\n    font-size: var(--font-size-base, 13px);\n}\n.page-header .breadcrumb-separator[data-v-4d82a654] {\n    font-size: var(--font-size-sm, 12px);\n}\n}@keyframes fadeIn-f199a048 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-f199a048 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-f199a048 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-f199a048 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.card-list[data-v-f199a048] {\n  display: grid;\n  gap: var(--spacing-lg, 16px);\n}\n.card-list--medium[data-v-f199a048] {\n  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));\n}\n.card-list--small[data-v-f199a048] {\n  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));\n}\n.card-list--large[data-v-f199a048] {\n  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));\n}\n@media (max-width: 768px) {\n.card-list[data-v-f199a048] {\n    grid-template-columns: 1fr;\n}\n}@keyframes fadeIn-bf918fa3 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-bf918fa3 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-bf918fa3 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-bf918fa3 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.page-pagination[data-v-bf918fa3] {\n  display: flex;\n  justify-content: flex-end;\n  padding: var(--spacing-lg, 16px) 0;\n  margin-top: var(--spacing-lg, 16px);\n}\n.pagination-controls[data-v-bf918fa3] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-md, 12px);\n}\n.pagination-btn[data-v-bf918fa3] {\n  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);\n  background: var(--bg-primary, #ffffff);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.pagination-btn[data-v-bf918fa3]:hover:not(:disabled) {\n  background: var(--bg-secondary, #f7f8fa);\n  border-color: var(--primary, #6366f1);\n  color: var(--primary, #6366f1);\n}\n.pagination-btn[data-v-bf918fa3]:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.pagination-info[data-v-bf918fa3] {\n  color: var(--text-secondary, #4e5969);\n  font-size: var(--font-size-sm, 12px);\n  white-space: nowrap;\n}\n.pagination-select[data-v-bf918fa3] {\n  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);\n  background: var(--bg-primary, #ffffff);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.pagination-select[data-v-bf918fa3]:hover {\n  border-color: var(--primary, #6366f1);\n}\n.pagination-select[data-v-bf918fa3]:focus {\n  outline: none;\n  border-color: var(--primary, #6366f1);\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}@keyframes fadeIn-c4c4657a {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-c4c4657a {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-c4c4657a {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-c4c4657a {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.log-viewer[data-v-c4c4657a] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: var(--bg-secondary, #f8f9fa);\n  border-radius: var(--radius-md, 8px);\n  overflow: hidden;\n  border: 1px solid var(--border-secondary, #e8e8e8);\n}\n.log-viewer.log-viewer--dark[data-v-c4c4657a] {\n  background: #1e1e1e;\n  border-color: #3e3e3e;\n}\n.log-viewer.log-viewer--dark .log-toolbar[data-v-c4c4657a] {\n  background: #2d2d2d;\n  border-bottom-color: #3e3e3e;\n}\n.log-viewer.log-viewer--dark .log-content[data-v-c4c4657a] {\n  background: #1e1e1e;\n}\n.log-viewer.log-viewer--dark .log-line[data-v-c4c4657a]:hover {\n  background: rgba(255, 255, 255, 0.05);\n}\n.log-viewer.log-viewer--dark .log-timestamp[data-v-c4c4657a] {\n  color: #8c8c8c;\n}\n.log-viewer.log-viewer--dark .log-thread[data-v-c4c4657a] {\n  color: #69c0ff;\n}\n.log-viewer.log-viewer--dark .log-class[data-v-c4c4657a] {\n  color: #b37feb;\n}\n.log-viewer.log-viewer--dark .log-message[data-v-c4c4657a] {\n  color: #d4d4d4;\n}\n.log-viewer.log-viewer--dark .log-empty[data-v-c4c4657a] {\n  color: #8c8c8c;\n}\n.log-viewer.log-viewer--dark .toolbar-btn[data-v-c4c4657a] {\n  background: #3e3e3e;\n  color: #d4d4d4;\n  border-color: #4e4e4e;\n}\n.log-viewer.log-viewer--dark .toolbar-btn[data-v-c4c4657a]:hover {\n  background: #4e4e4e;\n}\n.log-viewer.log-viewer--dark .toolbar-select[data-v-c4c4657a] {\n  background: #3e3e3e;\n  color: #d4d4d4;\n  border-color: #4e4e4e;\n}\n.log-toolbar[data-v-c4c4657a] {\n  padding: 12px;\n  background: var(--bg-primary, #ffffff);\n  border-bottom: 1px solid var(--border-secondary, #e8e8e8);\n  flex-shrink: 0;\n}\n.toolbar-group[data-v-c4c4657a] {\n  display: flex;\n  gap: 8px;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.toolbar-btn[data-v-c4c4657a] {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n  padding: 6px 12px;\n  background: var(--bg-primary, #ffffff);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.toolbar-btn[data-v-c4c4657a]:hover {\n  background: var(--bg-secondary, #f7f8fa);\n  border-color: var(--primary, #6366f1);\n}\n.toolbar-btn .btn-icon[data-v-c4c4657a] {\n  font-size: 14px;\n}\n.toolbar-select[data-v-c4c4657a] {\n  padding: 6px 12px;\n  background: var(--bg-primary, #ffffff);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.toolbar-select[data-v-c4c4657a]:hover {\n  border-color: var(--primary, #6366f1);\n}\n.toolbar-select[data-v-c4c4657a]:focus {\n  outline: none;\n  border-color: var(--primary, #6366f1);\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}\n.log-content[data-v-c4c4657a] {\n  flex: 1;\n  padding: 12px;\n  overflow-y: auto;\n  overflow-x: hidden;\n}\n.log-content[data-v-c4c4657a]::-webkit-scrollbar {\n  width: 6px;\n}\n.log-content[data-v-c4c4657a]::-webkit-scrollbar-thumb {\n  background: var(--gray-300, #d4d4d4);\n  border-radius: var(--radius-full, 9999px);\n}\n.log-content[data-v-c4c4657a]::-webkit-scrollbar-thumb:hover {\n  background: var(--gray-400, #a3a3a3);\n}\n.log-loading[data-v-c4c4657a] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  height: 200px;\n  gap: 12px;\n  color: var(--text-tertiary, #86909c);\n}\n.loading-spinner[data-v-c4c4657a] {\n  width: 32px;\n  height: 32px;\n  border: 3px solid var(--border-secondary, #f0f2f5);\n  border-top-color: var(--primary, #6366f1);\n  border-radius: var(--radius-full, 9999px);\n  animation: spin-c4c4657a 0.8s linear infinite;\n}\n@keyframes spin-c4c4657a {\nto {\n    transform: rotate(360deg);\n}\n}\n.log-list[data-v-c4c4657a] {\n  display: flex;\n  flex-direction: column;\n  gap: 0;\n}\n.log-line[data-v-c4c4657a] {\n  padding: 4px 8px;\n  font-family: "Consolas", "Monaco", "Courier New", monospace;\n  font-size: 12px;\n  line-height: 1.6;\n  white-space: pre-wrap;\n  word-break: break-word;\n  border-left: 2px solid transparent;\n  transition: all 0.15s ease;\n}\n.log-line[data-v-c4c4657a]:hover {\n  background: rgba(0, 0, 0, 0.03);\n  border-left-color: var(--primary, #6366f1);\n}\n.log-line.log-level-trace .log-level[data-v-c4c4657a] {\n  color: #8c8c8c;\n}\n.log-line.log-level-debug .log-level[data-v-c4c4657a] {\n  color: #1890ff;\n}\n.log-line.log-level-info .log-level[data-v-c4c4657a] {\n  color: #52c41a;\n}\n.log-line.log-level-warn[data-v-c4c4657a] {\n  background: rgba(250, 173, 20, 0.05);\n}\n.log-line.log-level-warn .log-level[data-v-c4c4657a] {\n  color: #faad14;\n}\n.log-line.log-level-error[data-v-c4c4657a], .log-line.log-level-fatal[data-v-c4c4657a] {\n  background: rgba(245, 34, 45, 0.05);\n}\n.log-line.log-level-error .log-level[data-v-c4c4657a], .log-line.log-level-fatal .log-level[data-v-c4c4657a] {\n  color: #f5222d;\n  font-weight: 600;\n}\n.log-timestamp[data-v-c4c4657a] {\n  color: #8c8c8c;\n  margin-right: 8px;\n  font-weight: 500;\n}\n.log-thread[data-v-c4c4657a] {\n  color: #1890ff;\n  margin-right: 8px;\n  font-style: italic;\n}\n.log-level[data-v-c4c4657a] {\n  display: inline-block;\n  min-width: 50px;\n  margin-right: 8px;\n  font-weight: 600;\n  text-align: left;\n}\n.log-class[data-v-c4c4657a] {\n  color: #722ed1;\n  margin-right: 8px;\n}\n.log-separator[data-v-c4c4657a] {\n  color: #8c8c8c;\n  margin-right: 8px;\n}\n.log-message[data-v-c4c4657a] {\n  color: var(--text-primary, #262626);\n  flex: 1;\n}\n.log-error-detail[data-v-c4c4657a] {\n  display: block;\n  margin-top: 4px;\n  padding-left: 24px;\n  color: #f5222d;\n}\n.log-error-label[data-v-c4c4657a] {\n  font-weight: 600;\n  margin-right: 8px;\n}\n.log-error-message[data-v-c4c4657a] {\n  font-style: italic;\n}\n.log-empty[data-v-c4c4657a] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  height: 200px;\n  gap: 12px;\n  color: var(--text-tertiary, #86909c);\n}\n.empty-icon[data-v-c4c4657a] {\n  font-size: 48px;\n  opacity: 0.5;\n}\n.empty-text[data-v-c4c4657a] {\n  font-size: var(--font-size-base, 13px);\n}@keyframes fadeIn-8db9aa68 {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-8db9aa68 {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-8db9aa68 {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-8db9aa68 {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.filter-card[data-v-8db9aa68] {\n  background: var(--bg-primary, #ffffff);\n  border-radius: var(--radius-lg, 12px);\n  padding: var(--spacing-lg, 16px);\n  display: flex;\n  flex-direction: column;\n  gap: var(--spacing-md, 12px);\n}\n.filter-inline[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--spacing-lg, 16px);\n  flex-wrap: wrap;\n}\n.filter-inline__fields[data-v-8db9aa68] {\n  display: flex;\n  gap: var(--spacing-lg, 16px);\n  flex: 1;\n  min-width: 240px;\n  flex-wrap: wrap;\n}\n.filter-inline__field[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-sm, 8px);\n  min-width: 220px;\n}\n.field-label[data-v-8db9aa68] {\n  color: var(--text-secondary, #4e5969);\n  font-size: var(--font-size-sm, 12px);\n  white-space: nowrap;\n}\n.filter-input[data-v-8db9aa68] {\n  flex: 1;\n  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);\n  border: 1px solid var(--border-primary, #e5e6eb);\n  border-radius: var(--radius-md, 8px);\n  background: var(--bg-primary, #ffffff);\n  color: var(--text-primary, #1f2329);\n  font-size: var(--font-size-base, 13px);\n  transition: all 0.2s ease;\n}\n.filter-input[data-v-8db9aa68]:hover {\n  border-color: var(--border-tertiary, #dcdfe6);\n}\n.filter-input[data-v-8db9aa68]:focus {\n  outline: none;\n  border-color: var(--primary, #6366f1);\n  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);\n}\n.filter-input[data-v-8db9aa68]::placeholder {\n  color: var(--text-tertiary, #86909c);\n}\n.filter-inline__actions[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-sm, 8px);\n}\n.filter-inline__actions.align-left[data-v-8db9aa68] {\n  justify-content: flex-start;\n}\n.filter-inline__actions.align-right[data-v-8db9aa68] {\n  justify-content: flex-end;\n}\n.filter-btn[data-v-8db9aa68] {\n  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);\n  border: none;\n  border-radius: var(--radius-md, 8px);\n  font-size: var(--font-size-sm, 12px);\n  font-weight: var(--font-weight-medium, 500);\n  cursor: pointer;\n  transition: all 0.2s ease;\n  white-space: nowrap;\n}\n.filter-btn--primary[data-v-8db9aa68] {\n  background: linear-gradient(135deg, var(--primary, #6366f1) 0%, var(--secondary, #8b5cf6) 100%);\n  color: var(--text-white, #ffffff);\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);\n}\n.filter-btn--primary[data-v-8db9aa68]:hover {\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n  transform: translateY(-1px);\n}\n.filter-btn--secondary[data-v-8db9aa68] {\n  background: var(--bg-secondary, #f7f8fa);\n  color: var(--text-primary, #1f2329);\n  border: 1px solid var(--border-primary, #e5e6eb);\n}\n.filter-btn--secondary[data-v-8db9aa68]:hover {\n  background: var(--bg-tertiary, #f2f3f5);\n  border-color: var(--border-tertiary, #dcdfe6);\n}\n.inline-toggle[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-xs, 4px);\n  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);\n  background: none;\n  border: 1px solid rgba(99, 102, 241, 0.3);\n  border-radius: var(--radius-full, 9999px);\n  color: var(--primary, #6366f1);\n  font-size: var(--font-size-sm, 12px);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.inline-toggle[data-v-8db9aa68]:hover {\n  background: rgba(99, 102, 241, 0.08);\n}\n.inline-toggle .toggle-icon[data-v-8db9aa68] {\n  font-size: 10px;\n}\n.filter-grid[data-v-8db9aa68] {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: var(--spacing-md, 12px);\n  padding-top: var(--spacing-sm, 8px);\n  border-top: 1px dashed var(--border-secondary, #f0f2f5);\n  overflow: hidden;\n}\n.filter-grid__field[data-v-8db9aa68] {\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-sm, 8px);\n}\n.filter-grid__hint[data-v-8db9aa68] {\n  grid-column: 1/-1;\n  font-size: var(--font-size-xs, 11px);\n  color: var(--text-tertiary, #86909c);\n}@keyframes fadeIn-c1a551dc {\nfrom {\n    opacity: 0;\n}\nto {\n    opacity: 1;\n}\n}\n@keyframes slideInUp-c1a551dc {\nfrom {\n    opacity: 0;\n    transform: translateY(20px);\n}\nto {\n    opacity: 1;\n    transform: translateY(0);\n}\n}\n@keyframes scaleIn-c1a551dc {\nfrom {\n    opacity: 0;\n    transform: scale(0.9);\n}\nto {\n    opacity: 1;\n    transform: scale(1);\n}\n}\n@keyframes pulse-c1a551dc {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.5;\n}\n}\n.fade-scale-enter-active[data-v-c1a551dc],\n.fade-scale-leave-active[data-v-c1a551dc] {\n  transition: opacity 0.25s ease, transform 0.25s ease;\n}\n.fade-scale-enter-from[data-v-c1a551dc],\n.fade-scale-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: scale(0.95);\n}\n.slide-left-enter-active[data-v-c1a551dc],\n.slide-left-leave-active[data-v-c1a551dc],\n.slide-right-enter-active[data-v-c1a551dc],\n.slide-right-leave-active[data-v-c1a551dc],\n.slide-top-enter-active[data-v-c1a551dc],\n.slide-top-leave-active[data-v-c1a551dc],\n.slide-bottom-enter-active[data-v-c1a551dc],\n.slide-bottom-leave-active[data-v-c1a551dc] {\n  transition: opacity 0.25s ease, transform 0.25s ease;\n}\n.slide-left-enter-from[data-v-c1a551dc],\n.slide-left-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: translateX(-20px);\n}\n.slide-right-enter-from[data-v-c1a551dc],\n.slide-right-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: translateX(20px);\n}\n.slide-top-enter-from[data-v-c1a551dc],\n.slide-top-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: translateY(-20px);\n}\n.slide-bottom-enter-from[data-v-c1a551dc],\n.slide-bottom-leave-to[data-v-c1a551dc] {\n  opacity: 0;\n  transform: translateY(20px);\n}\n.universal-modal-wrapper[data-v-c1a551dc] {\n  position: fixed;\n  inset: 0;\n  display: flex;\n  z-index: 1000;\n}\n.universal-modal-wrapper.with-mask[data-v-c1a551dc] {\n  background: rgba(0, 0, 0, 0.45);\n}\n.universal-modal-wrapper.no-mask[data-v-c1a551dc] {\n  background: transparent;\n  pointer-events: none;\n}\n.universal-modal-wrapper.position-center[data-v-c1a551dc] {\n  align-items: center;\n  justify-content: center;\n  padding: 24px;\n}\n.universal-modal-wrapper.position-left[data-v-c1a551dc] {\n  justify-content: flex-start;\n}\n.universal-modal-wrapper.position-right[data-v-c1a551dc] {\n  justify-content: flex-end;\n}\n.universal-modal-wrapper.position-top[data-v-c1a551dc] {\n  align-items: flex-start;\n}\n.universal-modal-wrapper.position-bottom[data-v-c1a551dc] {\n  align-items: flex-end;\n}\n.universal-modal-wrapper.fullscreen[data-v-c1a551dc] {\n  padding: 0;\n}\n.universal-modal[data-v-c1a551dc] {\n  position: relative;\n  background: var(--bg-primary, #ffffff);\n  border-radius: var(--radius-xl, 16px);\n  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.14);\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n  pointer-events: auto;\n  height: 100%;\n}\n.universal-modal.modal-center[data-v-c1a551dc] {\n  margin: auto;\n  height: auto;\n}\n.universal-modal.modal-left[data-v-c1a551dc], .universal-modal.modal-right[data-v-c1a551dc] {\n  position: absolute;\n}\n.universal-modal.modal-top[data-v-c1a551dc], .universal-modal.modal-bottom[data-v-c1a551dc] {\n  position: absolute;\n  max-width: calc(100vw - 48px);\n  height: auto;\n}\n.universal-modal.modal-fullscreen[data-v-c1a551dc] {\n  width: 100vw !important;\n  height: 100vh !important;\n  max-width: 100vw !important;\n  max-height: 100vh !important;\n  border-radius: 0;\n  top: 0 !important;\n  left: 0 !important;\n  right: 0 !important;\n  bottom: 0 !important;\n}\n.resize-handle[data-v-c1a551dc] {\n  position: absolute;\n  z-index: 10;\n}\n.resize-handle-top[data-v-c1a551dc], .resize-handle-bottom[data-v-c1a551dc] {\n  left: 0;\n  right: 0;\n  height: 4px;\n  cursor: ns-resize;\n}\n.resize-handle-top[data-v-c1a551dc]:hover, .resize-handle-bottom[data-v-c1a551dc]:hover {\n  background: rgba(99, 102, 241, 0.3);\n}\n.resize-handle-top[data-v-c1a551dc] {\n  top: 0;\n}\n.resize-handle-bottom[data-v-c1a551dc] {\n  bottom: 0;\n}\n.resize-handle-left[data-v-c1a551dc], .resize-handle-right[data-v-c1a551dc] {\n  top: 0;\n  bottom: 0;\n  width: 4px;\n  cursor: ew-resize;\n}\n.resize-handle-left[data-v-c1a551dc]:hover, .resize-handle-right[data-v-c1a551dc]:hover {\n  background: rgba(99, 102, 241, 0.3);\n}\n.resize-handle-left[data-v-c1a551dc] {\n  left: 0;\n}\n.resize-handle-right[data-v-c1a551dc] {\n  right: 0;\n}\n.modal-header[data-v-c1a551dc] {\n  padding: 16px 20px 12px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-start;\n  gap: 12px;\n  border-bottom: 1px solid var(--border-secondary, #f2f3f5);\n  background: linear-gradient(180deg, rgba(248, 249, 255, 0.8), #fff);\n  flex-shrink: 0;\n}\n.header-content[data-v-c1a551dc] {\n  display: flex;\n  gap: 12px;\n  align-items: flex-start;\n  flex: 1;\n  min-width: 0;\n}\n.header-icon[data-v-c1a551dc] {\n  width: 32px;\n  height: 32px;\n  border-radius: 10px;\n  background: radial-gradient(circle at 30% 20%, #e6e8ff, #cdcfff);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.header-icon .header-icon-img[data-v-c1a551dc] {\n  width: 24px;\n  height: 24px;\n  object-fit: contain;\n}\n.header-info[data-v-c1a551dc] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n  min-width: 0;\n}\n.header-subtitle[data-v-c1a551dc] {\n  font-size: var(--font-size-sm, 12px);\n  color: var(--text-tertiary, #86909c);\n  line-height: 1.3;\n}\n.header-title[data-v-c1a551dc] {\n  font-size: var(--font-size-lg, 16px);\n  font-weight: var(--font-weight-semibold, 600);\n  color: var(--text-primary, #1f2329);\n  line-height: 1.3;\n  word-break: break-word;\n}\n.header-actions[data-v-c1a551dc] {\n  display: flex;\n  gap: 8px;\n  align-items: center;\n  flex-shrink: 0;\n}\n.header-btn[data-v-c1a551dc] {\n  width: 28px;\n  height: 28px;\n  border: none;\n  background: transparent;\n  border-radius: var(--radius-full, 9999px);\n  color: var(--text-tertiary, #86909c);\n  cursor: pointer;\n  transition: all 0.2s ease;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 16px;\n}\n.header-btn[data-v-c1a551dc]:hover {\n  background: var(--bg-secondary, #f7f8fa);\n  color: var(--text-primary, #1f2329);\n}\n.modal-body[data-v-c1a551dc] {\n  flex: 1;\n  padding: 20px 24px;\n  overflow-y: auto;\n  overflow-x: hidden;\n  min-height: 0;\n  max-height: 100%;\n}\n.modal-body[data-v-c1a551dc]::-webkit-scrollbar {\n  width: 6px;\n}\n.modal-body[data-v-c1a551dc]::-webkit-scrollbar-thumb {\n  background: var(--gray-300, #d4d4d4);\n  border-radius: var(--radius-full, 9999px);\n}\n.modal-body[data-v-c1a551dc]::-webkit-scrollbar-thumb:hover {\n  background: var(--gray-400, #a3a3a3);\n}\n.modal-footer[data-v-c1a551dc] {\n  padding: 16px 24px;\n  border-top: 1px solid var(--border-secondary, #f2f3f5);\n  background: var(--bg-secondary, #f7f8fa);\n  flex-shrink: 0;\n}\n.footer-actions[data-v-c1a551dc] {\n  display: flex;\n  justify-content: flex-end;\n  gap: 12px;\n}\n.footer-btn[data-v-c1a551dc] {\n  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);\n  border: none;\n  border-radius: var(--radius-md, 8px);\n  font-size: var(--font-size-sm, 12px);\n  font-weight: var(--font-weight-medium, 500);\n  cursor: pointer;\n  transition: all 0.2s ease;\n}\n.footer-btn--cancel[data-v-c1a551dc] {\n  background: var(--bg-secondary, #f7f8fa);\n  color: var(--text-primary, #1f2329);\n  border: 1px solid var(--border-primary, #e5e6eb);\n}\n.footer-btn--cancel[data-v-c1a551dc]:hover {\n  background: var(--bg-tertiary, #f2f3f5);\n}\n.footer-btn--confirm[data-v-c1a551dc] {\n  background: linear-gradient(135deg, var(--primary, #6366f1) 0%, var(--secondary, #8b5cf6) 100%);\n  color: var(--text-white, #ffffff);\n  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);\n}\n.footer-btn--confirm[data-v-c1a551dc]:hover {\n  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);\n  transform: translateY(-1px);\n}\n@media (max-width: 768px) {\n.universal-modal-wrapper.position-center[data-v-c1a551dc] {\n    padding: 16px;\n}\n.universal-modal.modal-left[data-v-c1a551dc], .universal-modal.modal-right[data-v-c1a551dc] {\n    max-height: calc(100vh - 32px);\n}\n.universal-modal.modal-top[data-v-c1a551dc], .universal-modal.modal-bottom[data-v-c1a551dc] {\n    max-width: calc(100vw - 32px);\n}\n.modal-header[data-v-c1a551dc] {\n    padding: 14px 16px 10px;\n}\n.modal-body[data-v-c1a551dc] {\n    padding: 16px 20px;\n}\n.modal-footer[data-v-c1a551dc] {\n    padding: 12px 20px;\n}\n}\n.loading-container[data-v-d3a7a28f] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 200px;\n  padding: var(--spacing-4xl, 40px);\n}\n.loading-spinner[data-v-d3a7a28f] {\n  width: 40px;\n  height: 40px;\n  border: 3px solid var(--border-secondary, #f0f2f5);\n  border-top-color: var(--primary, #6366f1);\n  border-radius: var(--radius-full, 9999px);\n  animation: spin-d3a7a28f 0.8s linear infinite;\n}\n@keyframes spin-d3a7a28f {\nto {\n    transform: rotate(360deg);\n}\n}\n.loading-message[data-v-d3a7a28f] {\n  margin-top: var(--spacing-lg, 16px);\n  font-size: var(--font-size-sm, 12px);\n  color: var(--text-secondary, #4e5969);\n}\n\n.empty-state[data-v-a29f92b8] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  padding: var(--spacing-5xl, 48px) var(--spacing-2xl, 24px);\n  text-align: center;\n}\n.empty-icon[data-v-a29f92b8] {\n  font-size: 48px;\n  color: var(--text-quaternary, #c9cdd4);\n  margin-bottom: var(--spacing-lg, 16px);\n}\n.empty-title[data-v-a29f92b8] {\n  font-size: var(--font-size-lg, 16px);\n  font-weight: var(--font-weight-medium, 500);\n  color: var(--text-secondary, #4e5969);\n  margin-bottom: var(--spacing-sm, 8px);\n}\n.empty-description[data-v-a29f92b8] {\n  font-size: var(--font-size-sm, 12px);\n  color: var(--text-tertiary, #86909c);\n  max-width: 400px;\n  margin: 0;\n}\n.empty-action[data-v-a29f92b8] {\n  margin-top: var(--spacing-lg, 16px);\n}\n\n.error-container[data-v-c6d5c909] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  padding: var(--spacing-4xl, 40px) var(--spacing-2xl, 24px);\n  text-align: center;\n}\n.error-icon[data-v-c6d5c909] {\n  font-size: 48px;\n  color: var(--error, #ef4444);\n  margin-bottom: var(--spacing-lg, 16px);\n}\n.error-title[data-v-c6d5c909] {\n  font-size: var(--font-size-lg, 16px);\n  font-weight: var(--font-weight-semibold, 600);\n  color: var(--error, #ef4444);\n  margin-bottom: var(--spacing-sm, 8px);\n}\n.error-message[data-v-c6d5c909] {\n  font-size: var(--font-size-sm, 12px);\n  color: var(--text-secondary, #4e5969);\n  max-width: 500px;\n  margin: 0 0 var(--spacing-lg, 16px);\n}\n.error-action[data-v-c6d5c909] {\n  margin-top: var(--spacing-lg, 16px);\n}\n.error-retry-btn[data-v-c6d5c909] {\n  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);\n  font-size: var(--font-size-sm, 12px);\n  color: white;\n  background-color: var(--primary, #6366f1);\n  border: none;\n  border-radius: var(--radius-md, 8px);\n  cursor: pointer;\n  transition: opacity var(--transition-fast, 0.15s) ease;\n}\n.error-retry-btn[data-v-c6d5c909]:hover {\n  opacity: 0.8;\n}\n.error-retry-btn[data-v-c6d5c909]:active {\n  opacity: 0.6;\n}\n\n.plugin-admin-layout[data-v-fb377eb7] {\n  width: 100%;\n  height: 100%;\n}\n\n.plugin-submission-detail[data-v-a7d31ce5] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-card[data-v-a7d31ce5] {\n  margin-bottom: 0;\n}\n.description-content[data-v-a7d31ce5] {\n  color: #666;\n  line-height: 1.6;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n.icon-preview {\n&[data-v-a7d31ce5] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 20px;\n  }\nimg[data-v-a7d31ce5] {\n    max-width: 200px;\n    max-height: 200px;\n    object-fit: contain;\n}\n}\n.empty-text[data-v-a7d31ce5] {\n  color: #999;\n  font-size: 14px;\n}\n.action-buttons[data-v-a7d31ce5] {\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.plugin-submissions-page[data-v-50381363] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-50381363] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-50381363] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-50381363] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-50381363] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.plugin-detail[data-v-c501f9ff] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-card[data-v-c501f9ff] {\n  margin-bottom: 0;\n}\n.description-content[data-v-c501f9ff] {\n  color: #666;\n  line-height: 1.6;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n.version-list[data-v-c501f9ff] {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.version-item[data-v-c501f9ff] {\n  padding: 12px;\n  background: #fafafa;\n  border-radius: 4px;\n  border: 1px solid #f0f0f0;\n}\n.version-header[data-v-c501f9ff] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 8px;\n}\n.version-info[data-v-c501f9ff] {\n  display: flex;\n  align-items: center;\n}\n.version-number[data-v-c501f9ff] {\n  font-size: 16px;\n  font-weight: 600;\n  color: #333;\n}\n.version-time[data-v-c501f9ff] {\n  font-size: 13px;\n  color: #999;\n}\n.version-notes[data-v-c501f9ff] {\n  margin-bottom: 8px;\n  padding: 8px;\n  background: white;\n  border-radius: 4px;\n  font-size: 14px;\n  color: #666;\n  line-height: 1.5;\n}\n.version-meta[data-v-c501f9ff] {\n  font-size: 13px;\n  color: #999;\n}\n.icon-preview {\n&[data-v-c501f9ff] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 20px;\n  }\nimg[data-v-c501f9ff] {\n    max-width: 200px;\n    max-height: 200px;\n    object-fit: contain;\n}\n}\n.empty-text[data-v-c501f9ff] {\n  color: #999;\n  font-size: 14px;\n}\n.rating-text[data-v-c501f9ff] {\n  margin-left: 8px;\n  color: #666;\n  font-size: 14px;\n}\n.action-buttons[data-v-c501f9ff] {\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.plugin-management-page[data-v-5678b1d6] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-5678b1d6] {\n  /* 页面头部撑满宽度，无 padding */\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-5678b1d6] {\n  /* 内容区域有 padding */\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-5678b1d6] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-5678b1d6] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.statistics-analysis-page[data-v-cb00e5b0] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-cb00e5b0] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-cb00e5b0] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.filter-card {\n&[data-v-cb00e5b0] {\n  margin-bottom: 24px;\n  }\n.filter-label[data-v-cb00e5b0] {\n    font-weight: 500;\n    color: var(--n-text-color);\n}\n}\n.overview-cards {\n&[data-v-cb00e5b0] {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 16px;\n  margin-bottom: 24px;\n  }\n.stat-card {\n.stat-content {\n&[data-v-cb00e5b0] {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      }\n.stat-icon[data-v-cb00e5b0] {\n        width: 64px;\n        height: 64px;\n        border-radius: 12px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        color: white;\n}\n.stat-info {\n&[data-v-cb00e5b0] {\n        flex: 1;\n        }\n.stat-label[data-v-cb00e5b0] {\n          font-size: 14px;\n          color: var(--n-text-color-3);\n          margin-bottom: 8px;\n}\n.stat-value[data-v-cb00e5b0] {\n          font-size: 28px;\n          font-weight: 600;\n          color: var(--n-text-color);\n}\n}\n}\n}\n}\n.today-stats {\n&[data-v-cb00e5b0] {\n  margin-bottom: 24px;\n  }\n.stat-unit[data-v-cb00e5b0] {\n    font-size: 14px;\n    color: var(--n-text-color-3);\n    margin-left: 4px;\n}\n}\n.trend-charts {\n&[data-v-cb00e5b0] {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));\n  gap: 16px;\n  margin-bottom: 24px;\n  }\n.chart-card {\n.chart-container {\n&[data-v-cb00e5b0] {\n      height: 300px;\n      padding: 20px 0;\n      position: relative;\n      }\n.simple-chart {\n&[data-v-cb00e5b0] {\n        display: flex;\n        align-items: flex-end;\n        justify-content: space-around;\n        height: 100%;\n        gap: 8px;\n        }\n.chart-bar {\n&[data-v-cb00e5b0] {\n          flex: 1;\n          background: linear-gradient(180deg, #2080f0 0%, #4098fc 100%);\n          border-radius: 4px 4px 0 0;\n          min-height: 20px;\n          position: relative;\n          cursor: pointer;\n          transition: all 0.3s;\n          }\n&[data-v-cb00e5b0]:hover {\n            opacity: 0.8;\n            transform: translateY(-2px);\n}\n.bar-value[data-v-cb00e5b0] {\n            position: absolute;\n            top: -24px;\n            left: 50%;\n            transform: translateX(-50%);\n            font-size: 12px;\n            color: var(--n-text-color);\n            white-space: nowrap;\n}\n}\n}\n.empty-chart[data-v-cb00e5b0] {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        height: 100%;\n        color: var(--n-text-color-3);\n        font-size: 14px;\n}\n}\n.chart-labels {\n&[data-v-cb00e5b0] {\n      display: flex;\n      justify-content: space-around;\n      margin-top: 12px;\n      padding: 0 4px;\n      }\n.chart-label[data-v-cb00e5b0] {\n        font-size: 12px;\n        color: var(--n-text-color-3);\n        text-align: center;\n        flex: 1;\n}\n}\n}\n}\n.top-plugins {\n.rank-badge[data-v-cb00e5b0] {\n    display: flex;\n    align-items: center;\n}\n}\n\n.category-management-page[data-v-cb59b69e] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-cb59b69e] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-cb59b69e] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-cb59b69e] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-cb59b69e] {\n  margin-top: 16px;\n}\n.category-detail[data-v-cb59b69e] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-cb59b69e] {\n  margin-bottom: 16px;\n}\n\n.tag-management-page[data-v-cacd4f23] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-cacd4f23] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-cacd4f23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-cacd4f23] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n}\n.tag-detail[data-v-cacd4f23] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-cacd4f23] {\n  margin-bottom: 16px;\n}\n\n.developer-management-page[data-v-70519d49] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-70519d49] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-70519d49] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-70519d49] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-70519d49] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n.developer-detail[data-v-70519d49] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-70519d49] {\n  margin-bottom: 16px;\n}\n.text-secondary[data-v-70519d49] {\n  color: #999;\n  font-size: 12px;\n}\n\n.audit-log-page[data-v-687b2df6] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-687b2df6] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-687b2df6] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-687b2df6] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-687b2df6] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n.log-detail[data-v-687b2df6] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-687b2df6] {\n  margin-bottom: 16px;\n}\n\n.review-rules-page[data-v-0ef816e9] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-0ef816e9] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-0ef816e9] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-0ef816e9] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-0ef816e9] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n.conditions-container[data-v-0ef816e9],\n.actions-container[data-v-0ef816e9] {\n  width: 100%;\n}\n.condition-item[data-v-0ef816e9],\n.action-item[data-v-0ef816e9] {\n  margin-bottom: 8px;\n}\n\n.feedback-management-page[data-v-bf346ffe] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-bf346ffe] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-bf346ffe] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-bf346ffe] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-bf346ffe] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n.feedback-detail[data-v-bf346ffe] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n.detail-section[data-v-bf346ffe] {\n  margin-bottom: 16px;\n}\n.feedback-content[data-v-bf346ffe],\n.handle-comment[data-v-bf346ffe] {\n  white-space: pre-wrap;\n  word-break: break-word;\n  line-height: 1.6;\n  padding: 12px;\n  background: #f5f5f5;\n  border-radius: 4px;\n}\n\n.permission-request-review-page[data-v-eb0bd909] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-eb0bd909] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-eb0bd909] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-eb0bd909] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-eb0bd909] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.plugin-table-permission-management-page[data-v-d2eaf243] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-d2eaf243] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-d2eaf243] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 16px;\n  overflow: auto;\n}\n.table-container[data-v-d2eaf243] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n  display: flex;\n  flex-direction: column;\n}\n.pagination-container[data-v-d2eaf243] {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 16px;\n  padding-top: 16px;\n  border-top: 1px solid #f0f0f0;\n}\n\n.signing-key-management-page[data-v-5429c1cf] {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background: #f5f5f5;\n}\n.page-header-wrapper[data-v-5429c1cf] {\n  background: white;\n  border-bottom: 1px solid #e8e8e8;\n}\n.page-content[data-v-5429c1cf] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  padding: 16px;\n  overflow: auto;\n  gap: 16px;\n}\n.table-container[data-v-5429c1cf] {\n  flex: 1;\n  background: white;\n  border-radius: 8px;\n  padding: 16px;\n  overflow: auto;\n}\n/*$vite$:1*/';
   document.head.appendChild(__vite_style__);
-  const _hoisted_1$d = { class: "plugin-admin-layout" };
-  const _sfc_main$d = /* @__PURE__ */ vue.defineComponent({
+  const _hoisted_1$e = { class: "plugin-admin-layout" };
+  const _sfc_main$e = /* @__PURE__ */ vue.defineComponent({
     __name: "PluginAdminLayout",
     setup(__props) {
       return (_ctx, _cache) => {
         const _component_router_view = vue.resolveComponent("router-view");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$d, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$e, [
           vue.createVNode(_component_router_view)
         ]);
       };
@@ -22,7 +22,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
     }
     return target;
   };
-  const PluginAdminLayout = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["__scopeId", "data-v-fb377eb7"]]);
+  const PluginAdminLayout = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-fb377eb7"]]);
   function useIcon(iconName) {
     const Ionicons5 = window.Ionicons5;
     if (!Ionicons5) {
@@ -239,10 +239,11 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
     };
   }
   const useMessage = () => useHostBridge().message;
-  const _hoisted_1$c = { class: "plugin-submission-detail" };
-  const _hoisted_2$c = { class: "description-content" };
-  const _hoisted_3$c = { class: "icon-preview" };
-  const _hoisted_4$c = ["src"];
+  const useDialog = () => useHostBridge().dialog;
+  const _hoisted_1$d = { class: "plugin-submission-detail" };
+  const _hoisted_2$d = { class: "description-content" };
+  const _hoisted_3$d = { class: "icon-preview" };
+  const _hoisted_4$d = ["src"];
   const _hoisted_5$c = {
     key: 1,
     class: "empty-text"
@@ -251,7 +252,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
     key: 2,
     class: "action-buttons"
   };
-  const _sfc_main$c = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$d = /* @__PURE__ */ vue.defineComponent({
     __name: "PluginSubmissionDetail",
     props: {
       submission: {}
@@ -296,7 +297,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
         const _component_n_space = vue.resolveComponent("n-space");
         const _component_n_button = vue.resolveComponent("n-button");
         const _component_n_icon = vue.resolveComponent("n-icon");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$c, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$d, [
           vue.createVNode(_component_n_card, {
             title: "基本信息",
             bordered: false,
@@ -381,7 +382,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
             class: "detail-card"
           }, {
             default: vue.withCtx(() => [
-              vue.createElementVNode("div", _hoisted_2$c, vue.toDisplayString(__props.submission.description || "暂无描述"), 1)
+              vue.createElementVNode("div", _hoisted_2$d, vue.toDisplayString(__props.submission.description || "暂无描述"), 1)
             ]),
             _: 1
           }),
@@ -392,11 +393,11 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
             class: "detail-card"
           }, {
             default: vue.withCtx(() => [
-              vue.createElementVNode("div", _hoisted_3$c, [
+              vue.createElementVNode("div", _hoisted_3$d, [
                 vue.createElementVNode("img", {
                   src: __props.submission.icon,
                   alt: "插件图标"
-                }, null, 8, _hoisted_4$c)
+                }, null, 8, _hoisted_4$d)
               ])
             ]),
             _: 1
@@ -525,7 +526,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
       };
     }
   });
-  const PluginSubmissionDetail = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-a7d31ce5"]]);
+  const PluginSubmissionDetail = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["__scopeId", "data-v-a7d31ce5"]]);
   function bind(fn, thisArg) {
     return function wrap() {
       return fn.apply(thisArg, arguments);
@@ -3845,12 +3846,26 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
       return http.post(`${API_BASE}/feedbacks/${id}/close`, data);
     }
   };
-  const _hoisted_1$b = { class: "plugin-submissions-page" };
-  const _hoisted_2$b = { class: "page-header-wrapper" };
-  const _hoisted_3$b = { class: "page-content" };
-  const _hoisted_4$b = { class: "table-container" };
+  const signingKeyApi = {
+    list() {
+      return http.get(`${API_BASE}/signing-keys`);
+    },
+    getPublicKeyPem(keyId) {
+      return http.get(`${API_BASE}/signing-keys/${keyId}/public-key-pem`);
+    },
+    generate(data) {
+      return http.post(`${API_BASE}/signing-keys/generate`, data);
+    },
+    activate(keyId, data) {
+      return http.post(`${API_BASE}/signing-keys/${keyId}/activate`, data);
+    }
+  };
+  const _hoisted_1$c = { class: "plugin-submissions-page" };
+  const _hoisted_2$c = { class: "page-header-wrapper" };
+  const _hoisted_3$c = { class: "page-content" };
+  const _hoisted_4$c = { class: "table-container" };
   const _hoisted_5$b = { class: "pagination-container" };
-  const _sfc_main$b = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$c = /* @__PURE__ */ vue.defineComponent({
     __name: "PluginSubmissions",
     setup(__props) {
       const CheckmarkCircle = useIcon("CheckmarkCircleOutline");
@@ -4241,8 +4256,8 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
         const _component_n_form_item = vue.resolveComponent("n-form-item");
         const _component_n_form = vue.resolveComponent("n-form");
         const _component_n_modal = vue.resolveComponent("n-modal");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$b, [
-          vue.createElementVNode("div", _hoisted_2$b, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$c, [
+          vue.createElementVNode("div", _hoisted_2$c, [
             vue.createVNode(_component_PageHeader, {
               title: "插件审核管理",
               subtitle: "审核开发者提交的插件申请"
@@ -4306,7 +4321,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$b, [
+          vue.createElementVNode("div", _hoisted_3$c, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[0] || (_cache[0] = ($event) => filters.value = $event),
@@ -4317,7 +4332,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4$b, [
+            vue.createElementVNode("div", _hoisted_4$c, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: tableData.value,
@@ -4458,14 +4473,14 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
       };
     }
   });
-  const PluginSubmissions = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-50381363"]]);
-  const _hoisted_1$a = { class: "plugin-detail" };
-  const _hoisted_2$a = { class: "description-content" };
-  const _hoisted_3$a = {
+  const PluginSubmissions = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-50381363"]]);
+  const _hoisted_1$b = { class: "plugin-detail" };
+  const _hoisted_2$b = { class: "description-content" };
+  const _hoisted_3$b = {
     key: 0,
     class: "version-list"
   };
-  const _hoisted_4$a = { class: "version-header" };
+  const _hoisted_4$b = { class: "version-header" };
   const _hoisted_5$a = { class: "version-info" };
   const _hoisted_6$6 = { class: "version-number" };
   const _hoisted_7$5 = { class: "version-time" };
@@ -4483,16 +4498,17 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
   };
   const _hoisted_14$1 = { class: "rating-text" };
   const _hoisted_15$1 = { class: "action-buttons" };
-  const _sfc_main$a = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$b = /* @__PURE__ */ vue.defineComponent({
     __name: "PluginDetail",
     props: {
       plugin: {}
     },
-    emits: ["delist", "relist", "edit", "close"],
+    emits: ["delist", "relist", "edit", "delete", "close"],
     setup(__props) {
       const CreateOutline = useIcon("CreateOutline");
       const BanOutline = useIcon("BanOutline");
       const CheckmarkCircle = useIcon("CheckmarkCircleOutline");
+      const TrashOutline = useIcon("TrashOutline");
       const Refresh = useIcon("RefreshOutline");
       useMessage();
       const props = __props;
@@ -4571,7 +4587,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
         const _component_n_spin = vue.resolveComponent("n-spin");
         const _component_n_space = vue.resolveComponent("n-space");
         const _component_n_rate = vue.resolveComponent("n-rate");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$a, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$b, [
           vue.createVNode(_component_n_card, {
             title: "基本信息",
             bordered: false,
@@ -4656,7 +4672,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
             class: "detail-card"
           }, {
             default: vue.withCtx(() => [
-              vue.createElementVNode("div", _hoisted_2$a, vue.toDisplayString(__props.plugin.description || "暂无描述"), 1)
+              vue.createElementVNode("div", _hoisted_2$b, vue.toDisplayString(__props.plugin.description || "暂无描述"), 1)
             ]),
             _: 1
           }),
@@ -4680,7 +4696,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
                   })
                 ]),
                 default: vue.withCtx(() => [
-                  _cache[4] || (_cache[4] = vue.createTextVNode(" 刷新 ", -1))
+                  _cache[5] || (_cache[5] = vue.createTextVNode(" 刷新 ", -1))
                 ]),
                 _: 1
               }, 8, ["loading"])
@@ -4688,13 +4704,13 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
             default: vue.withCtx(() => [
               vue.createVNode(_component_n_spin, { show: loadingVersions.value }, {
                 default: vue.withCtx(() => [
-                  versions.value.length > 0 ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3$a, [
+                  versions.value.length > 0 ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_3$b, [
                     (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(versions.value, (version) => {
                       return vue.openBlock(), vue.createElementBlock("div", {
                         key: version.version,
                         class: "version-item"
                       }, [
-                        vue.createElementVNode("div", _hoisted_4$a, [
+                        vue.createElementVNode("div", _hoisted_4$b, [
                           vue.createElementVNode("div", _hoisted_5$a, [
                             vue.createElementVNode("span", _hoisted_6$6, vue.toDisplayString(version.version), 1),
                             version.isCurrent ? (vue.openBlock(), vue.createBlock(_component_n_tag, {
@@ -4703,7 +4719,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
                               size: "small",
                               style: { "margin-left": "8px" }
                             }, {
-                              default: vue.withCtx(() => [..._cache[5] || (_cache[5] = [
+                              default: vue.withCtx(() => [..._cache[6] || (_cache[6] = [
                                 vue.createTextVNode(" 当前版本 ", -1)
                               ])]),
                               _: 1
@@ -4839,7 +4855,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
                 vue.createVNode(_component_n_button, {
                   onClick: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("close"))
                 }, {
-                  default: vue.withCtx(() => [..._cache[6] || (_cache[6] = [
+                  default: vue.withCtx(() => [..._cache[7] || (_cache[7] = [
                     vue.createTextVNode(" 关闭 ", -1)
                   ])]),
                   _: 1
@@ -4856,7 +4872,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
                     })
                   ]),
                   default: vue.withCtx(() => [
-                    _cache[7] || (_cache[7] = vue.createTextVNode(" 编辑 ", -1))
+                    _cache[8] || (_cache[8] = vue.createTextVNode(" 编辑 ", -1))
                   ]),
                   _: 1
                 }),
@@ -4874,14 +4890,33 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
                     })
                   ]),
                   default: vue.withCtx(() => [
-                    _cache[8] || (_cache[8] = vue.createTextVNode(" 下架 ", -1))
+                    _cache[9] || (_cache[9] = vue.createTextVNode(" 下架 ", -1))
+                  ]),
+                  _: 1
+                })) : vue.createCommentVNode("", true),
+                __props.plugin.status === "DELISTED" || __props.plugin.status === "OFFLINE" ? (vue.openBlock(), vue.createBlock(_component_n_button, {
+                  key: 1,
+                  type: "error",
+                  secondary: "",
+                  onClick: _cache[3] || (_cache[3] = ($event) => _ctx.$emit("delete", __props.plugin.pluginId))
+                }, {
+                  icon: vue.withCtx(() => [
+                    vue.createVNode(_component_n_icon, null, {
+                      default: vue.withCtx(() => [
+                        (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(vue.unref(TrashOutline))))
+                      ]),
+                      _: 1
+                    })
+                  ]),
+                  default: vue.withCtx(() => [
+                    _cache[10] || (_cache[10] = vue.createTextVNode(" 删除 ", -1))
                   ]),
                   _: 1
                 })) : vue.createCommentVNode("", true),
                 __props.plugin.status === "DELISTED" ? (vue.openBlock(), vue.createBlock(_component_n_button, {
-                  key: 1,
+                  key: 2,
                   type: "success",
-                  onClick: _cache[3] || (_cache[3] = ($event) => _ctx.$emit("relist", __props.plugin.pluginId))
+                  onClick: _cache[4] || (_cache[4] = ($event) => _ctx.$emit("relist", __props.plugin.pluginId))
                 }, {
                   icon: vue.withCtx(() => [
                     vue.createVNode(_component_n_icon, null, {
@@ -4892,7 +4927,7 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
                     })
                   ]),
                   default: vue.withCtx(() => [
-                    _cache[9] || (_cache[9] = vue.createTextVNode(" 重新上架 ", -1))
+                    _cache[11] || (_cache[11] = vue.createTextVNode(" 重新上架 ", -1))
                   ]),
                   _: 1
                 })) : vue.createCommentVNode("", true)
@@ -4904,17 +4939,17 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
       };
     }
   });
-  const PluginDetail = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-3e715355"]]);
-  const _hoisted_1$9 = { class: "plugin-management-page" };
-  const _hoisted_2$9 = { class: "page-header-wrapper" };
-  const _hoisted_3$9 = { class: "page-content" };
-  const _hoisted_4$9 = { class: "table-container" };
+  const PluginDetail = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-c501f9ff"]]);
+  const _hoisted_1$a = { class: "plugin-management-page" };
+  const _hoisted_2$a = { class: "page-header-wrapper" };
+  const _hoisted_3$a = { class: "page-content" };
+  const _hoisted_4$a = { class: "table-container" };
   const _hoisted_5$9 = { class: "pagination-container" };
   const _hoisted_6$5 = { style: { "margin-bottom": "12px" } };
   const _hoisted_7$4 = { key: 0 };
   const _hoisted_8$3 = { style: { "color": "#18a058" } };
   const _hoisted_9$2 = { style: { "margin-bottom": "12px" } };
-  const _sfc_main$9 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$a = /* @__PURE__ */ vue.defineComponent({
     __name: "PluginManagement",
     setup(__props) {
       const BanOutline = useIcon("BanOutline");
@@ -4924,7 +4959,9 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
       const CheckmarkCircle = useIcon("CheckmarkCircleOutline");
       const CloudUploadOutline = useIcon("CloudUploadOutline");
       const CloudUpload = useIcon("CloudUpload");
+      const TrashOutline = useIcon("TrashOutline");
       const message = useMessage();
+      const dialog = naiveUi.useDialog();
       const loading = vue.ref(false);
       const refreshLoading = vue.ref(false);
       const batchRelistLoading = vue.ref(false);
@@ -5216,6 +5253,13 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
                 icon: () => vue.h(NIcon, { component: CheckmarkCircle })
               });
             }
+            if (row.status === "DELISTED" || row.status === "OFFLINE") {
+              moreOptions.push({
+                label: "删除",
+                key: "delete",
+                icon: () => vue.h(NIcon, { component: TrashOutline })
+              });
+            }
             const handleMoreSelect = (key) => {
               switch (key) {
                 case "upgrade":
@@ -5226,6 +5270,9 @@ var __GRESS_PLUGIN__ = function(exports, vue, naiveUi) {
                   break;
                 case "relist":
                   handleRelist(row.pluginId);
+                  break;
+                case "delete":
+                  confirmDeletePlugin(row.pluginId, row.pluginName);
                   break;
               }
             };
@@ -5342,6 +5389,30 @@ ${errors.join("\n")}`);
         await pluginApi.relist(pluginId);
         message.success("插件已重新上架");
         await loadData();
+      }
+      function confirmDeletePlugin(pluginId, pluginName) {
+        dialog.warning({
+          title: "永久删除插件",
+          content: `将删除插件「${pluginName || pluginId}」的应用信息、全部版本记录，并移除已存储的插件包（JAR），不可恢复。确定继续？`,
+          positiveText: "删除",
+          negativeText: "取消",
+          onPositiveClick: async () => {
+            var _a, _b, _c, _d;
+            try {
+              await pluginApi.delete(pluginId);
+              message.success("插件已删除");
+              showDetailDrawer.value = false;
+              currentPlugin.value = null;
+              checkedRowKeys.value = [];
+              await loadData();
+              return true;
+            } catch (error) {
+              const msg = ((_b = (_a = error.response) == null ? void 0 : _a.data) == null ? void 0 : _b.errorMessage) || ((_d = (_c = error.response) == null ? void 0 : _c.data) == null ? void 0 : _d.message) || error.message || "删除失败";
+              message.error(msg);
+              return false;
+            }
+          }
+        });
       }
       function handleEdit(pluginId) {
         const plugin = tableData.value.find((p) => p.pluginId === pluginId);
@@ -5619,8 +5690,8 @@ ${errors.join("\n")}`);
         const _component_n_switch = vue.resolveComponent("n-switch");
         const _component_n_progress = vue.resolveComponent("n-progress");
         const _component_n_alert = vue.resolveComponent("n-alert");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$9, [
-          vue.createElementVNode("div", _hoisted_2$9, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$a, [
+          vue.createElementVNode("div", _hoisted_2$a, [
             vue.createVNode(_component_PageHeader, {
               title: "插件列表管理",
               subtitle: "管理已上架的插件"
@@ -5641,7 +5712,7 @@ ${errors.join("\n")}`);
                         })
                       ]),
                       default: vue.withCtx(() => [
-                        _cache[20] || (_cache[20] = vue.createTextVNode(" 上传新插件 ", -1))
+                        _cache[21] || (_cache[21] = vue.createTextVNode(" 上传新插件 ", -1))
                       ]),
                       _: 1
                     }),
@@ -5660,7 +5731,7 @@ ${errors.join("\n")}`);
                         })
                       ]),
                       default: vue.withCtx(() => [
-                        _cache[21] || (_cache[21] = vue.createTextVNode(" 批量上架 ", -1))
+                        _cache[22] || (_cache[22] = vue.createTextVNode(" 批量上架 ", -1))
                       ]),
                       _: 1
                     }, 8, ["disabled", "loading"]),
@@ -5679,7 +5750,7 @@ ${errors.join("\n")}`);
                         })
                       ]),
                       default: vue.withCtx(() => [
-                        _cache[22] || (_cache[22] = vue.createTextVNode(" 批量下架 ", -1))
+                        _cache[23] || (_cache[23] = vue.createTextVNode(" 批量下架 ", -1))
                       ]),
                       _: 1
                     }, 8, ["disabled", "loading"]),
@@ -5696,7 +5767,7 @@ ${errors.join("\n")}`);
                         })
                       ]),
                       default: vue.withCtx(() => [
-                        _cache[23] || (_cache[23] = vue.createTextVNode(" 刷新 ", -1))
+                        _cache[24] || (_cache[24] = vue.createTextVNode(" 刷新 ", -1))
                       ]),
                       _: 1
                     }, 8, ["loading"])
@@ -5707,7 +5778,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$9, [
+          vue.createElementVNode("div", _hoisted_3$a, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[1] || (_cache[1] = ($event) => filters.value = $event),
@@ -5718,7 +5789,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced", "basic-fields"]),
-            vue.createElementVNode("div", _hoisted_4$9, [
+            vue.createElementVNode("div", _hoisted_4$a, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: tableData.value,
@@ -5756,7 +5827,7 @@ ${errors.join("\n")}`);
           ]),
           vue.createVNode(_component_n_drawer, {
             show: showDetailDrawer.value,
-            "onUpdate:show": _cache[6] || (_cache[6] = ($event) => showDetailDrawer.value = $event),
+            "onUpdate:show": _cache[7] || (_cache[7] = ($event) => showDetailDrawer.value = $event),
             width: 720,
             placement: "right"
           }, {
@@ -5772,7 +5843,8 @@ ${errors.join("\n")}`);
                     onDelist: handleDelist,
                     onRelist: handleRelist,
                     onEdit: handleEdit,
-                    onClose: _cache[5] || (_cache[5] = ($event) => showDetailDrawer.value = false)
+                    onDelete: _cache[5] || (_cache[5] = (id) => confirmDeletePlugin(id)),
+                    onClose: _cache[6] || (_cache[6] = ($event) => showDetailDrawer.value = false)
                   }, null, 8, ["plugin"])) : vue.createCommentVNode("", true)
                 ]),
                 _: 1
@@ -5782,7 +5854,7 @@ ${errors.join("\n")}`);
           }, 8, ["show"]),
           vue.createVNode(_component_n_modal, {
             show: showDelistModal.value,
-            "onUpdate:show": _cache[8] || (_cache[8] = ($event) => showDelistModal.value = $event),
+            "onUpdate:show": _cache[9] || (_cache[9] = ($event) => showDelistModal.value = $event),
             preset: "dialog",
             title: "下架插件",
             "positive-text": "确认下架",
@@ -5804,7 +5876,7 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_input, {
                         value: delistForm.reason,
-                        "onUpdate:value": _cache[7] || (_cache[7] = ($event) => delistForm.reason = $event),
+                        "onUpdate:value": _cache[8] || (_cache[8] = ($event) => delistForm.reason = $event),
                         type: "textarea",
                         placeholder: "请输入下架原因（必填）",
                         rows: 4
@@ -5820,7 +5892,7 @@ ${errors.join("\n")}`);
           }, 8, ["show"]),
           vue.createVNode(_component_n_modal, {
             show: showEditModal.value,
-            "onUpdate:show": _cache[12] || (_cache[12] = ($event) => showEditModal.value = $event),
+            "onUpdate:show": _cache[13] || (_cache[13] = ($event) => showEditModal.value = $event),
             preset: "dialog",
             title: "编辑插件信息",
             "positive-text": "保存",
@@ -5842,7 +5914,7 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_input, {
                         value: editForm.pluginName,
-                        "onUpdate:value": _cache[9] || (_cache[9] = ($event) => editForm.pluginName = $event),
+                        "onUpdate:value": _cache[10] || (_cache[10] = ($event) => editForm.pluginName = $event),
                         placeholder: "请输入插件名称"
                       }, null, 8, ["value"])
                     ]),
@@ -5855,7 +5927,7 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_input, {
                         value: editForm.description,
-                        "onUpdate:value": _cache[10] || (_cache[10] = ($event) => editForm.description = $event),
+                        "onUpdate:value": _cache[11] || (_cache[11] = ($event) => editForm.description = $event),
                         type: "textarea",
                         placeholder: "请输入插件描述",
                         rows: 4
@@ -5870,7 +5942,7 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_input, {
                         value: editForm.category,
-                        "onUpdate:value": _cache[11] || (_cache[11] = ($event) => editForm.category = $event),
+                        "onUpdate:value": _cache[12] || (_cache[12] = ($event) => editForm.category = $event),
                         placeholder: "请输入分类"
                       }, null, 8, ["value"])
                     ]),
@@ -5884,7 +5956,7 @@ ${errors.join("\n")}`);
           }, 8, ["show"]),
           vue.createVNode(_component_n_modal, {
             show: showUploadModal.value,
-            "onUpdate:show": _cache[16] || (_cache[16] = ($event) => showUploadModal.value = $event),
+            "onUpdate:show": _cache[17] || (_cache[17] = ($event) => showUploadModal.value = $event),
             preset: "dialog",
             title: "上传新插件",
             "positive-text": "开始上传",
@@ -5927,7 +5999,7 @@ ${errors.join("\n")}`);
                                 })
                               ]),
                               vue.createVNode(_component_n_text, { style: { "font-size": "16px" } }, {
-                                default: vue.withCtx(() => [..._cache[24] || (_cache[24] = [
+                                default: vue.withCtx(() => [..._cache[25] || (_cache[25] = [
                                   vue.createTextVNode(" 点击或拖拽文件到此区域上传 ", -1)
                                 ])]),
                                 _: 1
@@ -5936,7 +6008,7 @@ ${errors.join("\n")}`);
                                 depth: "3",
                                 style: { "margin": "8px 0 0 0" }
                               }, {
-                                default: vue.withCtx(() => [..._cache[25] || (_cache[25] = [
+                                default: vue.withCtx(() => [..._cache[26] || (_cache[26] = [
                                   vue.createTextVNode(" 仅支持 .jar 格式的插件包文件 ", -1)
                                 ])]),
                                 _: 1
@@ -5957,7 +6029,7 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_select, {
                         value: uploadForm.pluginType,
-                        "onUpdate:value": _cache[13] || (_cache[13] = ($event) => uploadForm.pluginType = $event),
+                        "onUpdate:value": _cache[14] || (_cache[14] = ($event) => uploadForm.pluginType = $event),
                         placeholder: "请选择插件类型",
                         options: pluginTypeOptions.value
                       }, null, 8, ["value", "options"])
@@ -5971,7 +6043,7 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_input, {
                         value: uploadForm.description,
-                        "onUpdate:value": _cache[14] || (_cache[14] = ($event) => uploadForm.description = $event),
+                        "onUpdate:value": _cache[15] || (_cache[15] = ($event) => uploadForm.description = $event),
                         type: "textarea",
                         placeholder: "请输入插件描述（可选）",
                         rows: 3
@@ -5986,13 +6058,13 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_switch, {
                         value: uploadForm.autoList,
-                        "onUpdate:value": _cache[15] || (_cache[15] = ($event) => uploadForm.autoList = $event)
+                        "onUpdate:value": _cache[16] || (_cache[16] = ($event) => uploadForm.autoList = $event)
                       }, null, 8, ["value"]),
                       vue.createVNode(_component_n_text, {
                         depth: "3",
                         style: { "margin-left": "12px", "font-size": "14px" }
                       }, {
-                        default: vue.withCtx(() => [..._cache[26] || (_cache[26] = [
+                        default: vue.withCtx(() => [..._cache[27] || (_cache[27] = [
                           vue.createTextVNode(" 开启后插件将自动上架到应用商店 ", -1)
                         ])]),
                         _: 1
@@ -6015,7 +6087,7 @@ ${errors.join("\n")}`);
           }, 8, ["show", "positive-button-props"]),
           vue.createVNode(_component_n_modal, {
             show: showUpgradeModal.value,
-            "onUpdate:show": _cache[19] || (_cache[19] = ($event) => showUpgradeModal.value = $event),
+            "onUpdate:show": _cache[20] || (_cache[20] = ($event) => showUpgradeModal.value = $event),
             preset: "dialog",
             title: "升级插件版本",
             "positive-text": "确认升级",
@@ -6027,21 +6099,21 @@ ${errors.join("\n")}`);
                 type: "info",
                 style: { "margin-bottom": "16px" }
               }, {
-                header: vue.withCtx(() => [..._cache[27] || (_cache[27] = [
+                header: vue.withCtx(() => [..._cache[28] || (_cache[28] = [
                   vue.createTextVNode("升级插件", -1)
                 ])]),
                 default: vue.withCtx(() => {
                   var _a, _b, _c;
                   return [
-                    _cache[30] || (_cache[30] = vue.createTextVNode(" 正在为插件 ", -1)),
+                    _cache[31] || (_cache[31] = vue.createTextVNode(" 正在为插件 ", -1)),
                     vue.createElementVNode("strong", null, vue.toDisplayString((_a = upgradeTargetPlugin.value) == null ? void 0 : _a.pluginName), 1),
                     vue.createTextVNode(" (" + vue.toDisplayString((_b = upgradeTargetPlugin.value) == null ? void 0 : _b.pluginId) + ") 升级新版本 ", 1),
-                    _cache[31] || (_cache[31] = vue.createElementVNode("br", null, null, -1)),
-                    _cache[32] || (_cache[32] = vue.createTextVNode(" 当前版本：", -1)),
+                    _cache[32] || (_cache[32] = vue.createElementVNode("br", null, null, -1)),
+                    _cache[33] || (_cache[33] = vue.createTextVNode(" 当前版本：", -1)),
                     vue.createElementVNode("strong", null, vue.toDisplayString((_c = upgradeTargetPlugin.value) == null ? void 0 : _c.currentVersion), 1),
                     upgradeForm.parsedVersion ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_7$4, [
-                      _cache[28] || (_cache[28] = vue.createElementVNode("br", null, null, -1)),
-                      _cache[29] || (_cache[29] = vue.createTextVNode(" 检测到的新版本：", -1)),
+                      _cache[29] || (_cache[29] = vue.createElementVNode("br", null, null, -1)),
+                      _cache[30] || (_cache[30] = vue.createTextVNode(" 检测到的新版本：", -1)),
                       vue.createElementVNode("strong", _hoisted_8$3, vue.toDisplayString(upgradeForm.parsedVersion), 1)
                     ])) : vue.createCommentVNode("", true)
                   ];
@@ -6082,7 +6154,7 @@ ${errors.join("\n")}`);
                                 })
                               ]),
                               vue.createVNode(_component_n_text, { style: { "font-size": "16px" } }, {
-                                default: vue.withCtx(() => [..._cache[33] || (_cache[33] = [
+                                default: vue.withCtx(() => [..._cache[34] || (_cache[34] = [
                                   vue.createTextVNode(" 点击或拖拽文件到此区域上传 ", -1)
                                 ])]),
                                 _: 1
@@ -6091,7 +6163,7 @@ ${errors.join("\n")}`);
                                 depth: "3",
                                 style: { "margin": "8px 0 0 0" }
                               }, {
-                                default: vue.withCtx(() => [..._cache[34] || (_cache[34] = [
+                                default: vue.withCtx(() => [..._cache[35] || (_cache[35] = [
                                   vue.createTextVNode(" 仅支持 .jar 格式的插件包文件，版本号将自动从包中解析 ", -1)
                                 ])]),
                                 _: 1
@@ -6112,7 +6184,7 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_input, {
                         value: upgradeForm.updateNotes,
-                        "onUpdate:value": _cache[17] || (_cache[17] = ($event) => upgradeForm.updateNotes = $event),
+                        "onUpdate:value": _cache[18] || (_cache[18] = ($event) => upgradeForm.updateNotes = $event),
                         type: "textarea",
                         placeholder: "请输入本次更新的内容说明",
                         rows: 4
@@ -6127,13 +6199,13 @@ ${errors.join("\n")}`);
                     default: vue.withCtx(() => [
                       vue.createVNode(_component_n_switch, {
                         value: upgradeForm.autoList,
-                        "onUpdate:value": _cache[18] || (_cache[18] = ($event) => upgradeForm.autoList = $event)
+                        "onUpdate:value": _cache[19] || (_cache[19] = ($event) => upgradeForm.autoList = $event)
                       }, null, 8, ["value"]),
                       vue.createVNode(_component_n_text, {
                         depth: "3",
                         style: { "margin-left": "12px", "font-size": "14px" }
                       }, {
-                        default: vue.withCtx(() => [..._cache[35] || (_cache[35] = [
+                        default: vue.withCtx(() => [..._cache[36] || (_cache[36] = [
                           vue.createTextVNode(" 开启后新版本将自动上架到应用商店 ", -1)
                         ])]),
                         _: 1
@@ -6158,11 +6230,11 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const PluginManagement = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-f7880059"]]);
-  const _hoisted_1$8 = { class: "statistics-analysis-page" };
-  const _hoisted_2$8 = { class: "page-header-wrapper" };
-  const _hoisted_3$8 = { class: "page-content" };
-  const _hoisted_4$8 = { class: "overview-cards" };
+  const PluginManagement = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-5678b1d6"]]);
+  const _hoisted_1$9 = { class: "statistics-analysis-page" };
+  const _hoisted_2$9 = { class: "page-header-wrapper" };
+  const _hoisted_3$9 = { class: "page-content" };
+  const _hoisted_4$9 = { class: "overview-cards" };
   const _hoisted_5$8 = { class: "stat-content" };
   const _hoisted_6$4 = {
     class: "stat-icon",
@@ -6222,7 +6294,7 @@ ${errors.join("\n")}`);
     key: 0,
     class: "chart-labels"
   };
-  const _sfc_main$8 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$9 = /* @__PURE__ */ vue.defineComponent({
     __name: "StatisticsAnalysis",
     setup(__props) {
       const DownloadOutline = useIcon("DownloadOutline");
@@ -6448,8 +6520,8 @@ ${errors.join("\n")}`);
         const _component_n_switch = vue.resolveComponent("n-switch");
         const _component_n_form = vue.resolveComponent("n-form");
         const _component_n_modal = vue.resolveComponent("n-modal");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$8, [
-          vue.createElementVNode("div", _hoisted_2$8, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$9, [
+          vue.createElementVNode("div", _hoisted_2$9, [
             vue.createVNode(_component_PageHeader, {
               title: "统计分析",
               subtitle: "查看插件商店的统计数据和趋势分析"
@@ -6493,7 +6565,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$8, [
+          vue.createElementVNode("div", _hoisted_3$9, [
             vue.createVNode(_component_n_card, {
               class: "filter-card",
               bordered: false
@@ -6549,7 +6621,7 @@ ${errors.join("\n")}`);
               ]),
               _: 1
             }),
-            vue.createElementVNode("div", _hoisted_4$8, [
+            vue.createElementVNode("div", _hoisted_4$9, [
               vue.createVNode(_component_n_card, {
                 class: "stat-card",
                 bordered: false
@@ -6824,16 +6896,16 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const StatisticsAnalysis = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-cb00e5b0"]]);
-  const _hoisted_1$7 = { class: "category-management-page" };
-  const _hoisted_2$7 = { class: "page-header-wrapper" };
-  const _hoisted_3$7 = { class: "page-content" };
-  const _hoisted_4$7 = { class: "table-container" };
+  const StatisticsAnalysis = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-cb00e5b0"]]);
+  const _hoisted_1$8 = { class: "category-management-page" };
+  const _hoisted_2$8 = { class: "page-header-wrapper" };
+  const _hoisted_3$8 = { class: "page-content" };
+  const _hoisted_4$8 = { class: "table-container" };
   const _hoisted_5$7 = {
     key: 0,
     class: "category-detail"
   };
-  const _sfc_main$7 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$8 = /* @__PURE__ */ vue.defineComponent({
     __name: "CategoryManagement",
     setup(__props) {
       const Add = useIcon("AddOutline");
@@ -7152,8 +7224,8 @@ ${errors.join("\n")}`);
         const _component_n_card = vue.resolveComponent("n-card");
         const _component_n_drawer_content = vue.resolveComponent("n-drawer-content");
         const _component_n_drawer = vue.resolveComponent("n-drawer");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$7, [
-          vue.createElementVNode("div", _hoisted_2$7, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$8, [
+          vue.createElementVNode("div", _hoisted_2$8, [
             vue.createVNode(_component_PageHeader, {
               title: "分类管理",
               subtitle: "管理插件分类，维护分类信息"
@@ -7197,7 +7269,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$7, [
+          vue.createElementVNode("div", _hoisted_3$8, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[0] || (_cache[0] = ($event) => filters.value = $event),
@@ -7207,7 +7279,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4$7, [
+            vue.createElementVNode("div", _hoisted_4$8, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: categories.value,
@@ -7489,16 +7561,16 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const CategoryManagement = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-cb59b69e"]]);
-  const _hoisted_1$6 = { class: "tag-management-page" };
-  const _hoisted_2$6 = { class: "page-header-wrapper" };
-  const _hoisted_3$6 = { class: "page-content" };
-  const _hoisted_4$6 = { class: "table-container" };
+  const CategoryManagement = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-cb59b69e"]]);
+  const _hoisted_1$7 = { class: "tag-management-page" };
+  const _hoisted_2$7 = { class: "page-header-wrapper" };
+  const _hoisted_3$7 = { class: "page-content" };
+  const _hoisted_4$7 = { class: "table-container" };
   const _hoisted_5$6 = {
     key: 0,
     class: "tag-detail"
   };
-  const _sfc_main$6 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$7 = /* @__PURE__ */ vue.defineComponent({
     __name: "TagManagement",
     setup(__props) {
       const Add = useIcon("AddOutline");
@@ -7826,8 +7898,8 @@ ${errors.join("\n")}`);
         const _component_n_card = vue.resolveComponent("n-card");
         const _component_n_drawer_content = vue.resolveComponent("n-drawer-content");
         const _component_n_drawer = vue.resolveComponent("n-drawer");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$6, [
-          vue.createElementVNode("div", _hoisted_2$6, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$7, [
+          vue.createElementVNode("div", _hoisted_2$7, [
             vue.createVNode(_component_PageHeader, {
               title: "标签管理",
               subtitle: "管理插件标签，维护标签信息"
@@ -7871,7 +7943,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$6, [
+          vue.createElementVNode("div", _hoisted_3$7, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[0] || (_cache[0] = ($event) => filters.value = $event),
@@ -7881,7 +7953,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4$6, [
+            vue.createElementVNode("div", _hoisted_4$7, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: tags.value,
@@ -8157,11 +8229,11 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const TagManagement = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-cacd4f23"]]);
-  const _hoisted_1$5 = { class: "developer-management-page" };
-  const _hoisted_2$5 = { class: "page-header-wrapper" };
-  const _hoisted_3$5 = { class: "page-content" };
-  const _hoisted_4$5 = { class: "table-container" };
+  const TagManagement = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-cacd4f23"]]);
+  const _hoisted_1$6 = { class: "developer-management-page" };
+  const _hoisted_2$6 = { class: "page-header-wrapper" };
+  const _hoisted_3$6 = { class: "page-content" };
+  const _hoisted_4$6 = { class: "table-container" };
   const _hoisted_5$5 = { class: "pagination-container" };
   const _hoisted_6$3 = {
     key: 0,
@@ -8170,7 +8242,7 @@ ${errors.join("\n")}`);
   const _hoisted_7$2 = ["href"];
   const _hoisted_8$1 = { key: 1 };
   const _hoisted_9 = { class: "text-secondary" };
-  const _sfc_main$5 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$6 = /* @__PURE__ */ vue.defineComponent({
     __name: "DeveloperManagement",
     setup(__props) {
       const Refresh = useIcon("RefreshOutline");
@@ -8563,8 +8635,8 @@ ${errors.join("\n")}`);
         const _component_n_empty = vue.resolveComponent("n-empty");
         const _component_n_drawer_content = vue.resolveComponent("n-drawer-content");
         const _component_n_drawer = vue.resolveComponent("n-drawer");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$5, [
-          vue.createElementVNode("div", _hoisted_2$5, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$6, [
+          vue.createElementVNode("div", _hoisted_2$6, [
             vue.createVNode(_component_PageHeader, {
               title: "开发者管理",
               subtitle: "管理开发者账户，审核开发者资格申请"
@@ -8591,7 +8663,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$5, [
+          vue.createElementVNode("div", _hoisted_3$6, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[0] || (_cache[0] = ($event) => filters.value = $event),
@@ -8601,7 +8673,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4$5, [
+            vue.createElementVNode("div", _hoisted_4$6, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: developers.value,
@@ -8902,17 +8974,17 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const DeveloperManagement = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-70519d49"]]);
-  const _hoisted_1$4 = { class: "audit-log-page" };
-  const _hoisted_2$4 = { class: "page-header-wrapper" };
-  const _hoisted_3$4 = { class: "page-content" };
-  const _hoisted_4$4 = { class: "table-container" };
+  const DeveloperManagement = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-70519d49"]]);
+  const _hoisted_1$5 = { class: "audit-log-page" };
+  const _hoisted_2$5 = { class: "page-header-wrapper" };
+  const _hoisted_3$5 = { class: "page-content" };
+  const _hoisted_4$5 = { class: "table-container" };
   const _hoisted_5$4 = { class: "pagination-container" };
   const _hoisted_6$2 = {
     key: 0,
     class: "log-detail"
   };
-  const _sfc_main$4 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$5 = /* @__PURE__ */ vue.defineComponent({
     __name: "AuditLog",
     setup(__props) {
       const Refresh = useIcon("RefreshOutline");
@@ -9288,8 +9360,8 @@ ${errors.join("\n")}`);
       return (_ctx, _cache) => {
         const _component_PageHeader = vue.resolveComponent("PageHeader");
         const _component_FilterPanel = vue.resolveComponent("FilterPanel");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$4, [
-          vue.createElementVNode("div", _hoisted_2$4, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$5, [
+          vue.createElementVNode("div", _hoisted_2$5, [
             vue.createVNode(_component_PageHeader, {
               title: "审计日志",
               subtitle: "查看所有管理操作记录，追踪系统变更"
@@ -9334,7 +9406,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$4, [
+          vue.createElementVNode("div", _hoisted_3$5, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[0] || (_cache[0] = ($event) => filters.value = $event),
@@ -9345,7 +9417,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4$4, [
+            vue.createElementVNode("div", _hoisted_4$5, [
               vue.createVNode(vue.unref(naiveUi.NDataTable), {
                 columns,
                 data: tableData.value,
@@ -9719,15 +9791,15 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const AuditLog = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-687b2df6"]]);
-  const _hoisted_1$3 = { class: "review-rules-page" };
-  const _hoisted_2$3 = { class: "page-header-wrapper" };
-  const _hoisted_3$3 = { class: "page-content" };
-  const _hoisted_4$3 = { class: "table-container" };
+  const AuditLog = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-687b2df6"]]);
+  const _hoisted_1$4 = { class: "review-rules-page" };
+  const _hoisted_2$4 = { class: "page-header-wrapper" };
+  const _hoisted_3$4 = { class: "page-content" };
+  const _hoisted_4$4 = { class: "table-container" };
   const _hoisted_5$3 = { class: "pagination-container" };
   const _hoisted_6$1 = { class: "conditions-container" };
   const _hoisted_7$1 = { class: "actions-container" };
-  const _sfc_main$3 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$4 = /* @__PURE__ */ vue.defineComponent({
     __name: "ReviewRules",
     setup(__props) {
       const Add = useIcon("AddOutline");
@@ -10191,8 +10263,8 @@ ${errors.join("\n")}`);
         const _component_n_radio_group = vue.resolveComponent("n-radio-group");
         const _component_n_form = vue.resolveComponent("n-form");
         const _component_n_modal = vue.resolveComponent("n-modal");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$3, [
-          vue.createElementVNode("div", _hoisted_2$3, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$4, [
+          vue.createElementVNode("div", _hoisted_2$4, [
             vue.createVNode(_component_PageHeader, {
               title: "审核规则配置",
               subtitle: "配置自动化审核规则，提高审核效率"
@@ -10241,7 +10313,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$3, [
+          vue.createElementVNode("div", _hoisted_3$4, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[0] || (_cache[0] = ($event) => filters.value = $event),
@@ -10251,7 +10323,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4$3, [
+            vue.createElementVNode("div", _hoisted_4$4, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: rules.value,
@@ -10609,11 +10681,11 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const ReviewRules = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-0ef816e9"]]);
-  const _hoisted_1$2 = { class: "feedback-management-page" };
-  const _hoisted_2$2 = { class: "page-header-wrapper" };
-  const _hoisted_3$2 = { class: "page-content" };
-  const _hoisted_4$2 = { class: "table-container" };
+  const ReviewRules = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-0ef816e9"]]);
+  const _hoisted_1$3 = { class: "feedback-management-page" };
+  const _hoisted_2$3 = { class: "page-header-wrapper" };
+  const _hoisted_3$3 = { class: "page-content" };
+  const _hoisted_4$3 = { class: "table-container" };
   const _hoisted_5$2 = { class: "pagination-container" };
   const _hoisted_6 = {
     key: 0,
@@ -10621,7 +10693,7 @@ ${errors.join("\n")}`);
   };
   const _hoisted_7 = { class: "feedback-content" };
   const _hoisted_8 = { class: "handle-comment" };
-  const _sfc_main$2 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$3 = /* @__PURE__ */ vue.defineComponent({
     __name: "FeedbackManagement",
     setup(__props) {
       const Refresh = useIcon("RefreshOutline");
@@ -11071,8 +11143,8 @@ ${errors.join("\n")}`);
         const _component_n_input = vue.resolveComponent("n-input");
         const _component_n_form = vue.resolveComponent("n-form");
         const _component_n_modal = vue.resolveComponent("n-modal");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$2, [
-          vue.createElementVNode("div", _hoisted_2$2, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$3, [
+          vue.createElementVNode("div", _hoisted_2$3, [
             vue.createVNode(_component_PageHeader, {
               title: "用户反馈管理",
               subtitle: "查看和处理用户提交的反馈和举报"
@@ -11099,7 +11171,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$2, [
+          vue.createElementVNode("div", _hoisted_3$3, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[0] || (_cache[0] = ($event) => filters.value = $event),
@@ -11109,7 +11181,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4$2, [
+            vue.createElementVNode("div", _hoisted_4$3, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: feedbacks.value,
@@ -11537,13 +11609,13 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const FeedbackManagement = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-bf346ffe"]]);
-  const _hoisted_1$1 = { class: "permission-request-review-page" };
-  const _hoisted_2$1 = { class: "page-header-wrapper" };
-  const _hoisted_3$1 = { class: "page-content" };
-  const _hoisted_4$1 = { class: "table-container" };
+  const FeedbackManagement = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-bf346ffe"]]);
+  const _hoisted_1$2 = { class: "permission-request-review-page" };
+  const _hoisted_2$2 = { class: "page-header-wrapper" };
+  const _hoisted_3$2 = { class: "page-content" };
+  const _hoisted_4$2 = { class: "table-container" };
   const _hoisted_5$1 = { class: "pagination-container" };
-  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$2 = /* @__PURE__ */ vue.defineComponent({
     __name: "PermissionRequestReview",
     setup(__props) {
       const CheckmarkCircle = useIcon("CheckmarkCircleOutline");
@@ -11848,8 +11920,8 @@ ${errors.join("\n")}`);
         const _component_n_form_item = vue.resolveComponent("n-form-item");
         const _component_n_form = vue.resolveComponent("n-form");
         const _component_n_modal = vue.resolveComponent("n-modal");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$1, [
-          vue.createElementVNode("div", _hoisted_2$1, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$2, [
+          vue.createElementVNode("div", _hoisted_2$2, [
             vue.createVNode(_component_PageHeader, {
               title: "权限申请审核",
               subtitle: "审核插件对系统表的访问权限申请"
@@ -11881,7 +11953,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3$1, [
+          vue.createElementVNode("div", _hoisted_3$2, [
             vue.createVNode(_component_FilterPanel, {
               filters,
               "show-advanced": showAdvanced.value,
@@ -11892,7 +11964,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4$1, [
+            vue.createElementVNode("div", _hoisted_4$2, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: tableData.value,
@@ -12005,13 +12077,13 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const PermissionRequestReview = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-eb0bd909"]]);
-  const _hoisted_1 = { class: "plugin-table-permission-management-page" };
-  const _hoisted_2 = { class: "page-header-wrapper" };
-  const _hoisted_3 = { class: "page-content" };
-  const _hoisted_4 = { class: "table-container" };
+  const PermissionRequestReview = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-eb0bd909"]]);
+  const _hoisted_1$1 = { class: "plugin-table-permission-management-page" };
+  const _hoisted_2$1 = { class: "page-header-wrapper" };
+  const _hoisted_3$1 = { class: "page-content" };
+  const _hoisted_4$1 = { class: "table-container" };
   const _hoisted_5 = { class: "pagination-container" };
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
     __name: "PluginTablePermissionManagement",
     setup(__props) {
       const Add = useIcon("AddOutline");
@@ -12355,8 +12427,8 @@ ${errors.join("\n")}`);
         const _component_n_switch = vue.resolveComponent("n-switch");
         const _component_n_form = vue.resolveComponent("n-form");
         const _component_n_modal = vue.resolveComponent("n-modal");
-        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
-          vue.createElementVNode("div", _hoisted_2, [
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1$1, [
+          vue.createElementVNode("div", _hoisted_2$1, [
             vue.createVNode(_component_PageHeader, {
               title: "插件表权限管理",
               subtitle: "配置插件对系统表的特殊访问权限"
@@ -12405,7 +12477,7 @@ ${errors.join("\n")}`);
               _: 1
             })
           ]),
-          vue.createElementVNode("div", _hoisted_3, [
+          vue.createElementVNode("div", _hoisted_3$1, [
             vue.createVNode(_component_FilterPanel, {
               filters: filters.value,
               "onUpdate:filters": _cache[0] || (_cache[0] = ($event) => filters.value = $event),
@@ -12416,7 +12488,7 @@ ${errors.join("\n")}`);
               onSearch: handleSearch,
               onReset: handleReset
             }, null, 8, ["filters", "show-advanced"]),
-            vue.createElementVNode("div", _hoisted_4, [
+            vue.createElementVNode("div", _hoisted_4$1, [
               vue.createVNode(_component_n_data_table, {
                 columns,
                 data: tableData.value,
@@ -12562,7 +12634,346 @@ ${errors.join("\n")}`);
       };
     }
   });
-  const PluginTablePermissionManagement = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-d2eaf243"]]);
+  const PluginTablePermissionManagement = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-d2eaf243"]]);
+  const _hoisted_1 = { class: "signing-key-management-page" };
+  const _hoisted_2 = { class: "page-header-wrapper" };
+  const _hoisted_3 = { class: "page-content" };
+  const _hoisted_4 = { class: "table-container" };
+  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+    __name: "SigningKeyManagement",
+    setup(__props) {
+      const message = useMessage();
+      const dialog = useDialog();
+      const loading = vue.ref(false);
+      const refreshLoading = vue.ref(false);
+      const keys = vue.ref([]);
+      const showGenerateModal = vue.ref(false);
+      const generateFormRef = vue.ref(null);
+      const generateForm = vue.reactive({
+        alias: "",
+        validityDays: 3650,
+        makeActive: true,
+        trustedWindowDays: 30
+      });
+      const generateRules = {
+        validityDays: [
+          { required: true, type: "number", message: "请输入有效期（天）", trigger: "blur" }
+        ],
+        trustedWindowDays: [
+          { required: true, type: "number", message: "请输入可信窗口（天）", trigger: "blur" }
+        ]
+      };
+      const NTag = vue.resolveComponent("NTag");
+      const NButton = vue.resolveComponent("NButton");
+      const columns = [
+        { title: "密钥ID", key: "keyId", width: 180, ellipsis: { tooltip: true } },
+        { title: "别名", key: "alias", width: 140, ellipsis: { tooltip: true } },
+        {
+          title: "状态",
+          key: "active",
+          width: 100,
+          render: (row) => vue.h(
+            NTag,
+            { type: row.active ? "success" : "default" },
+            { default: () => row.active ? "ACTIVE" : "TRUSTED" }
+          )
+        },
+        { title: "公钥指纹（SHA-256）", key: "fingerprintSha256", width: 240, ellipsis: { tooltip: true } },
+        { title: "可信至", key: "trustedUntil", width: 160 },
+        {
+          title: "吊销时间",
+          key: "revokedAt",
+          width: 160,
+          render: (row) => row.revokedAt ? row.revokedAt : "-"
+        },
+        { title: "创建时间", key: "createTime", width: 160 },
+        {
+          title: "操作",
+          key: "actions",
+          width: 220,
+          fixed: "right",
+          render: (row) => {
+            return vue.h("div", [
+              vue.h(
+                NButton,
+                {
+                  size: "small",
+                  type: row.active ? "default" : "primary",
+                  disabled: row.active,
+                  onClick: () => handleActivate(row.keyId)
+                },
+                { default: () => "设为激活" }
+              ),
+              vue.h(
+                NButton,
+                {
+                  size: "small",
+                  style: "margin-left: 8px",
+                  onClick: () => handleDownloadPem(row)
+                },
+                { default: () => "下载公钥" }
+              )
+            ]);
+          }
+        }
+      ];
+      async function loadKeys() {
+        loading.value = true;
+        try {
+          const res = await signingKeyApi.list();
+          keys.value = Array.isArray(res) ? res : (res == null ? void 0 : res.data) || [];
+        } catch (e) {
+          message.error((e == null ? void 0 : e.message) || "加载签名密钥失败");
+        } finally {
+          loading.value = false;
+          refreshLoading.value = false;
+        }
+      }
+      async function handleGenerate() {
+        var _a;
+        await ((_a = generateFormRef.value) == null ? void 0 : _a.validate());
+        const payload = {
+          alias: generateForm.alias || void 0,
+          validityDays: generateForm.validityDays,
+          makeActive: generateForm.makeActive,
+          trustedWindowDays: generateForm.trustedWindowDays
+        };
+        showGenerateModal.value = false;
+        refreshLoading.value = true;
+        try {
+          await signingKeyApi.generate(payload);
+          message.success("密钥生成成功");
+        } catch (e) {
+          message.error((e == null ? void 0 : e.message) || "密钥生成失败");
+        } finally {
+          refreshLoading.value = false;
+          await loadKeys();
+        }
+      }
+      function handleActivate(keyId) {
+        dialog.warning({
+          title: "切换为该密钥的 ACTIVE",
+          content: "将把当前密钥切换为 ACTIVE，并让新旧密钥在可信窗口期内都被客户端接受。",
+          positiveText: "确认切换",
+          negativeText: "取消",
+          onPositiveClick: async () => {
+            refreshLoading.value = true;
+            try {
+              const payload = { trustedWindowDays: generateForm.trustedWindowDays };
+              await signingKeyApi.activate(keyId, payload);
+              message.success("切换成功");
+              await loadKeys();
+            } catch (e) {
+              message.error((e == null ? void 0 : e.message) || "切换失败");
+            } finally {
+              refreshLoading.value = false;
+            }
+          }
+        });
+      }
+      async function handleDownloadPem(row) {
+        try {
+          const res = await signingKeyApi.getPublicKeyPem(row.keyId);
+          const pem = (res == null ? void 0 : res.data) ?? res;
+          if (!pem || typeof pem !== "string") {
+            message.error("下载失败：未获取到 PEM 内容");
+            return;
+          }
+          const blob = new Blob([pem], { type: "application/x-pem-file;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `appstore-signing-public-key-${row.keyId}.pem`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        } catch (e) {
+          message.error((e == null ? void 0 : e.message) || "下载公钥失败");
+        }
+      }
+      vue.onMounted(() => {
+        loadKeys();
+      });
+      return (_ctx, _cache) => {
+        const _component_n_space = vue.resolveComponent("n-space");
+        const _component_PageHeader = vue.resolveComponent("PageHeader");
+        const _component_n_data_table = vue.resolveComponent("n-data-table");
+        const _component_n_input = vue.resolveComponent("n-input");
+        const _component_n_form_item = vue.resolveComponent("n-form-item");
+        const _component_n_input_number = vue.resolveComponent("n-input-number");
+        const _component_n_switch = vue.resolveComponent("n-switch");
+        const _component_n_alert = vue.resolveComponent("n-alert");
+        const _component_n_form = vue.resolveComponent("n-form");
+        const _component_n_modal = vue.resolveComponent("n-modal");
+        return vue.openBlock(), vue.createElementBlock("div", _hoisted_1, [
+          vue.createElementVNode("div", _hoisted_2, [
+            vue.createVNode(_component_PageHeader, {
+              title: "签名密钥管理",
+              subtitle: "生成与轮换 AppStore 签名密钥（self-signed）"
+            }, {
+              actions: vue.withCtx(() => [
+                vue.createVNode(_component_n_space, null, {
+                  default: vue.withCtx(() => [
+                    vue.createVNode(vue.unref(NButton), {
+                      type: "primary",
+                      onClick: _cache[0] || (_cache[0] = ($event) => showGenerateModal.value = true)
+                    }, {
+                      default: vue.withCtx(() => [..._cache[7] || (_cache[7] = [
+                        vue.createTextVNode(" 一键生成密钥 ", -1)
+                      ])]),
+                      _: 1
+                    }),
+                    vue.createVNode(vue.unref(NButton), {
+                      onClick: loadKeys,
+                      loading: refreshLoading.value
+                    }, {
+                      default: vue.withCtx(() => [..._cache[8] || (_cache[8] = [
+                        vue.createTextVNode(" 刷新 ", -1)
+                      ])]),
+                      _: 1
+                    }, 8, ["loading"])
+                  ]),
+                  _: 1
+                })
+              ]),
+              _: 1
+            })
+          ]),
+          vue.createElementVNode("div", _hoisted_3, [
+            vue.createElementVNode("div", _hoisted_4, [
+              vue.createVNode(_component_n_data_table, {
+                columns,
+                data: keys.value,
+                loading: loading.value,
+                pagination: false,
+                "row-key": (row) => row.keyId,
+                striped: ""
+              }, null, 8, ["data", "loading", "row-key"])
+            ])
+          ]),
+          vue.createVNode(_component_n_modal, {
+            show: showGenerateModal.value,
+            "onUpdate:show": _cache[6] || (_cache[6] = ($event) => showGenerateModal.value = $event),
+            preset: "card",
+            title: "生成新的签名密钥",
+            "mask-closable": false,
+            style: { "width": "600px" }
+          }, {
+            footer: vue.withCtx(() => [
+              vue.createVNode(_component_n_space, { justify: "end" }, {
+                default: vue.withCtx(() => [
+                  vue.createVNode(vue.unref(NButton), {
+                    onClick: _cache[5] || (_cache[5] = ($event) => showGenerateModal.value = false)
+                  }, {
+                    default: vue.withCtx(() => [..._cache[11] || (_cache[11] = [
+                      vue.createTextVNode("取消", -1)
+                    ])]),
+                    _: 1
+                  }),
+                  vue.createVNode(vue.unref(NButton), {
+                    type: "primary",
+                    onClick: handleGenerate,
+                    loading: refreshLoading.value
+                  }, {
+                    default: vue.withCtx(() => [..._cache[12] || (_cache[12] = [
+                      vue.createTextVNode(" 生成 ", -1)
+                    ])]),
+                    _: 1
+                  }, 8, ["loading"])
+                ]),
+                _: 1
+              })
+            ]),
+            default: vue.withCtx(() => [
+              vue.createVNode(_component_n_form, {
+                ref_key: "generateFormRef",
+                ref: generateFormRef,
+                model: generateForm,
+                rules: generateRules,
+                "label-placement": "left",
+                "label-width": "140px"
+              }, {
+                default: vue.withCtx(() => [
+                  vue.createVNode(_component_n_form_item, {
+                    label: "alias（可选）",
+                    path: "alias"
+                  }, {
+                    default: vue.withCtx(() => [
+                      vue.createVNode(_component_n_input, {
+                        value: generateForm.alias,
+                        "onUpdate:value": _cache[1] || (_cache[1] = ($event) => generateForm.alias = $event),
+                        placeholder: "不填则自动生成"
+                      }, null, 8, ["value"])
+                    ]),
+                    _: 1
+                  }),
+                  vue.createVNode(_component_n_form_item, {
+                    label: "有效期（天）",
+                    path: "validityDays"
+                  }, {
+                    default: vue.withCtx(() => [
+                      vue.createVNode(_component_n_input_number, {
+                        value: generateForm.validityDays,
+                        "onUpdate:value": _cache[2] || (_cache[2] = ($event) => generateForm.validityDays = $event),
+                        min: 1,
+                        max: 36500,
+                        style: { "width": "100%" }
+                      }, null, 8, ["value"])
+                    ]),
+                    _: 1
+                  }),
+                  vue.createVNode(_component_n_form_item, {
+                    label: "是否立即激活",
+                    path: "makeActive"
+                  }, {
+                    default: vue.withCtx(() => [
+                      vue.createVNode(_component_n_switch, {
+                        value: generateForm.makeActive,
+                        "onUpdate:value": _cache[3] || (_cache[3] = ($event) => generateForm.makeActive = $event)
+                      }, null, 8, ["value"])
+                    ]),
+                    _: 1
+                  }),
+                  vue.createVNode(_component_n_form_item, {
+                    label: "可信窗口（天）",
+                    path: "trustedWindowDays"
+                  }, {
+                    default: vue.withCtx(() => [
+                      vue.createVNode(_component_n_input_number, {
+                        value: generateForm.trustedWindowDays,
+                        "onUpdate:value": _cache[4] || (_cache[4] = ($event) => generateForm.trustedWindowDays = $event),
+                        min: 1,
+                        max: 3650,
+                        style: { "width": "100%" }
+                      }, null, 8, ["value"]),
+                      _cache[9] || (_cache[9] = vue.createElementVNode("div", { style: { "margin-top": "6px", "font-size": "12px", "color": "#888" } }, " 激活后，新旧密钥会同时作为客户端 trusted roots 在窗口期内被接受。 ", -1))
+                    ]),
+                    _: 1
+                  }),
+                  vue.createVNode(_component_n_alert, {
+                    type: "warning",
+                    title: "安全提醒",
+                    style: { "margin-top": "12px" }
+                  }, {
+                    default: vue.withCtx(() => [..._cache[10] || (_cache[10] = [
+                      vue.createTextVNode(" 服务器端需要环境变量 ", -1),
+                      vue.createElementVNode("code", null, "APPSTORE_MASTER_ENCRYPTION_KEY", -1),
+                      vue.createTextVNode(" 才能安全加密 keystore 密码。 ", -1)
+                    ])]),
+                    _: 1
+                  })
+                ]),
+                _: 1
+              }, 8, ["model"])
+            ]),
+            _: 1
+          }, 8, ["show"])
+        ]);
+      };
+    }
+  });
+  const SigningKeyManagement = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-5429c1cf"]]);
   const defaultConfig = {
     enabled: true,
     debug: false
@@ -12615,7 +13026,8 @@ ${errors.join("\n")}`);
         ReviewRules,
         FeedbackManagement,
         PermissionRequestReview,
-        PluginTablePermissionManagement
+        PluginTablePermissionManagement,
+        SigningKeyManagement
       },
       extensions: {
         // 路由和菜单交由后端 plugin-ui.yml 管理，避免前后端信息重复维护

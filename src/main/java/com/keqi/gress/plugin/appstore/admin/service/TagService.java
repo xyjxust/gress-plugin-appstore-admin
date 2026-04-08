@@ -9,6 +9,7 @@ import com.keqi.gress.plugin.appstore.admin.dto.UpdateTagRequest;
 import com.keqi.gress.plugin.appstore.admin.entity.Tag;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,21 +20,20 @@ import java.util.stream.Collectors;
  * Tag Management Service
  */
 @Service
+@Slf4j
 public class TagService {
-    
-    private static final Log log = LogFactory.get(TagService.class);
-    
-    @Inject(source = Inject.BeanSource.SPRING)
+
+    @Inject
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Inject
     private AuditLogService auditLogService;
     
     /**
      * Helper method to log audit events
      */
     private void logAudit(String operationType, Object targetId, Object details) {
-        try {
+
             auditLogService.log(
                 operationType,
                 operationType,
@@ -46,9 +46,7 @@ public class TagService {
                 null,
                 details
             );
-        } catch (Exception e) {
-            log.error("Failed to record audit log", e);
-        }
+
     }
     
     /**
@@ -250,6 +248,30 @@ public class TagService {
         updateUsageCount(tagId);
         
         log.info("Tag assigned to plugin: pluginId={}, tagId={}", pluginId, tagId);
+    }
+    
+    /**
+     * Remove all tag associations for a plugin (e.g. before deleting the plugin).
+     */
+    public void clearPluginTagsForPlugin(String pluginId) {
+        String listSql = "SELECT tag_id FROM appstore_plugin_tag WHERE plugin_id = #{pluginId}";
+        List<Map<String, Object>> rows = dataSource.dynamicSql(listSql)
+            .param("pluginId", pluginId)
+            .query();
+        String deleteSql = "DELETE FROM appstore_plugin_tag WHERE plugin_id = #{pluginId}";
+        dataSource.dynamicSql(deleteSql)
+            .param("pluginId", pluginId)
+            .execute();
+        for (Map<String, Object> row : rows) {
+            Object tid = row.get("tag_id");
+            if (tid == null) {
+                tid = row.get("TAG_ID");
+            }
+            if (tid instanceof Number) {
+                updateUsageCount(((Number) tid).longValue());
+            }
+        }
+        log.info("Cleared all tags for plugin: {}", pluginId);
     }
     
     /**

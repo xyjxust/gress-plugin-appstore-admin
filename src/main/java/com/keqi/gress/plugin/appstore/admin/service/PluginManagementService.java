@@ -1,5 +1,7 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
+import cn.hutool.crypto.digest.MD5;
+import com.keqi.gress.common.utils.PluginVersionComparator;
 import com.keqi.gress.plugin.api.database.page.IPage;
 import com.keqi.gress.common.plugin.PluginMetadataParser;
 import com.keqi.gress.common.plugin.PluginType;
@@ -8,39 +10,69 @@ import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.common.storage.FileStorageService;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
+import com.keqi.gress.plugin.appstore.admin.config.AppStoreAdminConfig;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginManager;
+import com.keqi.gress.plugin.appstore.admin.entity.PluginStatistics;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginVersion;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.KeyStore;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
+
+import com.keqi.gress.plugin.appstore.admin.service.crypto.AesGcmCryptoUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Plugin Management Service
  * Handles listed plugin management operations
  */
 @Service
+@Slf4j
 public class PluginManagementService {
     
-    private static final Log log = LogFactory.get(PluginManagementService.class);
+
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Inject
     private AuditLogService auditLogService;
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Inject
     private FileStorageService fileStorageService;
     
     @Inject
     private PluginDependencyValidationService dependencyValidationService;
+
+    @Inject
+    private AppStoreSigningKeyService signingKeyService;
+
+    @Inject
+    private AppStoreAdminConfig appStoreAdminConfig;
+    
+    @Inject
+    private TagService tagService;
+
+    private static final String ENV_KEYSTORE_PATH = "APPSTORE_SIGNING_KEYSTORE_PATH";
+    private static final String ENV_KEYSTORE_PASSWORD = "APPSTORE_SIGNING_KEYSTORE_PASSWORD";
+    private static final String ENV_KEY_ALIAS = "APPSTORE_SIGNING_KEY_ALIAS";
+    private static final String ENV_KEY_PASSWORD = "APPSTORE_SIGNING_KEY_PASSWORD";
     
     /**
      * Get listed plugins with filtering and pagination
@@ -345,13 +377,103 @@ public class PluginManagementService {
     }
     
     /**
+     * Permanently delete a plugin that is not online: remove manager row, version rows,
+     * tag links, statistics, then delete stored JAR URLs (and remote icon if applicable).
+     */
+    public void deletePluginPermanently(String pluginId, String operatorId, String operatorName) {
+        log.info("Permanently deleting plugin: {}", pluginId);
+        
+        PluginManager plugin = dataSource.lambdaQuery(PluginManager.class)
+            .eq(PluginManager::getPluginId, pluginId)
+            .one();
+        
+        if (plugin == null) {
+            throw new IllegalArgumentException("插件不存在：" + pluginId);
+        }
+        if ("ONLINE".equals(plugin.getStatus())) {
+            throw new IllegalStateException("上架中的插件不能删除，请先下架");
+        }
+        
+        List<PluginVersion> versions = dataSource.lambdaQuery(PluginVersion.class)
+            .eq(PluginVersion::getPluginId, pluginId)
+            .list();
+        
+        Set<String> fileUrls = new LinkedHashSet<>();
+        for (PluginVersion v : versions) {
+            if (v.getFilePath() != null && !v.getFilePath().isBlank()) {
+                fileUrls.add(v.getFilePath().trim());
+            }
+        }
+        String iconUrl = plugin.getIcon();
+        
+        Map<String, Object> beforeData = Map.of(
+            "pluginId", pluginId,
+            "pluginName", plugin.getPluginName() != null ? plugin.getPluginName() : "",
+            "status", plugin.getStatus(),
+            "versionCount", versions.size()
+        );
+        
+        dataSource.executeTransaction(() -> {
+            tagService.clearPluginTagsForPlugin(pluginId);
+            dataSource.lambdaUpdate(PluginStatistics.class)
+                .eq(PluginStatistics::getPluginId, pluginId)
+                .delete();
+            dataSource.lambdaUpdate(PluginVersion.class)
+                .eq(PluginVersion::getPluginId, pluginId)
+                .delete();
+            int removed = dataSource.lambdaUpdate(PluginManager.class)
+                .eq(PluginManager::getPluginId, pluginId)
+                .delete();
+            if (removed == 0) {
+                throw new IllegalStateException("删除应用记录失败");
+            }
+        });
+        
+        for (String url : fileUrls) {
+            safeDeleteStoredFile(url);
+        }
+        if (iconUrl != null && !iconUrl.isBlank()) {
+            String trimmed = iconUrl.trim();
+            if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+                safeDeleteStoredFile(trimmed);
+            }
+        }
+        
+        auditLogService.logSuccess(
+            "DELETE_PLUGIN",
+            "永久删除插件",
+            "PLUGIN",
+            pluginId,
+            plugin.getPluginName(),
+            operatorId,
+            operatorName,
+            beforeData,
+            Map.of("deletedVersions", versions.size(), "removedFiles", fileUrls.size())
+        );
+        
+        log.info("Plugin permanently deleted: {} ({} versions)", pluginId, versions.size());
+    }
+    
+    private void safeDeleteStoredFile(String url) {
+        if (url == null || url.isBlank()) {
+            return;
+        }
+        try {
+            fileStorageService.delete(url).get();
+            log.info("Removed stored file: {}", url);
+        } catch (Exception e) {
+            log.warn("Could not remove stored file (may already be deleted): {}", url, e);
+        }
+    }
+    
+    /**
      * Upload plugin package
      *
      * @param jarFile Plugin JAR file
      * @param request Upload request
      * @return Uploaded plugin info
      */
-    public PluginManagerDTO uploadPlugin(java.io.File jarFile, PluginUploadRequest request) {
+    public PluginManagerDTO uploadPlugin(File jarFile, PluginUploadRequest request) {
         log.info("Uploading plugin package: {}", jarFile.getName());
         
         // Validate request
@@ -385,9 +507,23 @@ public class PluginManagementService {
             if (count > 0) {
                 throw new IllegalStateException("插件已存在：" + metadata.getPluginId());
             }
-            
-            // Store plugin file
-            String storedFilePath = storePluginFile(jarFile, metadata);
+            StoredPluginFileInfo stored;
+            String storedFilePath = "";
+            long size = Files.size(jarFile.toPath());
+            String fileHash = "";
+            if(this.isVerifySignatureEnabled()){
+                stored = storeSignedPluginFile(jarFile, metadata);
+                size = stored.fileSize;
+                fileHash = stored.sha256;
+            }else{
+                stored = null;
+                storedFilePath  =    storePluginFile(jarFile, metadata);
+                fileHash = MD5.create().digestHex16(jarFile);
+            }
+            if (stored != null) {
+                storedFilePath = stored.fileUrl;
+            }
+
             
             // Parse dependencies from JAR file
             String dependenciesJson = PluginDependencyParser.parseDependenciesFromJar(jarFile.getAbsolutePath());
@@ -411,13 +547,12 @@ public class PluginManagementService {
             // Determine initial status
             String initialStatus = Boolean.TRUE.equals(request.getAutoList()) ? "ONLINE" : "OFFLINE";
             
-            // Calculate file size and hash
-            long fileSize = jarFile.length();
-            String fileHash = calculateFileHash(jarFile.getAbsolutePath());
-            
             LocalDateTime now = LocalDateTime.now();
             
             // Execute insert operations in transaction
+            String finalStoredFilePath = storedFilePath;
+            Long finalSize = size;
+            String finalFileHash = fileHash;
             dataSource.executeTransaction(() -> {
                 // Insert plugin record using Lambda
                 PluginManager pluginManager = PluginManager.builder()
@@ -444,9 +579,9 @@ public class PluginManagementService {
                 PluginVersion pluginVersion = PluginVersion.builder()
                         .pluginId(metadata.getPluginId())
                         .version(metadata.getVersion())
-                        .filePath(storedFilePath)
-                        .fileSize(fileSize)
-                        .fileHash(fileHash)
+                        .filePath(finalStoredFilePath)
+                        .fileSize(finalSize)
+                        .fileHash(finalFileHash)
                         .releaseNotes(request.getDescription() != null ? request.getDescription() : "初始版本")
                         .isCurrent(true)
                         .status(initialStatus)
@@ -524,7 +659,7 @@ public class PluginManagementService {
         
         try {
             // 1. Download the JAR file from storage to parse metadata
-            java.io.File tempJarFile = downloadJarFromStorage(storedFilePath);
+            File tempJarFile = downloadJarFromStorage(storedFilePath);
             
             // 2. Parse plugin metadata from JAR file to get version
             PluginMetadataParser.PluginMetadata metadata = parsePluginMetadata(tempJarFile);
@@ -533,7 +668,7 @@ public class PluginManagementService {
             log.info("Parsed version from JAR: {}", newVersion);
             
             // Validate version format
-            if (!com.keqi.gress.common.utils.PluginVersionComparator.isValid(newVersion)) {
+            if (!PluginVersionComparator.isValid(newVersion)) {
                 throw new IllegalArgumentException("JAR 包中的版本号格式不正确：" + newVersion + "，应为：x.y.z");
             }
             
@@ -556,7 +691,7 @@ public class PluginManagementService {
             
             // 5. Compare versions using PluginVersionComparator
             String currentVersion = existingPlugin.getCurrentVersion();
-            if (!com.keqi.gress.common.utils.PluginVersionComparator.canUpgrade(currentVersion, newVersion)) {
+            if (!PluginVersionComparator.canUpgrade(currentVersion, newVersion)) {
                 throw new IllegalArgumentException(
                     String.format("新版本（%s）必须高于当前版本（%s）", newVersion, currentVersion)
                 );
@@ -597,10 +732,18 @@ public class PluginManagementService {
             
             // Determine version status
             String versionStatus = Boolean.TRUE.equals(request.getAutoList()) ? "ONLINE" : "OFFLINE";
-            
             // Calculate file size and hash
             long fileSize = tempJarFile.length();
             String fileHash = calculateFileHash(tempJarFile.getAbsolutePath());
+
+            if(isVerifySignatureEnabled()){
+                // Store signed jar (Marketplace 签发) and calculate SHA-256 for stored/signed jar
+                StoredPluginFileInfo stored = storeSignedPluginFile(tempJarFile, metadata);
+                 fileSize = stored.fileSize;
+                 fileHash = stored.sha256;
+                storedFilePath = stored.fileUrl;
+            }
+
             
             LocalDateTime now = LocalDateTime.now();
             
@@ -612,14 +755,17 @@ public class PluginManagementService {
             );
             
             // Execute upgrade operations in transaction
+            long finalFileSize = fileSize;
+            String finalFileHash = fileHash;
+            String finalStoredFilePath = storedFilePath;
             dataSource.executeTransaction(() -> {
                 // 7. Insert new version record in appstore_version
                 PluginVersion pluginVersion = PluginVersion.builder()
                         .pluginId(request.getPluginId())
                         .version(newVersion)
-                        .filePath(storedFilePath)
-                        .fileSize(fileSize)
-                        .fileHash(fileHash)
+                        .filePath(finalStoredFilePath)
+                        .fileSize(finalFileSize)
+                        .fileHash(finalFileHash)
                         .releaseNotes(request.getUpdateNotes())
                         .dependencies(dependenciesJson) // 存储依赖信息
                         .isCurrent(true)
@@ -692,18 +838,28 @@ public class PluginManagementService {
             throw new RuntimeException("升级插件失败：" + e.getMessage(), e);
         }
     }
+
+
+    /**
+     * Calculate file hash from file path (simplified version)
+     */
+    private String calculateFileHash(String filePath) {
+        // Since we're using FileStorageService, we don't have direct file access
+        // Return a hash based on timestamp and path
+        return String.valueOf(System.currentTimeMillis()) + "-" + filePath.hashCode();
+    }
     
     /**
      * Download JAR file from storage to local temp file for parsing
      */
-    private java.io.File downloadJarFromStorage(String storedFilePath) {
-        java.io.File tempFile = null;
+    private File downloadJarFromStorage(String storedFilePath) {
+        File tempFile = null;
         try {
             // Create temp file
-            tempFile = java.io.File.createTempFile("plugin-upgrade-", ".jar");
+            tempFile = File.createTempFile("plugin-upgrade-", ".jar");
             tempFile.deleteOnExit();
             
-            final java.io.File finalTempFile = tempFile;
+            final File finalTempFile = tempFile;
             
             // Download from storage service using toStream
             fileStorageService.download(storedFilePath)
@@ -739,18 +895,375 @@ public class PluginManagementService {
     }
     
     /**
-     * Calculate file hash from file path (simplified version)
+     * Store signed plugin file to storage (Marketplace 签发包)
      */
-    private String calculateFileHash(String filePath) {
-        // Since we're using FileStorageService, we don't have direct file access
-        // Return a hash based on timestamp and path
-        return String.valueOf(System.currentTimeMillis()) + "-" + filePath.hashCode();
+    private StoredPluginFileInfo storeSignedPluginFile(File jarFile, PluginMetadataParser.PluginMetadata metadata) {
+        if (jarFile == null || !jarFile.exists()) {
+            throw new IllegalArgumentException("插件文件不存在");
+        }
+
+        Path unsignedJar = jarFile.toPath();
+        Path signedJar = null;
+        String sha256 = "";
+        try {
+            long size = Files.size(unsignedJar);
+            if (isVerifySignatureEnabled()) {
+                signedJar = Files.createTempFile("appstore-admin-signed-", ".jar");
+                signJarWithActiveKey(unsignedJar, signedJar);
+               // PublicKey expectedPublicKey = loadExpectedSigningPublicKeyOrThrow();
+              //  verifySignedJarWithExpectedPublicKey(signedJar, expectedPublicKey);
+                size = Files.size(signedJar);
+                sha256 = sha256Hex(signedJar);
+            }
+
+            String fileName = metadata.getPluginId() + "-" + metadata.getVersion() + ".jar";
+
+            String fileUrl;
+            try (InputStream in = Files.newInputStream(signedJar)) {
+                fileUrl = fileStorageService
+                    .upload(in, fileName)
+                    .withMetadata("pluginId", metadata.getPluginId())
+                    .withMetadata("version", metadata.getVersion())
+                    .withMetadata("category", "plugin")
+                    .withMetadata("sha256", sha256)
+                    .onSuccess(savedUrl -> log.info("插件签名包上传成功: {}", savedUrl))
+                    .onError(e -> {
+                        log.error("插件签名包上传失败", e);
+                        throw new RuntimeException("插件签名包上传失败: " + e.getMessage(), e);
+                    })
+                    .get();
+            }
+
+            if (fileUrl == null || fileUrl.isEmpty()) {
+                throw new RuntimeException("文件保存失败，返回的 URL 为空");
+            }
+
+            return new StoredPluginFileInfo(fileUrl, sha256, size);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("保存签名插件包失败: " + e.getMessage(), e);
+        } finally {
+            if (signedJar != null) {
+                try {
+                    Files.deleteIfExists(signedJar);
+                } catch (IOException ignore) {
+                }
+            }
+        }
+    }
+
+    private boolean isVerifySignatureEnabled() {
+        return appStoreAdminConfig != null
+                && appStoreAdminConfig.getSecurity() != null
+                && Boolean.TRUE.equals(appStoreAdminConfig.getSecurity().getVerifySignature());
+    }
+
+    private PublicKey loadExpectedSigningPublicKeyOrThrow() {
+        try {
+            var activeKey = signingKeyService != null ? signingKeyService.getActiveKeyOrNull() : null;
+            if (activeKey != null && activeKey.getPublicKeyPem() != null && !activeKey.getPublicKeyPem().isBlank()) {
+                return parsePublicKeyFromPem(activeKey.getPublicKeyPem());
+            }
+
+            // fallback: legacy env-based signing
+            String keystorePath = getenvRequired(ENV_KEYSTORE_PATH);
+            String storePassword = getenvRequired(ENV_KEYSTORE_PASSWORD);
+            String keyAlias = getenvRequired(ENV_KEY_ALIAS);
+            return loadPublicKeyFromKeystore(keystorePath, storePassword, keyAlias);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to load expected signing public key: " + e.getMessage(), e);
+        }
+    }
+
+    private void verifySignedJarWithExpectedPublicKey(Path signedJar, PublicKey expectedPublicKey) throws Exception {
+        if (signedJar == null || !Files.exists(signedJar)) {
+            throw new IllegalArgumentException("signedJar not found: " + signedJar);
+        }
+        if (expectedPublicKey == null) {
+            throw new IllegalStateException("expectedPublicKey is null");
+        }
+        String expectedEnc = encodePublicKey(expectedPublicKey);
+        String expectedFingerprint = HexFormat.of().formatHex(expectedPublicKey.getEncoded());
+        log.info("[SigningVerify] expected public key fingerprint(sha256)={}", expectedFingerprint);
+
+        boolean hasSf = false;
+        boolean hasRsaOrDsa = false;
+        boolean matched = false;
+        java.util.Set<String> jarSignerFingerprints = new java.util.LinkedHashSet<>();
+        java.util.Set<String> jarSignerSubjects = new java.util.LinkedHashSet<>();
+        java.util.Set<String> jarCertTypes = new java.util.LinkedHashSet<>();
+
+        byte[] buffer = new byte[8192];
+
+        try (JarFile jarFile = new JarFile(signedJar.toFile(), true)) {
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                String name = entry.getName();
+
+                if (name == null) continue;
+
+                // 关键点：先读取 entry 流，触发 JAR 验签，才能让 certificates 被填充
+                if (!entry.isDirectory()) {
+                    try (InputStream is = jarFile.getInputStream(entry)) {
+                        while (is.read(buffer) != -1) {
+                            // no-op, 只为触发校验
+                        }
+                    }
+                }
+
+                if (name.startsWith("META-INF/") && name.endsWith(".SF")) {
+                    hasSf = true;
+                    continue;
+                }
+                if (name.startsWith("META-INF/") && (name.endsWith(".RSA") || name.endsWith(".DSA"))) {
+                    hasRsaOrDsa = true;
+                    continue;
+                }
+
+                Certificate[] certs;
+                try {
+                    certs = entry.getCertificates();
+                } catch (SecurityException se) {
+                    throw new IllegalStateException("Jar signature verification failed: " + se.getMessage(), se);
+                }
+
+                if (certs == null || certs.length == 0) {
+                    continue;
+                }
+
+                for (Certificate cert : certs) {
+                    if (!(cert instanceof X509Certificate signerCert)) {
+                        if (cert != null) {
+                            jarCertTypes.add(cert.getClass().getName());
+                        }
+                        continue;
+                    }
+                    PublicKey signerPk = signerCert.getPublicKey();
+                    if (signerPk == null) continue;
+
+                    String signerEnc = encodePublicKey(signerPk);
+                    String signerFingerprint = HexFormat.of().formatHex(signerPk.getEncoded());
+                    jarSignerFingerprints.add(signerFingerprint);
+                    jarSignerSubjects.add(String.valueOf(signerCert.getSubjectX500Principal()));
+                    log.info("[SigningVerify] found signer cert subject={}, fingerprint(sha256)={}",
+                            signerCert.getSubjectX500Principal(), signerFingerprint);
+
+                    if (expectedEnc.equals(signerEnc)) {
+                        matched = true;
+                        break;
+                    }
+                }
+
+                if (matched) {
+                    break;
+                }
+            }
+        }
+
+        // Keep behavior aligned with client verifier: if signature blocks absent => fail.
+        if (!hasSf || !hasRsaOrDsa) {
+            log.error("[SigningVerify] jar={} signature blocks missing: hasSf={}, hasRsaOrDsa={}, expectedFingerprint(sha256)={}",
+                    signedJar, hasSf, hasRsaOrDsa, expectedFingerprint);
+            throw new IllegalStateException("Jar signature files missing: hasSF=" + hasSf + ", hasRsaOrDsa=" + hasRsaOrDsa);
+        }
+        if (!matched) {
+            log.error("[SigningVerify] jar={} public key mismatch: hasSf={}, hasRsaOrDsa={}, expectedFingerprint(sha256)={}, jarSignerFingerprints={}, jarSignerSubjects={}, jarCertTypes={}",
+                    signedJar,
+                    hasSf,
+                    hasRsaOrDsa,
+                    expectedFingerprint,
+                    jarSignerFingerprints,
+                    jarSignerSubjects,
+                    jarCertTypes);
+            throw new IllegalStateException("Jar signed by an unexpected signer (public key mismatch)");
+        }
+    }
+
+    private static PublicKey parsePublicKeyFromPem(String pem) throws Exception {
+        String normalized = pem.trim();
+        if (normalized.contains("BEGIN CERTIFICATE")) {
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            X509Certificate cert = (X509Certificate) cf.generateCertificate(
+                    new ByteArrayInputStream(normalized.getBytes(StandardCharsets.UTF_8)));
+            return cert.getPublicKey();
+        }
+        if (normalized.contains("BEGIN PUBLIC KEY")) {
+            // Not expected in admin self-signed flow; keep minimal compatibility.
+            throw new IllegalStateException("Unsupported PEM type (PUBLIC KEY) for expectedPublicKey in admin verifier");
+        }
+        throw new IllegalStateException("Unsupported PEM format for public key");
+    }
+
+    private static PublicKey loadPublicKeyFromKeystore(String keystorePath, String storePassword, String alias) throws Exception {
+        if (keystorePath == null || alias == null) {
+            throw new IllegalArgumentException("keystorePath/alias required");
+        }
+        char[] passwordChars = storePassword != null ? storePassword.toCharArray() : new char[0];
+        List<String> types = Arrays.asList("PKCS12", "JKS");
+        Exception last = null;
+        for (String type : types) {
+            try (InputStream in = new FileInputStream(keystorePath)) {
+                KeyStore ks = KeyStore.getInstance(type);
+                ks.load(in, passwordChars);
+                Certificate cert = ks.getCertificate(alias);
+                if (cert instanceof X509Certificate x509) {
+                    return x509.getPublicKey();
+                }
+            } catch (Exception e) {
+                last = e;
+            }
+        }
+        throw new IllegalStateException("Failed to load keystore or certificate: " + (last == null ? "" : last.getMessage()), last);
+    }
+
+    private static String encodePublicKey(PublicKey pk) {
+        return Base64.getEncoder().encodeToString(pk.getEncoded());
+    }
+
+    /**
+     * Sign jar using active signing key from appstore_signing_key table.
+     * <p>
+     * Fallback: if there is no active key in DB, use legacy env-based signing.
+     * </p>
+     */
+    private void signJarWithActiveKey(Path inputJar, Path outputJar) throws Exception {
+        var activeKey = signingKeyService != null ? signingKeyService.getActiveKeyOrNull() : null;
+        if (activeKey == null) {
+            // Backward compatibility: old deployments use env vars only.
+            signJarWithPlatformKey(inputJar, outputJar);
+            return;
+        }
+
+        String storePassword = AesGcmCryptoUtil.decrypt(activeKey.getStorePasswordEnc());
+        String keyPassword = AesGcmCryptoUtil.decrypt(activeKey.getKeyPasswordEnc());
+
+        Path tempKeystore = null;
+        try {
+            tempKeystore = Files.createTempFile("appstore-signing-keystore-", ".p12");
+            final Path finalTempKeystore = tempKeystore;
+            // Download keystore from FileStorage to local temp file
+            fileStorageService.download(activeKey.getKeystoreUrl())
+                    .toStream(inputStream -> {
+                        try {
+                            Files.copy(inputStream, finalTempKeystore, StandardCopyOption.REPLACE_EXISTING);
+                        } catch (Exception e) {
+                            throw new RuntimeException("Failed to copy keystore to temp file", e);
+                        }
+                    })
+                    .onError(e -> {
+                        throw new RuntimeException("Failed to download keystore from storage: " + e.getMessage(), e);
+                    })
+                    .executeVoid();
+
+            List<String> cmd = new ArrayList<>();
+            cmd.add("jarsigner");
+            cmd.add("-sigalg");
+            cmd.add("SHA256withRSA");
+            cmd.add("-digestalg");
+            cmd.add("SHA-256");
+            cmd.add("-keystore");
+            cmd.add(tempKeystore.toString());
+            cmd.add("-storepass");
+            cmd.add(storePassword);
+            cmd.add("-keypass");
+            cmd.add(keyPassword);
+            cmd.add("-signedjar");
+            cmd.add(outputJar.toString());
+            cmd.add(inputJar.toString());
+            cmd.add(activeKey.getAlias());
+
+            ProcessBuilder pb = new ProcessBuilder(cmd);
+            pb.redirectErrorStream(true);
+            Process p = pb.start();
+            String output = new String(p.getInputStream().readAllBytes());
+            int exitCode = p.waitFor();
+            if (exitCode != 0) {
+                throw new IllegalStateException("jarsigner 执行失败: exitCode=" + exitCode + ", output=" + output);
+            }
+        } finally {
+            if (tempKeystore != null) {
+                try {
+                    Files.deleteIfExists(tempKeystore);
+                } catch (Exception ignore) {}
+            }
+        }
+    }
+
+    private void signJarWithPlatformKey(Path inputJar, Path outputJar) throws Exception {
+        String keystorePath = getenvRequired(ENV_KEYSTORE_PATH);
+        String storePassword = getenvRequired(ENV_KEYSTORE_PASSWORD);
+        String keyAlias = getenvRequired(ENV_KEY_ALIAS);
+        String keyPassword = System.getenv(ENV_KEY_PASSWORD);
+        if (keyPassword == null || keyPassword.isBlank()) {
+            keyPassword = storePassword;
+        }
+
+        List<String> cmd = new ArrayList<>();
+        cmd.add("jarsigner");
+        cmd.add("-sigalg");
+        cmd.add("SHA256withRSA");
+        cmd.add("-digestalg");
+        cmd.add("SHA-256");
+        cmd.add("-keystore");
+        cmd.add(keystorePath);
+        cmd.add("-storepass");
+        cmd.add(storePassword);
+        cmd.add("-keypass");
+        cmd.add(keyPassword);
+        cmd.add("-signedjar");
+        cmd.add(outputJar.toString());
+        cmd.add(inputJar.toString());
+        cmd.add(keyAlias);
+
+        ProcessBuilder pb = new ProcessBuilder(cmd);
+        pb.redirectErrorStream(true);
+        Process p = pb.start();
+
+        String output = new String(p.getInputStream().readAllBytes());
+        int exitCode = p.waitFor();
+        if (exitCode != 0) {
+            throw new IllegalStateException("jarsigner 执行失败: exitCode=" + exitCode + ", output=" + output);
+        }
+    }
+
+    private static String getenvRequired(String key) {
+        String v = System.getenv(key);
+        if (v == null || v.isBlank()) {
+            throw new IllegalStateException("Missing env var: " + key);
+        }
+        return v;
+    }
+
+    private static String sha256Hex(Path file) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        try (InputStream in = Files.newInputStream(file)) {
+            byte[] buf = new byte[8192];
+            int n;
+            while ((n = in.read(buf)) > 0) {
+                md.update(buf, 0, n);
+            }
+        }
+        return HexFormat.of().formatHex(md.digest());
+    }
+
+    private static class StoredPluginFileInfo {
+        final String fileUrl;
+        final String sha256;
+        final long fileSize;
+
+        StoredPluginFileInfo(String fileUrl, String sha256, long fileSize) {
+            this.fileUrl = fileUrl;
+            this.sha256 = sha256;
+            this.fileSize = fileSize;
+        }
     }
     
     /**
      * Parse plugin metadata from JAR file
      */
-    private PluginMetadataParser.PluginMetadata parsePluginMetadata(java.io.File jarFile) {
+    private PluginMetadataParser.PluginMetadata parsePluginMetadata(File jarFile) {
         try {
             return PluginMetadataParser.parseFromJar(jarFile.getAbsolutePath());
         } catch (Exception e) {
@@ -761,7 +1274,7 @@ public class PluginManagementService {
     /**
      * Store plugin file to storage
      */
-    private String storePluginFile(java.io.File jarFile, PluginMetadataParser.PluginMetadata metadata) {
+    private String storePluginFile(File jarFile, PluginMetadataParser.PluginMetadata metadata) {
         try {
             // Generate unique file name
             String fileName = metadata.getPluginId() + "-" + metadata.getVersion() + ".jar";

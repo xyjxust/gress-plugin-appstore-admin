@@ -24,7 +24,10 @@ import type {
   ReviewRule,
   ReviewRuleRequest,
   Feedback,
-  FeedbackProcessRequest
+  FeedbackProcessRequest,
+  SigningKeyDTO,
+  GenerateSigningKeyRequest,
+  ActivateSigningKeyRequest
 } from '../types'
 
 export { tablePermissionApi } from './tablePermission'
@@ -501,5 +504,26 @@ export const feedbackApi = {
    */
   close(id: number, data: { handlerId: string; handlerName: string; comment?: string }): Promise<ApiResponse> {
     return http.post(`${API_BASE}/feedbacks/${id}/close`, data)
+  }
+}
+
+/**
+ * Signing key management API
+ */
+export const signingKeyApi = {
+  list(): Promise<ApiResponse<SigningKeyDTO[]>> {
+    return http.get(`${API_BASE}/signing-keys`)
+  },
+
+  getPublicKeyPem(keyId: string): Promise<ApiResponse<string>> {
+    return http.get(`${API_BASE}/signing-keys/${keyId}/public-key-pem`)
+  },
+
+  generate(data: GenerateSigningKeyRequest): Promise<ApiResponse<SigningKeyDTO>> {
+    return http.post(`${API_BASE}/signing-keys/generate`, data)
+  },
+
+  activate(keyId: string, data: ActivateSigningKeyRequest): Promise<ApiResponse> {
+    return http.post(`${API_BASE}/signing-keys/${keyId}/activate`, data)
   }
 }

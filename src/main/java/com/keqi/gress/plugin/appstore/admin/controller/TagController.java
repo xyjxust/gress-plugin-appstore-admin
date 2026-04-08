@@ -34,14 +34,10 @@ public class TagController {
      */
     @GetMapping
     public Result<List<TagDTO>> getAllTags() {
-        try {
+
             List<TagDTO> tags = tagService.getAllTags();
             return Result.success(tags);
-            
-        } catch (Exception e) {
-            log.error("Failed to get tags", e);
-            return Result.error("获取标签列表失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -50,14 +46,10 @@ public class TagController {
      */
     @GetMapping("/{id}")
     public Result<TagDTO> getTagById(@PathVariable Long id) {
-        try {
+
             TagDTO tag = tagService.getTagById(id);
             return Result.success(tag);
-            
-        } catch (Exception e) {
-            log.error("Failed to get tag: id={}", id, e);
-            return Result.error("获取标签失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -66,14 +58,10 @@ public class TagController {
      */
     @PostMapping
     public Result<TagDTO> createTag(@RequestBody CreateTagRequest request) {
-        try {
+
             TagDTO tag = tagService.createTag(request);
             return Result.success(tag);
-            
-        } catch (Exception e) {
-            log.error("Failed to create tag", e);
-            return Result.error("创建标签失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -84,14 +72,11 @@ public class TagController {
     public Result<TagDTO> updateTag(
             @PathVariable Long id,
             @RequestBody UpdateTagRequest request) {
-        try {
+
             TagDTO tag = tagService.updateTag(id, request);
             return Result.success(tag);
             
-        } catch (Exception e) {
-            log.error("Failed to update tag: id={}", id, e);
-            return Result.error("更新标签失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -100,14 +85,10 @@ public class TagController {
      */
     @DeleteMapping("/{id}")
     public Result<Void> deleteTag(@PathVariable Long id) {
-        try {
+
             tagService.deleteTag(id);
             return Result.success();
-            
-        } catch (Exception e) {
-            log.error("Failed to delete tag: id={}", id, e);
-            return Result.error("删除标签失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -116,14 +97,10 @@ public class TagController {
      */
     @GetMapping("/plugins/{pluginId}")
     public Result<List<TagDTO>> getPluginTags(@PathVariable String pluginId) {
-        try {
+
             List<TagDTO> tags = tagService.getPluginTags(pluginId);
             return Result.success(tags);
-            
-        } catch (Exception e) {
-            log.error("Failed to get plugin tags: pluginId={}", pluginId, e);
-            return Result.error("获取插件标签失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -134,14 +111,11 @@ public class TagController {
     public Result<Void> assignTagToPlugin(
             @PathVariable String pluginId,
             @PathVariable Long tagId) {
-        try {
+
             tagService.assignTagToPlugin(pluginId, tagId);
             return Result.success();
             
-        } catch (Exception e) {
-            log.error("Failed to assign tag to plugin: pluginId={}, tagId={}", pluginId, tagId, e);
-            return Result.error("分配标签失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -152,13 +126,9 @@ public class TagController {
     public Result<Void> removeTagFromPlugin(
             @PathVariable String pluginId,
             @PathVariable Long tagId) {
-        try {
+
             tagService.removeTagFromPlugin(pluginId, tagId);
             return Result.success();
-            
-        } catch (Exception e) {
-            log.error("Failed to remove tag from plugin: pluginId={}, tagId={}", pluginId, tagId, e);
-            return Result.error("移除标签失败: " + e.getMessage());
-        }
+
     }
 }

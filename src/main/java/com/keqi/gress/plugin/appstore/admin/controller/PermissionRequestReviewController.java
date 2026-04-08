@@ -32,15 +32,10 @@ public class PermissionRequestReviewController {
      */
     @GetMapping("/pending")
     public Result<List<PluginTablePermissionRequestDTO>> listPendingRequests() {
-        log.info("GET /plugins/appstore-admin/permission-requests/pending");
-        
-        try {
+
             List<PluginTablePermissionRequestDTO> list = requestService.listPendingRequests();
             return Result.success(list);
-        } catch (Exception e) {
-            log.error("Failed to list pending requests", e);
-            return Result.error("查询失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -50,15 +45,10 @@ public class PermissionRequestReviewController {
     public Result<List<PluginTablePermissionRequestDTO>> listAll(
             @RequestParam(required = false) String pluginId,
             @RequestParam(required = false) String status) {
-        log.info("GET /plugins/appstore-admin/permission-requests - pluginId: {}, status: {}", pluginId, status);
-        
-        try {
+
             List<PluginTablePermissionRequestDTO> list = requestService.listAll(pluginId, status);
             return Result.success(list);
-        } catch (Exception e) {
-            log.error("Failed to list requests", e);
-            return Result.error("查询失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -66,15 +56,10 @@ public class PermissionRequestReviewController {
      */
     @GetMapping("/{id}")
     public Result<PluginTablePermissionRequestDTO> getById(@PathVariable Long id) {
-        log.info("GET /plugins/appstore-admin/permission-requests/{}", id);
-        
-        try {
+
             PluginTablePermissionRequestDTO dto = requestService.getById(id);
             return dto != null ? Result.success(dto) : Result.error("申请不存在");
-        } catch (Exception e) {
-            log.error("Failed to get request by id: {}", id, e);
-            return Result.error("查询失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -84,18 +69,10 @@ public class PermissionRequestReviewController {
     public Result<PluginTablePermissionRequestDTO> approveRequest(
             @PathVariable Long id,
             @RequestBody ApprovePermissionRequest request) {
-        log.info("POST /plugins/appstore-admin/permission-requests/{}/approve", id);
-        
-        try {
+
             PluginTablePermissionRequestDTO updated = requestService.approveRequest(id, request);
             return Result.success(updated);
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid request: {}", e.getMessage());
-            return Result.error(e.getMessage());
-        } catch (Exception e) {
-            log.error("Failed to approve request: {}", id, e);
-            return Result.error("批准失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -105,18 +82,10 @@ public class PermissionRequestReviewController {
     public Result<PluginTablePermissionRequestDTO> rejectRequest(
             @PathVariable Long id,
             @RequestBody RejectPermissionRequest request) {
-        log.info("POST /plugins/appstore-admin/permission-requests/{}/reject", id);
-        
-        try {
+
             PluginTablePermissionRequestDTO updated = requestService.rejectRequest(id, request);
             return Result.success(updated);
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid request: {}", e.getMessage());
-            return Result.error(e.getMessage());
-        } catch (Exception e) {
-            log.error("Failed to reject request: {}", id, e);
-            return Result.error("拒绝失败: " + e.getMessage());
-        }
+
     }
 }
 

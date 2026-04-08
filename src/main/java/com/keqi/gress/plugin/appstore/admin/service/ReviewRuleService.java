@@ -9,6 +9,7 @@ import com.keqi.gress.plugin.appstore.admin.entity.ReviewRule;
 import com.keqi.gress.plugin.appstore.admin.enums.RuleType;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,17 +21,17 @@ import java.util.stream.Collectors;
  * Manages CRUD operations for review rules
  */
 @Service
+@Slf4j
 public class ReviewRuleService {
     
-    private static final Log log = LogFactory.get(ReviewRuleService.class);
-    
-    @Inject(source = Inject.BeanSource.SPRING)
+
+    @Inject
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Inject
     private AuditLogService auditLogService;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Inject
     private ReviewRuleEngine reviewRuleEngine;
     
     /**

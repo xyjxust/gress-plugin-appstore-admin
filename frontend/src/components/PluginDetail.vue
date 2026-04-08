@@ -133,6 +133,12 @@
           </template>
           下架
         </n-button>
+        <n-button v-if="plugin.status === 'DELISTED' || plugin.status === 'OFFLINE'" type="error" secondary @click="$emit('delete', plugin.pluginId)">
+          <template #icon>
+            <n-icon><component :is="TrashOutline" /></n-icon>
+          </template>
+          删除
+        </n-button>
         <n-button v-if="plugin.status === 'DELISTED'" type="success" @click="$emit('relist', plugin.pluginId)">
           <template #icon>
             <n-icon><component :is="CheckmarkCircle" /></n-icon>
@@ -155,6 +161,7 @@ import type { Plugin, PluginStatus, PluginType, PluginVersion } from '../types'
 const CreateOutline = useIcon('CreateOutline')
 const BanOutline = useIcon('BanOutline')
 const CheckmarkCircle = useIcon('CheckmarkCircleOutline')
+const TrashOutline = useIcon('TrashOutline')
 const Refresh = useIcon('RefreshOutline')
 
 // 消息提示
@@ -172,6 +179,7 @@ defineEmits<{
   (e: 'delist', pluginId: string): void
   (e: 'relist', pluginId: string): void
   (e: 'edit', pluginId: string): void
+  (e: 'delete', pluginId: string): void
   (e: 'close'): void
 }>()
 

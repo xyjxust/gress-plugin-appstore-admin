@@ -10,6 +10,8 @@ import com.keqi.gress.plugin.appstore.admin.dto.PluginPackageDTO;
 import com.keqi.gress.plugin.appstore.admin.dto.PluginTablePermissionDTO;
 import com.keqi.gress.plugin.appstore.admin.service.AppStoreApiManagementService;
 import com.keqi.gress.plugin.appstore.admin.service.PluginTablePermissionService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,14 +28,14 @@ import java.util.List;
 @Service
 @RestController
 @RequestMapping("/api/appstore/packages")
+@Slf4j
 public class AppStoreApiController {
+
     
-    private static final Log log = LogFactory.get(AppStoreApiController.class);
-    
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private AppStoreApiManagementService appStoreApiManagementService;
-    
-    @Inject(source = Inject.BeanSource.PLUGIN)
+
+    @Autowired
     private PluginTablePermissionService pluginTablePermissionService;
     
     /**
@@ -54,9 +56,6 @@ public class AppStoreApiController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String keyword) {
         
-        log.info("查询应用列表: page={}, size={}, pluginType={}, category={}, keyword={}", 
-                page, size, pluginType, category, keyword);
-        
         PageResult<PluginPackageDTO> result = appStoreApiManagementService.getPackages(
             page, size, pluginType, category, keyword);
         
@@ -71,7 +70,6 @@ public class AppStoreApiController {
      */
     @GetMapping("/{pluginId}")
     public Result<PluginPackageDTO> getPackageDetail(@PathVariable String pluginId) {
-        log.info("获取应用详情: pluginId={}", pluginId);
         return appStoreApiManagementService.getPackageDetail(pluginId);
     }
     
@@ -83,9 +81,7 @@ public class AppStoreApiController {
      */
     @GetMapping("/{pluginId}/download")
     public ResponseEntity<Resource> downloadPackage(@PathVariable String pluginId) {
-        log.info("下载应用包: pluginId={}", pluginId);
-        
-        try {
+
             // 获取文件资源和文件名
             Result<Resource> result = appStoreApiManagementService.downloadPackage(pluginId);
             
@@ -105,11 +101,6 @@ public class AppStoreApiController {
                     .header(HttpHeaders.CONTENT_DISPOSITION, 
                            "attachment; filename=\"" + fileName + "\"")
                     .body(resource);
-                    
-        } catch (Exception e) {
-            log.error("下载应用包异常: pluginId={}", pluginId, e);
-            return ResponseEntity.internalServerError().build();
-        }
     }
 
     /**
@@ -123,7 +114,6 @@ public class AppStoreApiController {
     public Result<PluginPackageDTO> getPackageVersionDetail(
             @PathVariable String pluginId,
             @PathVariable String version) {
-        log.info("获取应用版本信息: pluginId={}, version={}", pluginId, version);
         return appStoreApiManagementService.getPackageVersionDetail(pluginId, version);
     }
 
@@ -139,8 +129,6 @@ public class AppStoreApiController {
             @PathVariable String pluginId,
             @PathVariable String version) {
         log.info("按版本下载应用包: pluginId={}, version={}", pluginId, version);
-
-        try {
             Result<byte[]> result = appStoreApiManagementService.downloadPackageBytesByVersion(pluginId, version);
 
             if (!result.isSuccess()) {
@@ -160,11 +148,6 @@ public class AppStoreApiController {
                     .header(HttpHeaders.CONTENT_DISPOSITION,
                            "attachment; filename=\"" + fileName + "\"")
                     .body(fileBytes);
-
-        } catch (Exception e) {
-            log.error("按版本下载应用包异常: pluginId={}, version={}", pluginId, version, e);
-            return ResponseEntity.internalServerError().build();
-        }
     }
 
     /**
@@ -175,15 +158,8 @@ public class AppStoreApiController {
      */
     @GetMapping("/{pluginId}/table-permissions")
     public Result<List<PluginTablePermissionDTO>> getTablePermissions(@PathVariable String pluginId) {
-        log.info("获取插件表授权信息: pluginId={}", pluginId);
-        
-        try {
             List<PluginTablePermissionDTO> permissions = pluginTablePermissionService.listByPluginId(pluginId);
             return Result.success(permissions);
-        } catch (Exception e) {
-            log.error("获取插件表授权信息失败: pluginId={}", pluginId, e);
-            return Result.error("获取表授权信息失败: " + e.getMessage());
-        }
     }
 
     /**
@@ -194,17 +170,8 @@ public class AppStoreApiController {
      */
     @GetMapping("/{pluginId}/config/metadata")
     public Result<List<com.keqi.gress.common.plugin.FormMetadataParser.FieldMetadata>> getPluginConfigMetadata(@PathVariable String pluginId) {
-        log.info("获取插件配置元数据: pluginId={}", pluginId);
-        
-        try {
-            // 通过 AppStoreApiService 从远程 jar 包解析配置元数据
-            // 注意：这里需要注入 AppStoreApiService，但它是插件服务，需要通过其他方式获取
-            // 暂时返回错误，提示需要通过 AppStoreApiService 调用
+
             return Result.error("此接口需要通过 AppStoreApiService 调用，请使用 /plugins/appstore/middlewares/remote/{pluginId}/config/metadata");
-        } catch (Exception e) {
-            log.error("获取插件配置元数据失败: pluginId={}", pluginId, e);
-            return Result.error("获取配置元数据失败: " + e.getMessage());
-        }
     }
 
 }

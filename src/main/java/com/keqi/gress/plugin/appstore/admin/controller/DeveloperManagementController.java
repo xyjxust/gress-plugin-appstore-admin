@@ -41,10 +41,7 @@ public class DeveloperManagementController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Boolean verified) {
         
-        log.info("GET /developers - page: {}, size: {}, status: {}, keyword: {}, verified: {}", 
-                 page, size, status, keyword, verified);
-        
-        try {
+
             // Build query request
             DeveloperQueryRequest request = DeveloperQueryRequest.builder()
                     .page(page)
@@ -63,10 +60,7 @@ public class DeveloperManagementController {
             
             return Result.success(result);
             
-        } catch (Exception e) {
-            log.error("Failed to get developers", e);
-            return Result.error("Failed to query developers: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -77,9 +71,7 @@ public class DeveloperManagementController {
      */
     @GetMapping("/{id}")
     public Result<DeveloperDetailDTO> getDeveloperDetail(@PathVariable Long id) {
-        log.info("GET /developers/{}", id);
-        
-        try {
+
             DeveloperDetailDTO detail = developerManagementService.getDeveloperDetail(id);
             
             if (detail == null) {
@@ -88,10 +80,7 @@ public class DeveloperManagementController {
             
             return Result.success(detail);
             
-        } catch (Exception e) {
-            log.error("Failed to get developer detail: {}", id, e);
-            return Result.error("Failed to get developer detail: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -103,25 +92,11 @@ public class DeveloperManagementController {
      */
     @PostMapping("/{id}/approve")
     public Result<Void> approveDeveloper(@PathVariable Long id, @RequestBody DeveloperApprovalRequest request) {
-        log.info("POST /developers/{}/approve - reviewer: {}", 
-                 id, request.getReviewerName());
-        
-        try {
+
             developerManagementService.approveDeveloper(id, request);
             return Result.success();
             
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid approval request: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (IllegalStateException e) {
-            log.warn("Invalid state for approval: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (Exception e) {
-            log.error("Failed to approve developer: {}", id, e);
-            return Result.error("Failed to approve developer: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -133,25 +108,11 @@ public class DeveloperManagementController {
      */
     @PostMapping("/{id}/suspend")
     public Result<Void> suspendDeveloper(@PathVariable Long id, @RequestBody DeveloperSuspendRequest request) {
-        log.info("POST /developers/{}/suspend - operator: {}, reason: {}", 
-                 id, request.getOperatorName(), request.getReason());
-        
-        try {
+
             developerManagementService.suspendDeveloper(id, request);
             return Result.success();
             
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid suspend request: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (IllegalStateException e) {
-            log.warn("Invalid state for suspension: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (Exception e) {
-            log.error("Failed to suspend developer: {}", id, e);
-            return Result.error("Failed to suspend developer: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -163,24 +124,9 @@ public class DeveloperManagementController {
      */
     @PostMapping("/{id}/activate")
     public Result<Void> activateDeveloper(@PathVariable Long id, @RequestBody DeveloperActivateRequest request) {
-        log.info("POST /developers/{}/activate - operator: {}", 
-                 id, request.getOperatorName());
-        
-        try {
+
             developerManagementService.activateDeveloper(id, request);
             return Result.success();
-            
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid activate request: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (IllegalStateException e) {
-            log.warn("Invalid state for activation: {}", e.getMessage());
-            return Result.error(e.getMessage());
-            
-        } catch (Exception e) {
-            log.error("Failed to activate developer: {}", id, e);
-            return Result.error("Failed to activate developer: " + e.getMessage());
-        }
+
     }
 }

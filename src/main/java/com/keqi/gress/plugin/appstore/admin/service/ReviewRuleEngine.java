@@ -15,6 +15,7 @@ import com.keqi.gress.plugin.appstore.admin.enums.ScanStatus;
 import com.keqi.gress.plugin.appstore.admin.enums.SubmissionStatus;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,10 +27,10 @@ import java.util.Map;
  * Evaluates and applies automated review rules to plugin submissions
  */
 @Service
+@Slf4j
 public class ReviewRuleEngine {
     
-    private static final Log log = LogFactory.get(ReviewRuleEngine.class);
-    
+
     @Inject(source = Inject.BeanSource.SPRING)
     private PluginLambdaDataSource dataSource;
     
@@ -40,9 +41,7 @@ public class ReviewRuleEngine {
      * Evaluate a single rule against a submission
      */
     public RuleEvaluationResult evaluate(PluginSubmission submission, ReviewRule rule) {
-        log.debug("Evaluating rule {} against submission {}", rule.getRuleName(), submission.getId());
-        
-        try {
+
             // Parse conditions
             JSONObject conditions = JSON.parseObject(rule.getConditions());
             
@@ -64,17 +63,7 @@ public class ReviewRuleEngine {
                     .reason(reason)
                     .actions(actions)
                     .build();
-                    
-        } catch (Exception e) {
-            log.error("Error evaluating rule {}: {}", rule.getId(), e.getMessage(), e);
-            return RuleEvaluationResult.builder()
-                    .ruleId(rule.getId())
-                    .ruleName(rule.getRuleName())
-                    .matched(false)
-                    .reason("Evaluation error: " + e.getMessage())
-                    .actions(new ArrayList<>())
-                    .build();
-        }
+
     }
     
     /**
@@ -147,10 +136,7 @@ public class ReviewRuleEngine {
      * Execute rule action on a submission
      */
     public void executeAction(PluginSubmission submission, String action, Long ruleId) {
-        log.info("Executing action {} on submission {} (rule {})", 
-                action, submission.getId(), ruleId);
-        
-        try {
+
             switch (action.toUpperCase()) {
                 case "AUTO_APPROVE":
                     autoApproveSubmission(submission, ruleId);
@@ -190,10 +176,7 @@ public class ReviewRuleEngine {
                     )
             );
             
-        } catch (Exception e) {
-            log.error("Error executing action {} on submission {}: {}", 
-                    action, submission.getId(), e.getMessage(), e);
-        }
+
     }
     
     /**

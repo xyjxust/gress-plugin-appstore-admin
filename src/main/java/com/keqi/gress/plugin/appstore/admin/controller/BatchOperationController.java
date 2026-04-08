@@ -31,9 +31,7 @@ public class BatchOperationController {
      */
     @PostMapping("/review")
     public Result<BatchOperationResult> batchReview(@RequestBody BatchReviewRequest request) {
-        log.info("收到批量审核请求，提交数量: {}", request.getSubmissionIds().size());
-        
-        try {
+
             // 参数验证
             if (request.getSubmissionIds() == null || request.getSubmissionIds().isEmpty()) {
                 return Result.error("提交ID列表不能为空");
@@ -57,11 +55,7 @@ public class BatchOperationController {
             BatchOperationResult result = batchOperationService.batchReview(request);
             
             return Result.success(result);
-            
-        } catch (Exception e) {
-            log.error("批量审核失败", e);
-            return Result.error("批量审核失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -72,9 +66,7 @@ public class BatchOperationController {
      */
     @PostMapping("/delist")
     public Result<BatchOperationResult> batchDelist(@RequestBody BatchDelistRequest request) {
-        log.info("收到批量下架请求，插件数量: {}", request.getPluginIds().size());
-        
-        try {
+
             // 参数验证
             if (request.getPluginIds() == null || request.getPluginIds().isEmpty()) {
                 return Result.error("插件ID列表不能为空");
@@ -88,11 +80,7 @@ public class BatchOperationController {
             BatchOperationResult result = batchOperationService.batchDelist(request);
             
             return Result.success(result);
-            
-        } catch (Exception e) {
-            log.error("批量下架失败", e);
-            return Result.error("批量下架失败: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -103,9 +91,7 @@ public class BatchOperationController {
      */
     @PostMapping("/update-category")
     public Result<BatchOperationResult> batchUpdateCategory(@RequestBody BatchCategoryUpdateRequest request) {
-        log.info("收到批量更新分类请求，插件数量: {}", request.getPluginIds().size());
-        
-        try {
+
             // 参数验证
             if (request.getPluginIds() == null || request.getPluginIds().isEmpty()) {
                 return Result.error("插件ID列表不能为空");
@@ -119,10 +105,6 @@ public class BatchOperationController {
             BatchOperationResult result = batchOperationService.batchUpdateCategory(request);
             
             return Result.success(result);
-            
-        } catch (Exception e) {
-            log.error("批量更新分类失败", e);
-            return Result.error("批量更新分类失败: " + e.getMessage());
-        }
+
     }
 }

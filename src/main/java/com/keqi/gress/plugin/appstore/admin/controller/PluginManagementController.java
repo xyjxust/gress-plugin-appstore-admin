@@ -339,6 +339,27 @@ public class PluginManagementController {
     }
     
     /**
+     * Permanently delete plugin (not ONLINE): app row, versions, stored JARs.
+     */
+    @DeleteMapping("/{pluginId}")
+    public Result<Void> deletePlugin(@PathVariable String pluginId) {
+        log.info("DELETE /plugins/{}", pluginId);
+        try {
+            pluginManagementService.deletePluginPermanently(pluginId, "admin", "管理员");
+            return Result.success();
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid delete request: {}", e.getMessage());
+            return Result.error(e.getMessage());
+        } catch (IllegalStateException e) {
+            log.warn("Invalid state for delete: {}", e.getMessage());
+            return Result.error(e.getMessage());
+        } catch (Exception e) {
+            log.error("Failed to delete plugin: {}", pluginId, e);
+            return Result.error("删除插件失败：" + e.getMessage());
+        }
+    }
+    
+    /**
      * Get available plugin types
      * 
      * @return List of plugin type information

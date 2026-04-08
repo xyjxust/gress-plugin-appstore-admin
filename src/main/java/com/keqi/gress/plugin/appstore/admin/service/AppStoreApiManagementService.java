@@ -543,7 +543,11 @@ public class AppStoreApiManagementService {
                     SELECT v.file_path
                     FROM appstore_manager m
                     JOIN appstore_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
-                    WHERE m.plugin_id = #{pluginId} AND m.status = 'ONLINE'
+                    WHERE m.plugin_id = #{pluginId}
+                      AND m.status = 'ONLINE'
+                      AND v.status = 'ONLINE'
+                      AND v.file_hash IS NOT NULL
+                      AND v.file_hash <> ''
                     """;
             
             List<Map<String, Object>> rows = dataSource.dynamicSql(sql)
@@ -648,6 +652,9 @@ public class AppStoreApiManagementService {
                     FROM appstore_version v
                     WHERE v.plugin_id = #{pluginId}
                       AND v.version = #{version}
+                      AND v.status = 'ONLINE'
+                      AND v.file_hash IS NOT NULL
+                      AND v.file_hash <> ''
                     """;
 
             List<Map<String, Object>> rows = dataSource.dynamicSql(sql)
@@ -705,6 +712,9 @@ public class AppStoreApiManagementService {
                     FROM appstore_version v
                     WHERE v.plugin_id = #{pluginId}
                       AND v.version = #{version}
+                      AND v.status = 'ONLINE'
+                      AND v.file_hash IS NOT NULL
+                      AND v.file_hash <> ''
                     """;
 
             List<Map<String, Object>> rows = dataSource.dynamicSql(sql)

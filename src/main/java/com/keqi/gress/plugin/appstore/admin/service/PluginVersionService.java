@@ -7,6 +7,8 @@ import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginManager;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginVersion;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginSubmission;
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.LocalDateTime;
 
 import java.util.HashMap;
@@ -21,12 +23,13 @@ import java.util.stream.Collectors;
  * @author Gress Team
  */
 @Service
+@Slf4j
 public class PluginVersionService {
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Inject
     private PluginLambdaDataSource pluginDataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Inject
     private AuditLogService auditLogService;
 
     

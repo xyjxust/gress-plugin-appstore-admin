@@ -27,7 +27,7 @@ public class AuditLogController {
 
     private static  final Log log = LogFactory.get(AuditLogController.class);
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Inject
     private AuditLogService auditLogService;
     
     /**
@@ -58,10 +58,9 @@ public class AuditLogController {
             @RequestParam(required = false) Long endTime,
             @RequestParam(required = false) String keyword) {
         
-        log.info("GET /audit-logs - page: {}, size: {}, operationType: {}, targetType: {}", 
-                 page, size, operationType, targetType);
+
         
-        try {
+
             // Validate page and size
             if (page < 1) {
                 return Result.error("Page number must be greater than 0");
@@ -88,11 +87,6 @@ public class AuditLogController {
             PageResult<AuditLogDTO> logs = auditLogService.queryLogs(request);
             
             return Result.success(logs);
-            
-        } catch (Exception e) {
-            log.error("Failed to query audit logs", e);
-            return Result.error("Failed to query audit logs: " + e.getMessage());
-        }
     }
     
     /**
@@ -103,9 +97,7 @@ public class AuditLogController {
      */
     @GetMapping("/{id}")
     public Result<AuditLogDTO> getLogDetail(@PathVariable Long id) {
-        log.info("GET /audit-logs/{}", id);
-        
-        try {
+
             AuditLogDTO logDetail = auditLogService.getLogDetail(id);
             
             if (logDetail == null) {
@@ -113,11 +105,7 @@ public class AuditLogController {
             }
             
             return Result.success(logDetail);
-            
-        } catch (Exception e) {
-            log.error("Failed to get audit log detail: {}", id, e);
-            return Result.error("Failed to get audit log detail: " + e.getMessage());
-        }
+
     }
     
     /**
@@ -144,10 +132,7 @@ public class AuditLogController {
             @RequestParam(required = false) Long endTime,
             @RequestParam(required = false) String keyword) {
         
-        log.info("GET /audit-logs/export - format: {}, operationType: {}", 
-                 format, operationType);
-        
-        try {
+
             // Validate format
             String exportFormat = format.toUpperCase();
             if (!exportFormat.equals("CSV") && !exportFormat.equals("JSON") && !exportFormat.equals("EXCEL")) {
@@ -196,17 +181,6 @@ public class AuditLogController {
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(exportedData);
-            
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid export request: {}", e.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(Result.error(e.getMessage()));
-            
-        } catch (Exception e) {
-            log.error("Failed to export audit logs", e);
-            return ResponseEntity.internalServerError()
-                    .body(Result.error("Failed to export audit logs: " + e.getMessage()));
-        }
     }
     
     /**
@@ -217,9 +191,7 @@ public class AuditLogController {
      */
     @PostMapping("/archive")
     public Result<Integer> archiveLogs(@RequestParam(defaultValue = "90") Integer daysToKeep) {
-        log.info("POST /audit-logs/archive - daysToKeep: {}", daysToKeep);
-        
-        try {
+
             // Validate daysToKeep
             if (daysToKeep < 1) {
                 return Result.error("Days to keep must be greater than 0");
@@ -236,9 +208,6 @@ public class AuditLogController {
             
             return Result.success(archivedCount);
             
-        } catch (Exception e) {
-            log.error("Failed to archive audit logs", e);
-            return Result.error("Failed to archive audit logs: " + e.getMessage());
-        }
+
     }
 }
