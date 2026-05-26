@@ -1,14 +1,13 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
 import com.keqi.gress.plugin.api.database.page.IPage;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.Feedback;
 import com.keqi.gress.plugin.appstore.admin.enums.FeedbackStatus;
 import com.keqi.gress.plugin.appstore.admin.enums.FeedbackType;
 import com.keqi.gress.plugin.appstore.admin.enums.Severity;
+import com.keqi.gress.plugin.appstore.admin.support.RequestActorContextBinder;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 
@@ -17,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Feedback Service
@@ -27,10 +28,10 @@ public class FeedbackService {
     
     private static final Log log = LogFactory.get(FeedbackService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private AuditLogService auditLogService;
     
     /**
@@ -127,6 +128,7 @@ public class FeedbackService {
      */
     public void processFeedback(Long id, ProcessFeedbackRequest request) {
         log.info("Processing feedback: {}, handler: {}", id, request.getHandlerName());
+        RequestActorContextBinder.bindHandler(request);
         
         // Validate request
         if (request.getHandlerId() == null || request.getHandlerId().trim().isEmpty()) {
@@ -206,6 +208,7 @@ public class FeedbackService {
      */
     public void closeFeedback(Long id, CloseFeedbackRequest request) {
         log.info("Closing feedback: {}, handler: {}", id, request.getHandlerName());
+        RequestActorContextBinder.bindHandler(request);
         
         // Validate request
         if (request.getHandlerId() == null || request.getHandlerId().trim().isEmpty()) {
@@ -278,7 +281,7 @@ public class FeedbackService {
         
         log.info("Feedback closed successfully: {}", id);
     }
-    
+
     /**
      * Get feedback by ID
      *

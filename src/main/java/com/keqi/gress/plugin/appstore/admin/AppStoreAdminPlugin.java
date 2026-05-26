@@ -3,15 +3,15 @@ package com.keqi.gress.plugin.appstore.admin;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.keqi.gress.common.plugin.ApplicationPlugin;
-import com.keqi.gress.common.plugin.annotion.Inject;
 import com.keqi.gress.common.plugin.annotion.PluginSpec;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.MappingInterface;
 
 import com.keqi.gress.plugin.appstore.admin.config.AppStoreAdminConfig;
 import com.keqi.gress.plugin.appstore.admin.controller.*;
 import org.pf4j.Extension;
 import org.pf4j.Plugin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 插件商店管理系统插件
@@ -36,14 +36,14 @@ import org.pf4j.Plugin;
  */
 @Extension
 @PluginSpec(
-        id = "appstore-admin",
+        id = "as-admin",
         name = "插件商店管理",
         description = "插件商店管理后台，提供插件审核、上架、下架、版本管理等管理功能",
         version = "1.0.0",
         author = "Gress Team",
         tags = {"admin", "management", "plugin-store"},
-        icon = "icons/appstore-admin.svg",
-        jsPath = "js/appstore-admin-frontend.js",
+        icon = "icons/as-admin.svg",
+        jsPath = "js/as-admin-frontend.js",
         inputClass = AppStoreAdminConfig.class
 )
 @Service
@@ -51,47 +51,50 @@ public class AppStoreAdminPlugin extends Plugin implements ApplicationPlugin {
     
     private static final Log log = LogFactory.get(AppStoreAdminPlugin.class);
     
-    @Inject
+    @Autowired
     private MappingInterface mapping;
     
     // 注入所有 Controller
-    @Inject
+    @Autowired
     private AuditLogController auditLogController;
     
-    @Inject
-    private BatchOperationController batchOperationController;
+    @Autowired
+    private SubmissionBatchOperationController submissionBatchOperationController;
+
+    @Autowired
+    private PluginBatchOperationController pluginBatchOperationController;
     
-    @Inject
+    @Autowired
     private CategoryController categoryController;
     
-    @Inject
+    @Autowired
     private DeveloperManagementController developerManagementController;
     
-    @Inject
+    @Autowired
     private DisplayConfigController displayConfigController;
     
-    @Inject
+    @Autowired
     private FeedbackController feedbackController;
     
-    @Inject
+    @Autowired
     private PluginManagementController pluginManagementController;
     
-    @Inject
+    @Autowired
     private PluginStatisticsController pluginStatisticsController;
     
-    @Inject
+    @Autowired
     private PluginSubmissionController pluginSubmissionController;
     
-    @Inject
+    @Autowired
     private PluginVersionController pluginVersionController;
     
-    @Inject
+    @Autowired
     private ReviewRuleController reviewRuleController;
     
-    @Inject
+    @Autowired
     private TagController tagController;
 
-    @Inject
+    @Autowired
     private AppStoreApiController appStoreApiController;
     
     /**
@@ -103,44 +106,47 @@ public class AppStoreAdminPlugin extends Plugin implements ApplicationPlugin {
         log.info("注册 AppStore Admin 插件 API 路由");
         
         try {
-            // 使用 registerForPlugin 方法强制使用 plugins/appstore-admin/ 前缀
-            String prefix = mapping.registerForPlugin("appstore-admin", auditLogController);
+            // 使用 registerForPlugin 方法强制使用 plugins/as-admin/ 前缀
+            String prefix = mapping.registerForPlugin("as-admin", auditLogController);
             log.debug("注册 AuditLogController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", batchOperationController);
-            log.debug("注册 BatchOperationController，前缀: {}", prefix);
+            prefix = mapping.registerForPlugin("as-admin", submissionBatchOperationController);
+            log.debug("注册 SubmissionBatchOperationController，前缀: {}", prefix);
+
+            prefix = mapping.registerForPlugin("as-admin", pluginBatchOperationController);
+            log.debug("注册 PluginBatchOperationController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", categoryController);
+            prefix = mapping.registerForPlugin("as-admin", categoryController);
             log.debug("注册 CategoryController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", developerManagementController);
+            prefix = mapping.registerForPlugin("as-admin", developerManagementController);
             log.debug("注册 DeveloperManagementController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", displayConfigController);
+            prefix = mapping.registerForPlugin("as-admin", displayConfigController);
             log.debug("注册 DisplayConfigController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", feedbackController);
+            prefix = mapping.registerForPlugin("as-admin", feedbackController);
             log.debug("注册 FeedbackController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", pluginManagementController);
+            prefix = mapping.registerForPlugin("as-admin", pluginManagementController);
             log.debug("注册 PluginManagementController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", pluginStatisticsController);
+            prefix = mapping.registerForPlugin("as-admin", pluginStatisticsController);
             log.debug("注册 PluginStatisticsController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", pluginSubmissionController);
+            prefix = mapping.registerForPlugin("as-admin", pluginSubmissionController);
             log.debug("注册 PluginSubmissionController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", pluginVersionController);
+            prefix = mapping.registerForPlugin("as-admin", pluginVersionController);
             log.debug("注册 PluginVersionController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", reviewRuleController);
+            prefix = mapping.registerForPlugin("as-admin", reviewRuleController);
             log.debug("注册 ReviewRuleController，前缀: {}", prefix);
             
-            prefix = mapping.registerForPlugin("appstore-admin", tagController);
+            prefix = mapping.registerForPlugin("as-admin", tagController);
             log.debug("注册 TagController，前缀: {}", prefix);
-            mapping.registerForPlugin("appstore-admin",appStoreApiController);
-            log.info("AppStore Admin 插件 API 路由注册完成，所有路由前缀: /plugins/appstore-admin");
+            mapping.registerForPlugin("as-admin",appStoreApiController);
+            log.info("AppStore Admin 插件 API 路由注册完成，所有路由前缀: /plugins/as-admin");
         } catch (Exception e) {
             log.error("注册 AppStore Admin 插件路由失败", e);
             throw new RuntimeException("注册插件路由失败", e);
@@ -157,9 +163,9 @@ public class AppStoreAdminPlugin extends Plugin implements ApplicationPlugin {
     @Override
     public void start() {
         log.info("插件商店管理插件启动");
-        log.info("插件 ID: appstore-admin");
+        log.info("插件 ID: as-admin");
         log.info("插件版本: 1.0.0");
-        log.info("前端资源: js/appstore-admin-frontend.js");
+        log.info("前端资源: js/as-admin-frontend.js");
     }
     
     /**
@@ -173,67 +179,72 @@ public class AppStoreAdminPlugin extends Plugin implements ApplicationPlugin {
         try {
             // 注销所有 Controller 的路由
             if (auditLogController != null) {
-                mapping.unregisterForPlugin("appstore-admin", auditLogController);
+                mapping.unregisterForPlugin("as-admin", auditLogController);
                 log.debug("注销 AuditLogController 路由");
             }
             
-            if (batchOperationController != null) {
-                mapping.unregisterForPlugin("appstore-admin", batchOperationController);
-                log.debug("注销 BatchOperationController 路由");
+            if (submissionBatchOperationController != null) {
+                mapping.unregisterForPlugin("as-admin", submissionBatchOperationController);
+                log.debug("注销 SubmissionBatchOperationController 路由");
+            }
+
+            if (pluginBatchOperationController != null) {
+                mapping.unregisterForPlugin("as-admin", pluginBatchOperationController);
+                log.debug("注销 PluginBatchOperationController 路由");
             }
             
             if (categoryController != null) {
-                mapping.unregisterForPlugin("appstore-admin", categoryController);
+                mapping.unregisterForPlugin("as-admin", categoryController);
                 log.debug("注销 CategoryController 路由");
             }
             
             if (developerManagementController != null) {
-                mapping.unregisterForPlugin("appstore-admin", developerManagementController);
+                mapping.unregisterForPlugin("as-admin", developerManagementController);
                 log.debug("注销 DeveloperManagementController 路由");
             }
             
             if (displayConfigController != null) {
-                mapping.unregisterForPlugin("appstore-admin", displayConfigController);
+                mapping.unregisterForPlugin("as-admin", displayConfigController);
                 log.debug("注销 DisplayConfigController 路由");
             }
             
             if (feedbackController != null) {
-                mapping.unregisterForPlugin("appstore-admin", feedbackController);
+                mapping.unregisterForPlugin("as-admin", feedbackController);
                 log.debug("注销 FeedbackController 路由");
             }
             
             if (pluginManagementController != null) {
-                mapping.unregisterForPlugin("appstore-admin", pluginManagementController);
+                mapping.unregisterForPlugin("as-admin", pluginManagementController);
                 log.debug("注销 PluginManagementController 路由");
             }
             
             if (pluginStatisticsController != null) {
-                mapping.unregisterForPlugin("appstore-admin", pluginStatisticsController);
+                mapping.unregisterForPlugin("as-admin", pluginStatisticsController);
                 log.debug("注销 PluginStatisticsController 路由");
             }
             
             if (pluginSubmissionController != null) {
-                mapping.unregisterForPlugin("appstore-admin", pluginSubmissionController);
+                mapping.unregisterForPlugin("as-admin", pluginSubmissionController);
                 log.debug("注销 PluginSubmissionController 路由");
             }
             
             if (pluginVersionController != null) {
-                mapping.unregisterForPlugin("appstore-admin", pluginVersionController);
+                mapping.unregisterForPlugin("as-admin", pluginVersionController);
                 log.debug("注销 PluginVersionController 路由");
             }
             
             if (reviewRuleController != null) {
-                mapping.unregisterForPlugin("appstore-admin", reviewRuleController);
+                mapping.unregisterForPlugin("as-admin", reviewRuleController);
                 log.debug("注销 ReviewRuleController 路由");
             }
             
             if (tagController != null) {
-                mapping.unregisterForPlugin("appstore-admin", tagController);
+                mapping.unregisterForPlugin("as-admin", tagController);
                 log.debug("注销 TagController 路由");
             }
             
             if (appStoreApiController != null) {
-                mapping.unregisterForPlugin("appstore-admin", appStoreApiController);
+                mapping.unregisterForPlugin("as-admin", appStoreApiController);
                 log.debug("注销 AppStoreApiController 路由");
             }
             

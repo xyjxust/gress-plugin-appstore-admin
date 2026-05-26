@@ -1,13 +1,13 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
 import com.keqi.gress.plugin.api.database.annotation.TableField;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
@@ -16,18 +16,12 @@ import java.time.LocalDateTime;
  * Represents an automated review rule
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_review_rule")
-public class ReviewRule {
-    
-    /**
-     * Primary key
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-    
+@TableName("as_admin_review_rule")
+public class ReviewRule extends BaseEntity {
     /**
      * Rule name
      */
@@ -90,21 +84,4 @@ public class ReviewRule {
     
     // Creation Information
     
-    /**
-     * Created by user ID
-     */
-    @TableField("created_by")
-    private String createdBy;
-    
-    /**
-     * Creation time
-     */
-    @TableField("create_time")
-    private LocalDateTime createTime;
-    
-    /**
-     * Last update time
-     */
-    @TableField("update_time")
-    private LocalDateTime updateTime;
 }

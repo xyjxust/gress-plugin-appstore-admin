@@ -2,8 +2,6 @@ package com.keqi.gress.plugin.appstore.admin.service;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.common.model.Result;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.common.storage.FileStorageService;
@@ -33,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * AppStore signing keys management.
@@ -49,11 +49,14 @@ public class AppStoreSigningKeyService {
 
     private static final String SIGNER_DNAME = "CN=Gress AppStore Signing, OU=Gress, O=Gress, L=Shanghai, ST=Shanghai, C=CN";
 
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
 
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private FileStorageService fileStorageService;
+
+    @Autowired
+    private AesGcmCryptoUtil aesGcmCryptoUtil;
 
     /**
      * List keys for admin UI.
@@ -91,7 +94,7 @@ public class AppStoreSigningKeyService {
     public List<TrustedRootDTO> getTrustedRoots() {
         String sql = """
                 SELECT key_id, alias, public_key_pem, public_fingerprint_sha256
-                FROM appstore_signing_key
+                FROM as_admin_signing_key
                 WHERE revoked_at IS NULL
                   AND (
                         active = 1
@@ -247,8 +250,8 @@ public class AppStoreSigningKeyService {
                     return Result.error("keystore upload returned empty url");
                 }
 
-                String storeEnc = AesGcmCryptoUtil.encrypt(keystorePassword);
-                String keyEnc = AesGcmCryptoUtil.encrypt(keyPassword);
+                String storeEnc = aesGcmCryptoUtil.encrypt(keystorePassword);
+                String keyEnc = aesGcmCryptoUtil.encrypt(keyPassword);
 
                 LocalDateTime now = LocalDateTime.now();
                 AppStoreSigningKey entity = AppStoreSigningKey.builder()
@@ -262,11 +265,11 @@ public class AppStoreSigningKeyService {
                         .active(false) // activated later if needed
                         .trustedUntil(null)
                         .revokedAt(null)
-                        .createdBy(operatorName)
-                        .updatedBy(operatorName)
-                        .createTime(now)
-                        .updateTime(now)
                         .build();
+                entity.setCreatedBy(operatorName);
+                entity.setUpdatedBy(operatorName);
+                entity.setCreateTime(now);
+                entity.setUpdateTime(now);
 
                 dataSource.insert(entity);
 
@@ -320,7 +323,7 @@ public class AppStoreSigningKeyService {
 
             // 2) Extend already-trusted keys so that multiple rotations within the window stay smooth.
             String extendSql = """
-                    UPDATE appstore_signing_key
+                    UPDATE as_admin_signing_key
                     SET trusted_until = #{trustedUntil},
                         updated_by = #{updatedBy}
                     WHERE revoked_at IS NULL
@@ -361,8 +364,8 @@ public class AppStoreSigningKeyService {
                 return Result.error("No active signing key configured");
             }
 
-            String storePass = AesGcmCryptoUtil.decrypt(active.getStorePasswordEnc());
-            String keyPass = AesGcmCryptoUtil.decrypt(active.getKeyPasswordEnc());
+            String storePass = aesGcmCryptoUtil.decrypt(active.getStorePasswordEnc());
+            String keyPass = aesGcmCryptoUtil.decrypt(active.getKeyPasswordEnc());
 
             return Result.success(java.util.Map.of(
                     "keystoreUrl", active.getKeystoreUrl(),
@@ -406,4 +409,3 @@ public class AppStoreSigningKeyService {
         return sb.toString();
     }
 }
-

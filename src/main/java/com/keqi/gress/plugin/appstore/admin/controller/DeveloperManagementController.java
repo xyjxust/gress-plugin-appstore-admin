@@ -1,13 +1,15 @@
 package com.keqi.gress.plugin.appstore.admin.controller;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.common.model.Result;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.service.DeveloperManagementService;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Developer Management Controller
@@ -16,11 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @Service
 @RestController
 @RequestMapping("/developers")
+@PluginMenu(id = "developers", name = "开发者管理", managementEnabled = true)
 public class DeveloperManagementController {
     
     private static final Log log = LogFactory.get(DeveloperManagementController.class);
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private DeveloperManagementService developerManagementService;
     
     /**
@@ -91,6 +94,7 @@ public class DeveloperManagementController {
      * @return Success result
      */
     @PostMapping("/{id}/approve")
+    @PluginAction(id = "verify", name = "认证开发者", managementEnabled = true, actionCode = "MANAGE")
     public Result<Void> approveDeveloper(@PathVariable Long id, @RequestBody DeveloperApprovalRequest request) {
 
             developerManagementService.approveDeveloper(id, request);
@@ -107,6 +111,7 @@ public class DeveloperManagementController {
      * @return Success result
      */
     @PostMapping("/{id}/suspend")
+    @PluginAction(id = "disable", name = "禁用开发者", managementEnabled = true, actionCode = "DISABLE")
     public Result<Void> suspendDeveloper(@PathVariable Long id, @RequestBody DeveloperSuspendRequest request) {
 
             developerManagementService.suspendDeveloper(id, request);
@@ -123,6 +128,7 @@ public class DeveloperManagementController {
      * @return Success result
      */
     @PostMapping("/{id}/activate")
+    @PluginAction(id = "enable", name = "启用开发者", managementEnabled = true, actionCode = "ENABLE")
     public Result<Void> activateDeveloper(@PathVariable Long id, @RequestBody DeveloperActivateRequest request) {
 
             developerManagementService.activateDeveloper(id, request);

@@ -36,7 +36,7 @@ export interface RejectPermissionRequest {
   reviewerName?: string
 }
 
-const API_BASE = '/plugins/appstore-admin'
+const API_BASE = '/plugins/as-admin'
 
 /**
  * 权限申请审核 API

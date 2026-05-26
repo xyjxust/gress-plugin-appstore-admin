@@ -3,13 +3,15 @@ package com.keqi.gress.plugin.appstore.admin.controller;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.PluginTablePermissionDTO;
 import com.keqi.gress.plugin.appstore.admin.service.PluginTablePermissionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 插件表权限管理 Controller
@@ -17,18 +19,20 @@ import java.util.List;
  */
 @Service
 @RestController
-@RequestMapping("/plugins/appstore-admin/table-permissions")
+@RequestMapping("/plugins/as-admin/table-permissions")
+@PluginMenu(id = "table-permissions", name = "表权限管理", managementEnabled = true)
 public class PluginTablePermissionController {
 
     private static final Log log = LogFactory.get(PluginTablePermissionController.class);
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private PluginTablePermissionService permissionService;
     
     /**
      * 获取所有权限配置
      */
     @GetMapping
+    @PluginAction(id = "refresh", name = "刷新")
     public Result<List<PluginTablePermissionDTO>> listAll(
             @RequestParam(required = false) String pluginId,
             @RequestParam(required = false) String tableName) {
@@ -60,6 +64,7 @@ public class PluginTablePermissionController {
      * 创建权限配置
      */
     @PostMapping
+    @PluginAction(id = "grant", name = "授予权限")
     public Result<PluginTablePermissionDTO> create(@RequestBody PluginTablePermissionDTO dto) {
 
             PluginTablePermissionDTO created = permissionService.create(dto);
@@ -84,6 +89,7 @@ public class PluginTablePermissionController {
      * 删除权限配置
      */
     @DeleteMapping("/{id}")
+    @PluginAction(id = "revoke", name = "撤销权限", managementEnabled = true, actionCode = "DELETE")
     public Result<Void> delete(@PathVariable Long id) {
 
             permissionService.delete(id);

@@ -1,12 +1,13 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
+import com.keqi.gress.plugin.api.database.annotation.TableField;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
@@ -15,18 +16,12 @@ import java.time.LocalDateTime;
  * Represents a listed plugin in the app store
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_manager")
-public class PluginManager {
-    
-    /**
-     * Primary key
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-    
+@TableName("as_admin_manager")
+public class PluginManager extends BaseEntity {
     /**
      * Plugin ID (unique identifier)
      */
@@ -93,16 +88,6 @@ public class PluginManager {
     // private String filePath;
     
     /**
-     * Creation time
-     */
-    private LocalDateTime createTime;
-    
-    /**
-     * Last update time
-     */
-    private LocalDateTime updateTime;
-    
-    /**
      * Delist reason
      */
     private String delistReason;
@@ -116,4 +101,10 @@ public class PluginManager {
      * Tags (JSON array)
      */
     private String tags;
+
+    /**
+     * Price type: free/paid
+     */
+    @TableField("price_type")
+    private String priceType;
 }

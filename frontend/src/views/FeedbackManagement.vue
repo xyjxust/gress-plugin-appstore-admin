@@ -651,8 +651,6 @@ const handleProcessSubmit = async () => {
 
     processLoading.value = true
     const request: FeedbackProcessRequest = {
-      handlerId: 'admin', // TODO: Get from current user
-      handlerName: '管理员', // TODO: Get from current user
       handleComment: processForm.handleComment,
       status: processForm.status
     }
@@ -686,8 +684,6 @@ const handleCloseSubmit = async () => {
   closeLoading.value = true
   try {
     const response = await feedbackApi.close(currentFeedback.value.id, {
-      handlerId: 'admin', // TODO: Get from current user
-      handlerName: '管理员', // TODO: Get from current user
       comment: closeForm.comment || undefined
     })
 

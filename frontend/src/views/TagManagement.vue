@@ -4,6 +4,12 @@
     <div class="page-header-wrapper">
       <PageHeader title="标签管理" subtitle="管理插件标签，维护标签信息">
         <template #actions>
+          <n-button @click="openTypeDrawer">
+            <template #icon>
+              <n-icon><component :is="Settings" /></n-icon>
+            </template>
+            类型管理
+          </n-button>
           <n-button type="primary" @click="handleCreate">
             <template #icon>
               <n-icon><component :is="Add" /></n-icon>
@@ -96,6 +102,15 @@
           />
         </n-form-item>
 
+        <n-form-item label="标签类型" path="tagTypeKey">
+          <n-select
+            v-model:value="tagForm.tagTypeKey"
+            :options="tagTypeOptions"
+            clearable
+            placeholder="请选择标签类型"
+          />
+        </n-form-item>
+
         <n-form-item label="启用状态" path="enabled">
           <n-switch v-model:value="tagForm.enabled" />
         </n-form-item>
@@ -129,6 +144,9 @@
               </n-descriptions-item>
               <n-descriptions-item label="标签标识">
                 {{ currentTag.tagKey }}
+              </n-descriptions-item>
+              <n-descriptions-item label="标签类型">
+                {{ currentTag.tagTypeKey || '-' }}
               </n-descriptions-item>
               <n-descriptions-item label="标签颜色">
                 <n-space :size="8">
@@ -178,15 +196,76 @@
         </template>
       </n-drawer-content>
     </n-drawer>
+
+    <n-drawer
+      v-model:show="showTypeDrawer"
+      :width="520"
+      placement="right"
+    >
+      <n-drawer-content title="标签类型管理">
+        <n-space vertical :size="16">
+          <n-alert type="info" :bordered="false">
+            类型数量较少，可在这里全量维护（动态新增/删除）
+          </n-alert>
+
+          <n-form
+            ref="typeFormRef"
+            :model="typeForm"
+            :rules="typeFormRules"
+            label-placement="left"
+            label-width="80px"
+          >
+            <n-form-item label="类型名称" path="typeName">
+              <n-input
+                v-model:value="typeForm.typeName"
+                maxlength="64"
+                show-count
+                placeholder="例如：业务标签"
+              />
+            </n-form-item>
+            <n-form-item label="类型标识" path="typeKey">
+              <n-input
+                v-model:value="typeForm.typeKey"
+                maxlength="64"
+                show-count
+                placeholder="例如：business_tag"
+              />
+            </n-form-item>
+            <n-form-item label="描述" path="description">
+              <n-input
+                v-model:value="typeForm.description"
+                type="textarea"
+                :rows="2"
+                maxlength="200"
+                show-count
+                placeholder="可选"
+              />
+            </n-form-item>
+            <n-form-item>
+              <n-button type="primary" :loading="typeSubmitting" @click="handleCreateType">
+                新增类型
+              </n-button>
+            </n-form-item>
+          </n-form>
+
+          <n-data-table
+            :columns="typeColumns"
+            :data="tagTypes"
+            :row-key="(row: TagType) => row.id"
+            size="small"
+          />
+        </n-space>
+      </n-drawer-content>
+    </n-drawer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, h, onMounted, resolveComponent } from 'vue'
+import { ref, reactive, computed, h, onMounted, resolveComponent } from 'vue'
 import { useMessage, useIcon } from '@keqi.gress/plugin-bridge'
 import { useDialog } from 'naive-ui'
 import { tagApi } from '../api'
-import type { Tag } from '../types'
+import type { Tag, TagType } from '../types'
 
 // PageHeader 和 FilterPanel 是宿主机全局注册的组件，无需导入
 // FilterFieldConfig 类型定义
@@ -210,6 +289,7 @@ const Refresh = useIcon('RefreshOutline')
 const Edit = useIcon('CreateOutline')
 const Delete = useIcon('TrashOutline')
 const Eye = useIcon('EyeOutline')
+const Settings = useIcon('SettingsOutline')
 
 // Message and Dialog
 const message = useMessage()
@@ -225,12 +305,17 @@ const showDetailDrawer = ref(false)
 const isEditing = ref(false)
 const currentTag = ref<Tag | null>(null)
 const formRef = ref<any>(null)
+const typeFormRef = ref<any>(null)
+const showTypeDrawer = ref(false)
+const typeSubmitting = ref(false)
+const tagTypes = ref<TagType[]>([])
 
 // Filters
 const showAdvanced = ref(false)
 const filters = ref({
   keyword: '',
-  enabled: null as boolean | null
+  enabled: null as boolean | null,
+  tagTypeKey: null as string | null
 })
 
 // 标签表单
@@ -239,7 +324,14 @@ const tagForm = reactive({
   tagKey: '',
   description: '',
   color: '#18a058',
+  tagTypeKey: undefined as string | undefined,
   enabled: true
+})
+
+const typeForm = reactive({
+  typeName: '',
+  typeKey: '',
+  description: ''
 })
 
 // 表单验证规则
@@ -254,8 +346,25 @@ const formRules = {
   ]
 }
 
+const typeFormRules = {
+  typeName: [
+    { required: true, message: '请输入类型名称', trigger: 'blur' }
+  ],
+  typeKey: [
+    { required: true, message: '请输入类型标识', trigger: 'blur' },
+    { pattern: /^[a-z0-9_-]+$/, message: '类型标识只能包含小写字母、数字、下划线和连字符', trigger: 'blur' }
+  ]
+}
+
+const tagTypeOptions = computed(() =>
+  tagTypes.value.map(item => ({
+    label: item.typeName,
+    value: item.typeKey
+  }))
+)
+
 // 过滤字段配置
-const basicFields: FilterFieldConfig[] = [
+const basicFields = computed<FilterFieldConfig[]>(() => [
   {
     key: 'keyword',
     label: '关键词',
@@ -274,8 +383,16 @@ const basicFields: FilterFieldConfig[] = [
       { label: '已禁用', value: false }
     ],
     span: 12
+  },
+  {
+    key: 'tagTypeKey',
+    label: '标签类型',
+    type: 'select',
+    placeholder: '请选择标签类型',
+    options: [{ label: '全部', value: null }, ...tagTypeOptions.value],
+    span: 12
   }
-]
+])
 
 // Table Columns
 const columns: any[] = [
@@ -293,6 +410,16 @@ const columns: any[] = [
     title: '标签标识',
     key: 'tagKey',
     width: 150
+  },
+  {
+    title: '标签类型',
+    key: 'tagTypeKey',
+    width: 140,
+    render: (row: Tag) => {
+      if (!row.tagTypeKey) return '-'
+      const current = tagTypes.value.find(item => item.typeKey === row.tagTypeKey)
+      return current ? `${current.typeName}(${current.typeKey})` : row.tagTypeKey
+    }
   },
   {
     title: '标签颜色',
@@ -421,12 +548,41 @@ const columns: any[] = [
   }
 ]
 
+const typeColumns: any[] = [
+  {
+    title: '名称',
+    key: 'typeName'
+  },
+  {
+    title: '标识',
+    key: 'typeKey'
+  },
+  {
+    title: '操作',
+    key: 'actions',
+    width: 100,
+    render: (row: TagType) => {
+      const NButton = resolveComponent('NButton') as any
+      return h(
+        NButton,
+        {
+          size: 'tiny',
+          type: 'error',
+          text: true,
+          onClick: () => handleDeleteType(row)
+        },
+        { default: () => '删除' }
+      )
+    }
+  }
+]
+
 // Methods
 const loadTags = async () => {
   loading.value = true
   refreshLoading.value = true
   try {
-    const response = await tagApi.getAll()
+    const response = await tagApi.getAll() as unknown as Tag[]
     
 
       let filteredTags = response
@@ -442,6 +598,10 @@ const loadTags = async () => {
 
       if (filters.value.enabled !== null) {
         filteredTags = filteredTags.filter(tag => tag.enabled === filters.value.enabled)
+      }
+
+      if (filters.value.tagTypeKey) {
+        filteredTags = filteredTags.filter(tag => tag.tagTypeKey === filters.value.tagTypeKey)
       }
 
       tags.value = filteredTags
@@ -460,6 +620,7 @@ const handleSearch = () => {
 const handleReset = () => {
   filters.value.keyword = ''
   filters.value.enabled = null
+  filters.value.tagTypeKey = null
   loadTags()
 }
 
@@ -477,13 +638,14 @@ const handleEdit = (tag: Tag) => {
   tagForm.tagKey = tag.tagKey
   tagForm.description = tag.description || ''
   tagForm.color = tag.color || '#18a058'
+  tagForm.tagTypeKey = tag.tagTypeKey || undefined
   tagForm.enabled = tag.enabled
   showFormModal.value = true
 }
 
 const handleViewDetail = async (id: number) => {
 
-    const response = await tagApi.getById(id)
+    const response = await tagApi.getById(id) as unknown as Tag
  
       currentTag.value = response
       showDetailDrawer.value = true
@@ -501,11 +663,14 @@ const handleSubmit = async () => {
 
   submitting.value = true
   try {
-    let response
+    const payload = {
+      ...tagForm,
+      tagTypeKey: tagForm.tagTypeKey || undefined
+    }
     if (isEditing.value && currentTag.value) {
-      response = await tagApi.update(currentTag.value.id, tagForm)
+      await tagApi.update(currentTag.value.id, payload)
     } else {
-      response = await tagApi.create(tagForm)
+      await tagApi.create(payload)
     }
       message.success(isEditing.value ? '更新成功' : '创建成功')
       showFormModal.value = false
@@ -524,10 +689,7 @@ const handleDelete = (tag: Tag) => {
     positiveText: '删除',
     negativeText: '取消',
     onPositiveClick: async () => {
-
-        const response = await tagApi.delete(tag.id)
-
-
+        await tagApi.delete(tag.id)
           message.success('删除成功')
           loadTags()
     
@@ -540,7 +702,56 @@ const resetForm = () => {
   tagForm.tagKey = ''
   tagForm.description = ''
   tagForm.color = '#18a058'
+  tagForm.tagTypeKey = undefined
   tagForm.enabled = true
+}
+
+const loadTagTypes = async () => {
+  const response = await tagApi.getTypes() as unknown as TagType[]
+  tagTypes.value = response
+}
+
+const resetTypeForm = () => {
+  typeForm.typeName = ''
+  typeForm.typeKey = ''
+  typeForm.description = ''
+}
+
+const openTypeDrawer = async () => {
+  await loadTagTypes()
+  showTypeDrawer.value = true
+}
+
+const handleCreateType = async () => {
+  if (!typeFormRef.value) return
+  try {
+    await typeFormRef.value.validate()
+  } catch (error) {
+    return
+  }
+  typeSubmitting.value = true
+  try {
+    await tagApi.createType(typeForm)
+    message.success('类型创建成功')
+    resetTypeForm()
+    await loadTagTypes()
+  } finally {
+    typeSubmitting.value = false
+  }
+}
+
+const handleDeleteType = (row: TagType) => {
+  dialog.warning({
+    title: '删除类型',
+    content: `确定删除类型 "${row.typeName}" 吗？`,
+    positiveText: '删除',
+    negativeText: '取消',
+    onPositiveClick: async () => {
+      await tagApi.deleteType(row.id)
+      message.success('删除成功')
+      await loadTagTypes()
+    }
+  })
 }
 
 const formatDateTime = (dateTime: string): string => {
@@ -557,6 +768,7 @@ const formatDateTime = (dateTime: string): string => {
 
 // Lifecycle
 onMounted(() => {
+  loadTagTypes()
   loadTags()
 })
 </script>

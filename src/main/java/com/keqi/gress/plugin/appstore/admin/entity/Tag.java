@@ -1,28 +1,24 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
 import com.keqi.gress.plugin.api.database.annotation.TableField;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.Builder;
 
 /**
  * Plugin Tag Entity
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_tag")
-public class Tag {
-
-    @TableId(type = IdType.AUTO)
-    private Long id;
+@TableName("as_admin_tag")
+public class Tag extends BaseEntity {
 
     @TableField("tag_name")
     private String tagName;
@@ -36,17 +32,13 @@ public class Tag {
     @TableField("color")
     private String color;
 
+    @TableField("tag_type_key")
+    private String tagTypeKey;
+
     @TableField("enabled")
     private Boolean enabled;
 
     @TableField("usage_count")
     private Integer usageCount;
 
-    @TableField("create_time")
-    private LocalDateTime createTime;
-
-    @TableField("update_time")
-    private LocalDateTime updateTime;
 }
-
-

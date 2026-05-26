@@ -3,11 +3,13 @@ package com.keqi.gress.plugin.appstore.admin.controller;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.service.PluginReviewService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Plugin Submission Controller
@@ -17,11 +19,12 @@ import org.springframework.web.bind.annotation.*;
 @Service
 @RestController
 @RequestMapping("/plugins/submissions")
+@PluginMenu(id = "submissions", name = "插件审核", managementEnabled = true)
 public class PluginSubmissionController {
 
     private final static Log log = LogFactory.get(PluginSubmissionController.class);
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private PluginReviewService pluginReviewService;
     
     /**
@@ -37,6 +40,7 @@ public class PluginSubmissionController {
      * @return Paginated list of plugin submissions
      */
     @GetMapping
+    @PluginAction(id = "refresh", name = "刷新")
     public Result<PageResult<PluginSubmissionDTO>> getSubmissions(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "20") Integer size,
@@ -107,6 +111,7 @@ public class PluginSubmissionController {
      * @return Success result
      */
     @PostMapping("/{id}/approve")
+    @PluginAction(id = "approve", name = "审核通过", managementEnabled = true, actionCode = "MANAGE")
     public Result<Void> approvePlugin(@PathVariable Long id, @RequestBody ApprovalRequest request) {
 
             pluginReviewService.approvePlugin(id, request);
@@ -122,6 +127,7 @@ public class PluginSubmissionController {
      * @return Success result
      */
     @PostMapping("/{id}/reject")
+    @PluginAction(id = "reject", name = "审核拒绝", managementEnabled = true, actionCode = "MANAGE")
     public Result<Void> rejectPlugin(@PathVariable Long id, @RequestBody RejectionRequest request) {
         log.info("POST /plugins/submissions/{}/reject - reviewer: {}, reason: {}", 
                  id, request.getReviewerName(), request.getReason());

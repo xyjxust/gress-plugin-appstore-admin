@@ -1,12 +1,12 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
@@ -16,14 +16,12 @@ import java.time.LocalDateTime;
  * <p>Stores signing keystore metadata (keystore is stored in FileStorageService).</p>
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_signing_key")
-public class AppStoreSigningKey {
-
-    @TableId(type = IdType.AUTO)
-    private Long id;
+@TableName("as_admin_signing_key")
+public class AppStoreSigningKey extends BaseEntity {
 
     /**
      * Stable key id used by UI/client.
@@ -74,11 +72,4 @@ public class AppStoreSigningKey {
      * Revoked time. null => not revoked.
      */
     private LocalDateTime revokedAt;
-
-    private String createdBy;
-    private String updatedBy;
-
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
 }
-

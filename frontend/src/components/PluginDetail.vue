@@ -17,6 +17,11 @@
             {{ getPluginTypeTag(plugin.pluginType).label }}
           </n-tag>
         </n-descriptions-item>
+        <n-descriptions-item label="价格类型">
+          <n-tag :type="plugin.priceType === 'paid' ? 'warning' : 'success'" size="small">
+            {{ plugin.priceType === 'paid' ? '付费' : '免费' }}
+          </n-tag>
+        </n-descriptions-item>
         <n-descriptions-item label="开发者">
           {{ plugin.developerName || plugin.developerId }}
         </n-descriptions-item>
@@ -33,9 +38,8 @@
 
     <!-- 插件描述 -->
     <n-card title="插件描述" :bordered="false" class="detail-card">
-      <div class="description-content">
-        {{ plugin.description || '暂无描述' }}
-      </div>
+      <div v-if="plugin.description" class="description-content richtext" v-html="sanitize(plugin.description)" />
+      <div v-else class="description-content">暂无描述</div>
     </n-card>
 
     <!-- 历史版本 -->
@@ -62,10 +66,10 @@
                   {{ getVersionStatusTag(version.status).label }}
                 </n-tag>
               </div>
-              <span class="version-time">{{ formatDateTime(version.uploadTime) }}</span>
+              <span class="version-time">{{ formatDateTime(version.createTime) }}</span>
             </div>
             <div v-if="version.releaseNotes" class="version-notes">
-              {{ version.releaseNotes }}
+              <div class="richtext" v-html="sanitize(version.releaseNotes)" />
             </div>
             <div class="version-meta">
               <span>文件大小: {{ formatFileSize(version.fileSize) }}</span>
@@ -153,9 +157,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useIcon } from '@keqi.gress/plugin-bridge'
-import { useMessage } from '@keqi.gress/plugin-bridge'
 import { versionApi } from '../api'
 import type { Plugin, PluginStatus, PluginType, PluginVersion } from '../types'
+import { sanitizeHtml } from '@keqi.gress/plugin-ui'
 
 // 图标
 const CreateOutline = useIcon('CreateOutline')
@@ -164,15 +168,13 @@ const CheckmarkCircle = useIcon('CheckmarkCircleOutline')
 const TrashOutline = useIcon('TrashOutline')
 const Refresh = useIcon('RefreshOutline')
 
-// 消息提示
-const message = useMessage()
-
 // 定义Props
 interface Props {
   plugin: Plugin
 }
 
 const props = defineProps<Props>()
+const sanitize = sanitizeHtml
 
 // 定义Emits
 defineEmits<{
@@ -194,8 +196,7 @@ async function loadVersions() {
   loadingVersions.value = true
   try {
     const response = await versionApi.getList(props.plugin.pluginId)
-
-      versions.value = response
+    versions.value = response?.data || []
 
   } finally {
     loadingVersions.value = false
@@ -214,7 +215,8 @@ function getPluginTypeTag(type: PluginType) {
   const typeMap: Record<PluginType, { label: string; type: 'info' | 'success' | 'warning' }> = {
     TASK: { label: '任务节点', type: 'info' },
     TRIGGER: { label: '触发器', type: 'success' },
-    APPLICATION: { label: '应用插件', type: 'warning' }
+    APPLICATION: { label: '应用插件', type: 'warning' },
+    MIDDLEWARE: { label: '中间件', type: 'info' }
   }
   return typeMap[type]
 }
@@ -279,6 +281,19 @@ function formatFileSize(bytes: number): string {
   line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.richtext :deep(p) {
+  margin: 0 0 10px;
+}
+.richtext :deep(ul),
+.richtext :deep(ol) {
+  padding-left: 22px;
+  margin: 0 0 10px;
+}
+.richtext :deep(a) {
+  color: #1677ff;
+  text-decoration: underline;
 }
 
 .version-list {

@@ -1,8 +1,8 @@
 package com.keqi.gress.plugin.appstore.admin.controller;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.common.model.Result;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.enums.FeedbackStatus;
 import com.keqi.gress.plugin.appstore.admin.enums.FeedbackType;
 import com.keqi.gress.plugin.appstore.admin.enums.Severity;
@@ -12,6 +12,8 @@ import com.keqi.gress.plugin.appstore.admin.service.FeedbackService;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Feedback Controller
@@ -20,11 +22,12 @@ import org.springframework.web.bind.annotation.*;
 @Service
 @RestController
 @RequestMapping("/feedbacks")
+@PluginMenu(id = "feedbacks", name = "用户反馈", managementEnabled = true)
 public class FeedbackController {
     
     private static final Log log = LogFactory.get(FeedbackController.class);
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private FeedbackService feedbackService;
     
     /**
@@ -122,6 +125,7 @@ public class FeedbackController {
      * @return Success result
      */
     @PostMapping("/{id}/process")
+    @PluginAction(id = "reply", name = "回复反馈", managementEnabled = true, actionCode = "MANAGE")
     public Result<Void> processFeedback(@PathVariable Long id, @RequestBody ProcessFeedbackRequest request) {
 
             feedbackService.processFeedback(id, request);
@@ -138,6 +142,7 @@ public class FeedbackController {
      * @return Success result
      */
     @PostMapping("/{id}/close")
+    @PluginAction(id = "resolve", name = "标记已解决", managementEnabled = true, actionCode = "MANAGE")
     public Result<Void> closeFeedback(@PathVariable Long id, @RequestBody CloseFeedbackRequest request) {
 
             feedbackService.closeFeedback(id, request);

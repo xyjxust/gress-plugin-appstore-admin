@@ -19,7 +19,7 @@ export interface PluginTablePermission {
   updateBy?: string
 }
 
-const API_BASE = '/plugins/appstore-admin'
+const API_BASE = '/plugins/as-admin'
 
 /**
  * 插件表权限管理 API

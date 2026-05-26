@@ -136,11 +136,12 @@
           />
         </n-form-item>
         <n-form-item label="插件描述" path="description">
-          <n-input
-            v-model:value="editForm.description"
-            type="textarea"
+          <KbDocEditorFullView
+            v-model="editForm.description"
+            value-type="html"
             placeholder="请输入插件描述"
-            :rows="4"
+            :min-height="180"
+            :headless="true"
           />
         </n-form-item>
         <n-form-item label="分类" path="category">
@@ -196,11 +197,12 @@
         </n-form-item>
 
         <n-form-item label="插件描述" path="description">
-          <n-input
-            v-model:value="uploadForm.description"
-            type="textarea"
+          <KbDocEditorFullView
+            v-model="uploadForm.description"
+            value-type="html"
             placeholder="请输入插件描述（可选）"
-            :rows="3"
+            :min-height="160"
+            :headless="true"
           />
         </n-form-item>
 
@@ -302,6 +304,7 @@ import { ref, reactive, computed, h, onMounted, resolveComponent } from 'vue'
 import { useMessage, useIcon } from '@keqi.gress/plugin-bridge'
 import { useDialog } from 'naive-ui'
 import { NUploadDragger } from 'naive-ui'
+import { KbDocEditorFullView } from '@keqi.gress/plugin-ui'
 
 // 图标
 const BanOutline = useIcon('BanOutline')
@@ -315,6 +318,7 @@ const TrashOutline = useIcon('TrashOutline')
 import PluginDetail from '../components/PluginDetail.vue'
 import { pluginApi, type PluginTypeInfo } from '../api'
 import type { Plugin, PluginStatus, PluginType } from '../types'
+import RichTextInput from '../components/RichTextInput.vue'
 
 // FilterFieldConfig 类型定义
 export type FilterFieldType = 'input' | 'select' | 'date' | 'date-range'
@@ -465,24 +469,22 @@ const pluginTypeMap = ref<Record<string, PluginTypeInfo>>({})
 
 // 加载插件类型列表
 const loadPluginTypes = async () => {
+  const types = await pluginApi.getTypes()
 
-    const response = await pluginApi.getTypes()
+  pluginTypeOptions.value = [
+    { label: '全部', value: '' },
+    ...types.map((type: PluginTypeInfo) => ({
+      label: type.label,
+      value: type.code
+    }))
+  ]
 
-      pluginTypeOptions.value = [
-        { label: '全部', value: '' },
-        ...response.map(type => ({
-          label: type.label,
-          value: type.code
-        }))
-      ]
-      
-      // 构建类型映射
-      const map: Record<string, PluginTypeInfo> = {}
-      response.forEach(type => {
-        map[type.code] = type
-      })
-      pluginTypeMap.value = map
-
+  // 构建类型映射
+  const map: Record<string, PluginTypeInfo> = {}
+  types.forEach((type: PluginTypeInfo) => {
+    map[type.code] = type
+  })
+  pluginTypeMap.value = map
 }
 
 // 计算属性
@@ -755,8 +757,29 @@ async function loadData() {
     }
 
     const response = await pluginApi.getList(params)
-     tableData.value = response.items || []
-          pagination.itemCount = response.total || 0
+    const payload: any = response as any
+    const page =
+      payload?.data?.data ??
+      payload?.data ??
+      payload?.result?.data ??
+      payload?.result ??
+      payload
+
+    const items =
+      page?.items ??
+      page?.list ??
+      page?.records ??
+      page?.content ??
+      []
+
+    tableData.value = Array.isArray(items) ? items : []
+    pagination.itemCount = Number(
+      page?.total ??
+        page?.totalElements ??
+        payload?.total ??
+        payload?.data?.total ??
+        0
+    )
 
   } finally {
     loading.value = false

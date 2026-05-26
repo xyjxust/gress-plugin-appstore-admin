@@ -25,6 +25,8 @@ public class TagDTO {
     private String description;
     
     private String color;
+
+    private String tagTypeKey;
     
     private Boolean enabled;
     

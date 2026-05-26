@@ -1,13 +1,12 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
 import com.alibaba.fastjson2.JSON;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginManager;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginReviewHistory;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginSubmission;
+import com.keqi.gress.plugin.appstore.admin.support.RequestActorContextBinder;
 import com.keqi.gress.common.plugin.PluginType;
 import com.keqi.gress.plugin.appstore.admin.enums.ScanStatus;
 import com.keqi.gress.plugin.appstore.admin.enums.SubmissionStatus;
@@ -18,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Plugin Review Service
@@ -28,16 +29,16 @@ public class PluginReviewService {
     
     private static final Log log = LogFactory.get(PluginReviewService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource pluginDataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private AuditLogService auditLogService;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private ReviewRuleEngine reviewRuleEngine;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private SecurityScanService securityScanService;
     
     /**
@@ -314,6 +315,7 @@ public class PluginReviewService {
      */
     public void approvePlugin(Long submissionId, ApprovalRequest request) {
         log.info("Approving plugin submission: {}", submissionId);
+        RequestActorContextBinder.bindReviewer(request);
         
         // Validate request
         if (request.getReviewerId() == null || request.getReviewerId().trim().isEmpty()) {
@@ -385,8 +387,8 @@ public class PluginReviewService {
                 .decision("APPROVED")
                 .comment(request.getComment())
                 .reviewTime(now)
-                .createTime(now)
                 .build();
+            history.setCreateTime(now);
             
             pluginDataSource.insert(history);
             
@@ -406,9 +408,9 @@ public class PluginReviewService {
                     .status("ONLINE")
                     .developerId(submission.getDeveloperId())
                     .developerName(submission.getDeveloperName())
-                    .createTime(now)
-                    .updateTime(now)
                     .build();
+                manager.setCreateTime(now);
+                manager.setUpdateTime(now);
                 
                 pluginDataSource.insert(manager);
             } else {
@@ -454,6 +456,7 @@ public class PluginReviewService {
      */
     public void rejectPlugin(Long submissionId, RejectionRequest request) {
         log.info("Rejecting plugin submission: {}", submissionId);
+        RequestActorContextBinder.bindReviewer(request);
         
         // Validate request
         if (request.getReviewerId() == null || request.getReviewerId().trim().isEmpty()) {
@@ -511,8 +514,8 @@ public class PluginReviewService {
                 .decision("REJECTED")
                 .comment(request.getReason())
                 .reviewTime(now)
-                .createTime(now)
                 .build();
+            history.setCreateTime(now);
             
             pluginDataSource.insert(history);
         });
@@ -541,7 +544,7 @@ public class PluginReviewService {
         
         log.info("Plugin submission rejected successfully: {}", submissionId);
     }
-    
+
     /**
      * Batch review plugin submissions
      *

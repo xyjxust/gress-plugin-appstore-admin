@@ -71,6 +71,11 @@ public class PluginManagerDTO {
      * Category
      */
     private String category;
+
+    /**
+     * Price type (free/paid)
+     */
+    private String priceType;
     
     /**
      * Install count

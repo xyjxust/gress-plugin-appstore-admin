@@ -1,13 +1,13 @@
 package com.keqi.gress.plugin.appstore.admin.listener;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.appstore.admin.service.PluginStatisticsService;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import org.springframework.context.event.EventListener;
 
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Plugin Event Listener
@@ -18,7 +18,7 @@ public class PluginEventListener {
     
     private static final Log log = LogFactory.get(PluginEventListener.class);
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private PluginStatisticsService pluginStatisticsService;
     
     /**

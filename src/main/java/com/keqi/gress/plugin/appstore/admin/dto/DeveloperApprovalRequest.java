@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.keqi.gress.plugin.appstore.admin.support.ReviewerAwareRequest;
 
 /**
  * Developer Approval Request
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeveloperApprovalRequest {
+public class DeveloperApprovalRequest implements ReviewerAwareRequest {
     
     /**
      * Reviewer ID

@@ -1,10 +1,10 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
 import com.keqi.gress.plugin.api.database.annotation.TableField;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -15,12 +15,9 @@ import java.util.stream.Collectors;
  * 插件系统表访问权限配置实体
  */
 @Data
-@TableName("appstore_plugin_table_permission")
-public class SysPluginTablePermission {
-    
-    /** 权限ID */
-    @TableId(type = IdType.AUTO)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+@TableName("as_admin_plugin_table_permission")
+public class SysPluginTablePermission extends BaseEntity {
     
     /** 插件ID */
     @TableField("plugin_id")
@@ -45,14 +42,6 @@ public class SysPluginTablePermission {
     /** 是否启用（1:启用 0:禁用） */
     @TableField("enabled")
     private Boolean enabled;
-    
-    /** 创建时间 */
-    @TableField("create_time")
-    private LocalDateTime createTime;
-    
-    /** 更新时间 */
-    @TableField("update_time")
-    private LocalDateTime updateTime;
     
     /** 创建人 */
     @TableField("create_by")
@@ -104,4 +93,3 @@ public class SysPluginTablePermission {
         return allowedOps.contains(operation.toUpperCase());
     }
 }
-

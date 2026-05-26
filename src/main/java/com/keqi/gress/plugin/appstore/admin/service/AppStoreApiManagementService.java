@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keqi.gress.common.data.TypeConverter;
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.common.storage.FileStorageService;
 import com.keqi.gress.plugin.api.database.page.IPage;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
@@ -17,22 +15,24 @@ import cn.hutool.log.LogFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 应用商店 API 服务（用户端）
  * 
  * 提供应用查询和下载功能
- * 从 appstore_manager 和 appstore_version 表查询数据
+ * 从 as_admin_manager 和 as_admin_version 表查询数据
  */
 @Service
 public class AppStoreApiManagementService {
     
     private static final Log log = LogFactory.get(AppStoreApiManagementService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private FileStorageService fileStorageService;
     
     /**
@@ -51,17 +51,19 @@ public class AppStoreApiManagementService {
             Integer size, 
             String pluginType,
             String category,
-            String keyword) {
+            String keyword,
+            String tag,
+            String priceType) {
         
-        log.info("查询应用列表: page={}, size={}, pluginType={}, category={}, keyword={}", 
-                page, size, pluginType, category, keyword);
+        log.info("查询应用列表: page={}, size={}, pluginType={}, category={}, keyword={}, tag={}, priceType={}", 
+                page, size, pluginType, category, keyword, tag, priceType);
         
         // 使用 MyBatis 动态 SQL 进行多表联查
         // 注意：使用 page() 方法时，SQL 中不需要手动添加 LIMIT
         String sql = """
                 SELECT m.*, v.file_path, v.file_size, v.release_notes
-                FROM appstore_manager m
-                LEFT JOIN appstore_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
+                FROM as_admin_manager m
+                LEFT JOIN as_admin_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
                 <where>
                   m.status = 'ONLINE'
                   <if test='pluginType != nil'>
@@ -72,6 +74,17 @@ public class AppStoreApiManagementService {
                   </if>
                   <if test='keyword != nil'>
                     AND (m.plugin_name LIKE #{keywordPattern} OR m.description LIKE #{keywordPattern})
+                  </if>
+                  <if test='tag != nil'>
+                    AND EXISTS (
+                      SELECT 1
+                      FROM as_admin_plugin_tag pt
+                      JOIN as_admin_tag t ON pt.tag_id = t.id
+                      WHERE pt.plugin_id = m.plugin_id AND t.tag_key = #{tag}
+                    )
+                  </if>
+                  <if test='priceType != nil'>
+                    AND m.price_type = #{priceType}
                   </if>
                 </where>
                 ORDER BY m.install_count DESC, m.rating_average DESC, m.update_time DESC
@@ -86,6 +99,8 @@ public class AppStoreApiManagementService {
                 .param("category", category != null && !category.trim().isEmpty() ? category : null)
                 .param("keyword", keyword != null && !keyword.trim().isEmpty() ? keyword : null)
                 .param("keywordPattern", keywordPattern)
+                .param("tag", tag != null && !tag.trim().isEmpty() ? tag : null)
+                .param("priceType", priceType != null && !priceType.trim().isEmpty() ? priceType : null)
                 .page(page, size)
                 .queryPage();
         
@@ -114,8 +129,8 @@ public class AppStoreApiManagementService {
             // 使用 MyBatis 动态 SQL 进行多表联查
             String sql = """
                     SELECT m.*, v.file_path, v.file_size, v.release_notes, v.file_hash, v.dependencies, v.version
-                    FROM appstore_manager m
-                    LEFT JOIN appstore_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
+                    FROM as_admin_manager m
+                    LEFT JOIN as_admin_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
                     WHERE m.plugin_id = #{pluginId}
                     """;
             
@@ -424,7 +439,7 @@ public class AppStoreApiManagementService {
                 // 获取指定版本的依赖
                 sql = """
                         SELECT v.dependencies
-                        FROM appstore_version v
+                        FROM as_admin_version v
                         WHERE v.plugin_id = #{pluginId} AND v.version = #{version}
                         """;
                 rows = dataSource.dynamicSql(sql)
@@ -435,8 +450,8 @@ public class AppStoreApiManagementService {
                 // 获取当前版本的依赖
                 sql = """
                         SELECT v.dependencies
-                        FROM appstore_manager m
-                        LEFT JOIN appstore_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
+                        FROM as_admin_manager m
+                        LEFT JOIN as_admin_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
                         WHERE m.plugin_id = #{pluginId}
                         """;
                 rows = dataSource.dynamicSql(sql)
@@ -541,8 +556,8 @@ public class AppStoreApiManagementService {
             // 使用 MyBatis 动态 SQL 进行多表联查
             String sql = """
                     SELECT v.file_path
-                    FROM appstore_manager m
-                    JOIN appstore_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
+                    FROM as_admin_manager m
+                    JOIN as_admin_version v ON m.plugin_id = v.plugin_id AND v.is_current = 1
                     WHERE m.plugin_id = #{pluginId}
                       AND m.status = 'ONLINE'
                       AND v.status = 'ONLINE'
@@ -604,7 +619,7 @@ public class AppStoreApiManagementService {
         try {
             String sql = """
                     SELECT v.*
-                    FROM appstore_version v
+                    FROM as_admin_version v
                     WHERE v.plugin_id = #{pluginId}
                       AND v.version = #{version}
                     """;
@@ -649,7 +664,7 @@ public class AppStoreApiManagementService {
         try {
             String sql = """
                     SELECT v.file_path
-                    FROM appstore_version v
+                    FROM as_admin_version v
                     WHERE v.plugin_id = #{pluginId}
                       AND v.version = #{version}
                       AND v.status = 'ONLINE'
@@ -709,7 +724,7 @@ public class AppStoreApiManagementService {
         try {
             String sql = """
                     SELECT v.file_path
-                    FROM appstore_version v
+                    FROM as_admin_version v
                     WHERE v.plugin_id = #{pluginId}
                       AND v.version = #{version}
                       AND v.status = 'ONLINE'
@@ -804,7 +819,7 @@ public class AppStoreApiManagementService {
     }
     
     /**
-     * 映射 appstore_manager + appstore_version 联表查询结果到DTO（用户端）
+     * 映射 as_admin_manager + as_admin_version 联表查询结果到DTO（用户端）
      */
     private PluginPackageDTO mapManagerToPluginPackageDTO(Map<String, Object> row) {
         PluginPackageDTO dto = new PluginPackageDTO();
@@ -819,6 +834,7 @@ public class AppStoreApiManagementService {
         dto.setDescription((String) row.get("description"));
         dto.setIcon((String) row.get("icon"));
         dto.setCategory((String) row.get("category"));
+        dto.setPriceType((String) row.get("price_type"));
         dto.setDeveloperId((String) row.get("developer_id"));
         dto.setDeveloperName((String) row.get("developer_name"));
         dto.setStatus((String) row.get("status"));
@@ -831,7 +847,7 @@ public class AppStoreApiManagementService {
     }
     
     /**
-     * 映射 appstore_version 表数据到DTO（管理端版本列表）
+     * 映射 as_admin_version 表数据到DTO（管理端版本列表）
      */
     private PluginPackageDTO mapVersionToPluginPackageDTO(Map<String, Object> row) {
         PluginPackageDTO dto = new PluginPackageDTO();

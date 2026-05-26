@@ -1,10 +1,10 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
 import com.keqi.gress.plugin.api.database.annotation.TableField;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
@@ -12,13 +12,9 @@ import java.time.LocalDateTime;
  * 插件系统表访问权限申请表
  */
 @Data
-@TableName("appstore_plugin_table_permission_request")
-public class SysPluginTablePermissionRequest {
-    
-    /** 申请ID */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-    
+@EqualsAndHashCode(callSuper = true)
+@TableName("as_admin_plugin_table_permission_request")
+public class SysPluginTablePermissionRequest extends BaseEntity {
     /** 插件ID */
     @TableField("plugin_id")
     private String pluginId;
@@ -71,14 +67,6 @@ public class SysPluginTablePermissionRequest {
     @TableField("review_time")
     private LocalDateTime reviewTime;
     
-    /** 申请时间 */
-    @TableField("create_time")
-    private LocalDateTime createTime;
-    
-    /** 更新时间 */
-    @TableField("update_time")
-    private LocalDateTime updateTime;
-    
     /**
      * 检查申请状态是否为待审核
      */
@@ -107,4 +95,3 @@ public class SysPluginTablePermissionRequest {
         return "CANCELLED".equals(status);
     }
 }
-

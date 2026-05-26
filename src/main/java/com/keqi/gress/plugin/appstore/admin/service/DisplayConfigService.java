@@ -1,8 +1,6 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
 import com.alibaba.fastjson2.JSON;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.DisplayConfigDTO;
 import com.keqi.gress.plugin.appstore.admin.dto.HotPluginsRuleConfig;
@@ -15,6 +13,8 @@ import cn.hutool.log.LogFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 展示配置服务
@@ -25,10 +25,10 @@ public class DisplayConfigService {
     
     private static final Log log = LogFactory.get(DisplayConfigService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private AuditLogService auditLogService;
     
     // 配置键常量

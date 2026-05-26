@@ -1,8 +1,6 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
 import com.alibaba.fastjson2.JSON;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.common.storage.FileStorageService;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.ScanResult;
@@ -24,6 +22,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Security Scan Service
@@ -34,10 +34,10 @@ import java.util.regex.Pattern;
 public class SecurityScanService {
     
 
-    @Inject
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject
+    @Autowired
     private FileStorageService fileStorageService;
     
     // Known vulnerable patterns (simplified for demonstration)
@@ -289,7 +289,7 @@ public class SecurityScanService {
     private void saveScanResult(Long submissionId, ScanResult result) {
 
             dataSource.dynamicSql("""
-                INSERT INTO appstore_security_scan 
+                INSERT INTO as_admin_security_scan 
                 (submission_id, scan_status, risk_level, vulnerabilities_count, 
                 scan_result, scan_start_time, scan_end_time, scan_duration_ms, scanner_version) 
                 VALUES (#{submissionId}, #{status}, #{riskLevel}, #{vulnCount}, 
@@ -372,7 +372,7 @@ public class SecurityScanService {
     public ScanResult getScanResult(Long submissionId) {
 
             List<Map<String, Object>> results = dataSource.dynamicSql("""
-                SELECT scan_result FROM appstore_security_scan 
+                SELECT scan_result FROM as_admin_security_scan 
                 WHERE submission_id = #{submissionId} 
                 ORDER BY scan_start_time DESC 
                 LIMIT 1

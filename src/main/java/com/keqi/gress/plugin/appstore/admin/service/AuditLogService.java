@@ -1,8 +1,6 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
 import com.alibaba.fastjson2.JSON;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.database.page.IPage;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.AuditLogDTO;
@@ -19,6 +17,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Audit Log Service
@@ -29,7 +29,7 @@ public class AuditLogService {
     
     private static final Log log = LogFactory.get(AuditLogService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
     /**

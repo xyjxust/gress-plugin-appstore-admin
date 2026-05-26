@@ -62,8 +62,19 @@ export interface Tag {
   tagKey: string
   description?: string
   color?: string
+  tagTypeKey?: string
   enabled: boolean
   usageCount: number
+  createTime: string
+  updateTime: string
+}
+
+export interface TagType {
+  id: number
+  typeName: string
+  typeKey: string
+  description?: string
+  enabled: boolean
   createTime: string
   updateTime: string
 }
@@ -118,6 +129,7 @@ export interface Plugin {
   icon?: string
   tags?: string[]
   category?: string
+  priceType?: 'free' | 'paid'
   status: PluginStatus
   installCount: number
   activeUsers: number
@@ -486,8 +498,8 @@ export interface FeedbackQueryRequest {
  * 反馈处理请求
  */
 export interface FeedbackProcessRequest {
-  handlerId: string
-  handlerName: string
+  handlerId?: string
+  handlerName?: string
   handleComment: string
   status: FeedbackStatus
 }
@@ -514,4 +526,49 @@ export interface GenerateSigningKeyRequest {
 
 export interface ActivateSigningKeyRequest {
   trustedWindowDays?: number
+}
+
+/**
+ * API Key 管理
+ */
+export interface ApiKey {
+  id: number
+  userId: string
+  keyId: string
+  scopes?: string
+  enabled: boolean
+  expireAt?: string
+  lastUsedAt?: string
+  createTime?: string
+  updateTime?: string
+}
+
+export interface ApiKeyCreateRequest {
+  userId: string
+  scopes?: string
+  expireInSeconds?: number
+}
+
+export interface ApiKeyCreateResponse {
+  apiKey: ApiKey
+  secret: string
+}
+
+export interface RevealSecretResponse {
+  secret: string
+}
+
+export interface ApiKeyDownloadLog {
+  id: number
+  keyId: string
+  userId?: string
+  pluginId: string
+  version?: string
+  issuedIp?: string
+  consumedIp?: string
+  issuedUa?: string
+  consumedUa?: string
+  used: boolean
+  createTime?: string
+  usedAt?: string
 }

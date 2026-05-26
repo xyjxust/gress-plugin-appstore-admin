@@ -1,12 +1,12 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
@@ -15,18 +15,12 @@ import java.time.LocalDateTime;
  * Records all administrative operations for audit trail
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_audit_log")
-public class AuditLog {
-    
-    /**
-     * Primary key
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-    
+@TableName("as_admin_audit_log")
+public class AuditLog extends BaseEntity {
     // Operation Information
     
     /**

@@ -3,8 +3,8 @@ package com.keqi.gress.plugin.appstore.admin.controller;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.AuditLogDTO;
 import com.keqi.gress.plugin.appstore.admin.dto.AuditLogExportRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.AuditLogQueryRequest;
@@ -14,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Audit Log Controller
@@ -23,11 +25,12 @@ import org.springframework.web.bind.annotation.*;
 @Service
 @RestController
 @RequestMapping("/audit-logs")
+@PluginMenu(id = "audit-logs", name = "审计日志")
 public class AuditLogController {
 
     private static  final Log log = LogFactory.get(AuditLogController.class);
     
-    @Inject
+    @Autowired
     private AuditLogService auditLogService;
     
     /**
@@ -46,6 +49,7 @@ public class AuditLogController {
      * @return Paginated list of audit logs
      */
     @GetMapping
+    @PluginAction(id = "refresh", name = "刷新")
     public Result<PageResult<AuditLogDTO>> queryLogs(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "20") Integer size,
@@ -122,6 +126,7 @@ public class AuditLogController {
      * @return Exported data file
      */
     @GetMapping("/export")
+    @PluginAction(id = "export", name = "导出日志")
     public ResponseEntity<?> exportLogs(
             @RequestParam(defaultValue = "JSON") String format,
             @RequestParam(required = false) String operationType,

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.keqi.gress.plugin.appstore.admin.support.OperatorAwareRequest;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PluginUpdateRequest {
+public class PluginUpdateRequest implements OperatorAwareRequest {
     
     /**
      * Plugin ID (set from path parameter)
@@ -41,6 +42,11 @@ public class PluginUpdateRequest {
      * Category name (for display)
      */
     private String category;
+
+    /**
+     * Price type (free/paid)
+     */
+    private String priceType;
     
     /**
      * Plugin tags

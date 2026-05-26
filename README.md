@@ -38,7 +38,7 @@ gress-plugin-appstore-admin/
 │       ├── db/migration/                      # Flyway 数据库迁移脚本
 │       ├── icons/                             # 插件图标
 │       ├── js/                                # 前端构建产物
-│       └── plugin.properties                  # 插件配置
+│       └── plugin.yml                         # 单一清单（元数据 + ui + plugin.config）；plugin.properties 构建期生成
 ├── frontend/                                  # 前端源码
 │   ├── src/
 │   │   ├── index.ts                          # 前端入口

@@ -24,16 +24,13 @@
           <n-divider />
 
           <div class="section-title">版本描述</div>
-          <div class="description-content">
-            {{ version1.description || '暂无描述' }}
-          </div>
+          <div v-if="version1.description" class="description-content richtext" v-html="sanitize(version1.description)" />
+          <div v-else class="description-content">暂无描述</div>
 
           <template v-if="version1.releaseNotes">
             <n-divider />
             <div class="section-title">发布说明</div>
-            <div class="release-notes-content">
-              {{ version1.releaseNotes }}
-            </div>
+            <div class="release-notes-content richtext" v-html="sanitize(version1.releaseNotes)" />
           </template>
         </n-card>
       </n-gi>
@@ -77,16 +74,13 @@
           <n-divider />
 
           <div class="section-title">版本描述</div>
-          <div class="description-content">
-            {{ version2.description || '暂无描述' }}
-          </div>
+          <div v-if="version2.description" class="description-content richtext" v-html="sanitize(version2.description)" />
+          <div v-else class="description-content">暂无描述</div>
 
           <template v-if="version2.releaseNotes">
             <n-divider />
             <div class="section-title">发布说明</div>
-            <div class="release-notes-content">
-              {{ version2.releaseNotes }}
-            </div>
+            <div class="release-notes-content richtext" v-html="sanitize(version2.releaseNotes)" />
           </template>
         </n-card>
       </n-gi>
@@ -121,6 +115,7 @@
 import { computed } from 'vue'
 import { NCard, NGrid, NGi, NDescriptions, NDescriptionsItem, NTag, NSpace, NText, NDivider } from 'naive-ui'
 import type { PluginVersion, SubmissionStatus } from '../types'
+import { sanitizeHtml } from '@keqi.gress/plugin-ui'
 
 // 定义Props
 interface Props {
@@ -129,6 +124,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const sanitize = sanitizeHtml
 
 // 计算差异
 const fileSizeDiff = computed(() => props.version2.fileSize - props.version1.fileSize)
@@ -199,5 +195,18 @@ function formatDateTime(dateStr: string): string {
   white-space: pre-wrap;
   word-break: break-word;
   font-size: 14px;
+}
+
+.version-compare .richtext :deep(p) {
+  margin: 0 0 10px;
+}
+.version-compare .richtext :deep(ul),
+.version-compare .richtext :deep(ol) {
+  padding-left: 22px;
+  margin: 0 0 10px;
+}
+.version-compare .richtext :deep(a) {
+  color: #1677ff;
+  text-decoration: underline;
 }
 </style>

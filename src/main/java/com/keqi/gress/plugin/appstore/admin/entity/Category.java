@@ -1,28 +1,24 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
 import com.keqi.gress.plugin.api.database.annotation.TableField;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.Builder;
 
 /**
  * Plugin Category Entity
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_category")
-public class Category {
-
-    @TableId(type = IdType.AUTO)
-    private Long id;
+@TableName("as_admin_category")
+public class Category extends BaseEntity {
 
     @TableField("category_name")
     private String categoryName;
@@ -44,12 +40,4 @@ public class Category {
 
     @TableField("plugin_count")
     private Integer pluginCount;
-
-    @TableField("create_time")
-    private LocalDateTime createTime;
-
-    @TableField("update_time")
-    private LocalDateTime updateTime;
 }
-
-

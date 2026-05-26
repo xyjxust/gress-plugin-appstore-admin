@@ -41,7 +41,7 @@ export default defineConfig({
       entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
       name: '__GRESS_PLUGIN__',  // 使用统一的全局变量名
       formats: ['iife'],
-      fileName: () => 'appstore-admin-frontend.js'
+      fileName: () => 'as-admin-frontend.js'
     },
     rollupOptions: {
       // 由主应用提供这些依赖，避免重复打包

@@ -1,6 +1,223 @@
-appstoreAdmin:
-  security:
-    # 是否启用客户端侧应用包验签（由客户端在安装前拉取）
-    # 建议：启用时必须保证 appstore_signing_key 表已有有效 trusted roots。
-    verifySignature: false
+# App Store Admin 插件清单（单一 plugin.yml：元数据 + ui + plugin.config）
+plugin:
+  id: as-admin
+  class: com.keqi.gress.plugin.appstore.admin.AppStoreAdminPlugin
+  name: 应用商店管理
+  version: 1.0.12
+  provider: Gress Team
+  description: Plugin Store Management System - Provides plugin review, listing, delisting, version management and other management functions
+  license: MIT
+  requires: "*"
+  type: APPLICATION
 
+  ui:
+    hasWidget: false
+    hasPanel: false
+    surfaces:
+      admin: true
+      consumer: false
+    autoLoad:
+      admin: true
+      consumer: false
+
+    menus:
+      - id: review-group
+        title: 审核管理
+        icon: ShieldCheckmark
+        type: group
+        order: 1
+        children:
+          - id: submissions
+            title: 插件审核
+            icon: CheckmarkDone
+            path: /plugins/as-admin/submissions
+            component: PluginSubmissions
+            order: 1
+            apiPrefix: /api/v2/plugins/as-admin/submissions
+            operations: [VIEW, MANAGE]
+
+          - id: permission-requests
+            title: 权限申请审核
+            icon: LockClosed
+            path: /plugins/as-admin/permission-requests
+            component: PermissionRequestReview
+            order: 2
+            apiPrefix: /api/v2/plugins/as-admin/permission-requests
+            operations: [VIEW, MANAGE]
+
+          - id: table-permissions
+            title: 表权限管理
+            icon: Grid
+            path: /plugins/as-admin/table-permissions
+            component: PluginTablePermissionManagement
+            order: 3
+            apiPrefix: /api/v2/plugins/as-admin/table-permissions
+            operations: [VIEW, MANAGE]
+
+          - id: review-rules
+            title: 审核规则
+            icon: ShieldCheckmark
+            path: /plugins/as-admin/review-rules
+            component: ReviewRules
+            order: 4
+            apiPrefix: /api/v2/plugins/as-admin/review-rules
+            operations: [VIEW, MANAGE]
+
+      - id: content-group
+        title: 内容管理
+        icon: Cube
+        type: group
+        order: 2
+        children:
+          - id: plugins
+            title: 插件列表
+            icon: Apps
+            path: /plugins/as-admin/plugins
+            component: PluginManagement
+            order: 1
+            apiPrefix: /api/v2/plugins/as-admin/plugins
+            operations: [VIEW, MANAGE]
+
+          - id: categories
+            title: 分类管理
+            icon: FolderOpen
+            path: /plugins/as-admin/categories
+            component: CategoryManagement
+            order: 2
+            apiPrefix: /api/v2/plugins/as-admin/categories
+            operations: [VIEW, MANAGE]
+
+          - id: tags
+            title: 标签管理
+            icon: Pricetags
+            path: /plugins/as-admin/tags
+            component: TagManagement
+            order: 3
+            apiPrefix: /api/v2/plugins/as-admin/tags
+            operations: [VIEW, MANAGE]
+
+      - id: user-group
+        title: 用户管理
+        icon: People
+        type: group
+        order: 3
+        children:
+          - id: developers
+            title: 开发者管理
+            icon: Person
+            path: /plugins/as-admin/developers
+            component: DeveloperManagement
+            order: 1
+            apiPrefix: /api/v2/plugins/as-admin/developers
+            operations: [VIEW, MANAGE]
+
+          - id: feedbacks
+            title: 用户反馈
+            icon: ChatbubbleEllipses
+            path: /plugins/as-admin/feedbacks
+            component: FeedbackManagement
+            order: 2
+            apiPrefix: /api/v2/plugins/as-admin/feedbacks
+            operations: [VIEW, MANAGE]
+
+      - id: analytics-group
+        title: 数据分析
+        icon: Analytics
+        type: group
+        order: 4
+        children:
+          - id: statistics
+            title: 统计分析
+            icon: BarChart
+            path: /plugins/as-admin/statistics
+            component: StatisticsAnalysis
+            order: 1
+            apiPrefix: /api/v2/plugins/as-admin/statistics
+            operations: [VIEW]
+
+          - id: audit-logs
+            title: 审计日志
+            icon: DocumentText
+            path: /plugins/as-admin/audit-logs
+            component: AuditLog
+            order: 2
+            apiPrefix: /api/v2/plugins/as-admin/audit-logs
+            operations: [VIEW]
+
+      - id: security-group
+        title: 安全管理
+        icon: ShieldCheckmark
+        type: group
+        order: 5
+        children:
+          - id: signing-keys
+            title: 签名密钥管理
+            icon: ShieldCheckmark
+            path: /plugins/as-admin/signing-keys
+            component: SigningKeyManagement
+            order: 1
+            apiPrefix: /api/v2/plugins/as-admin/signing-keys
+            operations: [VIEW, MANAGE]
+
+          - id: api-keys
+            title: API Key 管理
+            icon: Key
+            path: /plugins/as-admin/api-keys
+            component: ApiKeyManagement
+            order: 2
+            apiPrefix: /api/v2/plugins/as-admin/api-keys
+            operations: [VIEW, MANAGE]
+
+    roles:
+      - code: viewer
+        name: 查看者
+        description: 只能查看插件管理相关页面，不能进行管理操作
+        permissions:
+          - submissions:VIEW
+          - permission-requests:VIEW
+          - table-permissions:VIEW
+          - plugins:VIEW
+          - review-rules:VIEW
+          - categories:VIEW
+          - tags:VIEW
+          - developers:VIEW
+          - feedbacks:VIEW
+          - statistics:VIEW
+          - audit-logs:VIEW
+          - signing-keys:VIEW
+          - api-keys:VIEW
+
+      - code: manager
+        name: 插件管理员
+        description: 拥有插件管理的完整权限，可以进行审核、上架、下架等操作
+        permissions:
+          - submissions:VIEW,MANAGE
+          - submissions.*
+          - permission-requests:VIEW,MANAGE
+          - permission-requests.*
+          - table-permissions:VIEW,MANAGE
+          - table-permissions.*
+          - plugins:VIEW,MANAGE
+          - plugins.*
+          - review-rules:VIEW,MANAGE
+          - review-rules.*
+          - categories:VIEW,MANAGE
+          - categories.*
+          - tags:VIEW,MANAGE
+          - tags.*
+          - developers:VIEW,MANAGE
+          - developers.*
+          - feedbacks:VIEW,MANAGE
+          - feedbacks.*
+          - statistics:VIEW
+          - audit-logs:VIEW
+          - audit-logs.export
+          - signing-keys:VIEW,MANAGE
+          - signing-keys.*
+          - api-keys:VIEW,MANAGE
+          - api-keys.*
+
+  config:
+    appstoreAdmin:
+      security:
+        verifySignature: false

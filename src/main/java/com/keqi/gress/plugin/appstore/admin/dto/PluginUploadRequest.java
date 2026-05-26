@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.keqi.gress.plugin.appstore.admin.support.OperatorAwareRequest;
 
 /**
  * Plugin Upload Request DTO
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PluginUploadRequest {
+public class PluginUploadRequest implements OperatorAwareRequest {
     
     /**
      * Plugin type (TASK/TRIGGER/APPLICATION)
@@ -23,6 +24,11 @@ public class PluginUploadRequest {
      * Plugin description
      */
     private String description;
+
+    /**
+     * Price type (free/paid)
+     */
+    private String priceType;
     
     /**
      * Auto list to store after upload

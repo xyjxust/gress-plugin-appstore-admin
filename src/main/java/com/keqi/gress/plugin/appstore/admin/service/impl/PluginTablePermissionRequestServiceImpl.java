@@ -1,13 +1,12 @@
 package com.keqi.gress.plugin.appstore.admin.service.impl;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.ApprovePermissionRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.PluginTablePermissionDTO;
 import com.keqi.gress.plugin.appstore.admin.dto.PluginTablePermissionRequestDTO;
 import com.keqi.gress.plugin.appstore.admin.dto.RejectPermissionRequest;
 import com.keqi.gress.plugin.appstore.admin.entity.SysPluginTablePermissionRequest;
+import com.keqi.gress.plugin.appstore.admin.support.RequestActorContextBinder;
 import com.keqi.gress.plugin.appstore.admin.service.PluginTablePermissionRequestService;
 import com.keqi.gress.plugin.appstore.admin.service.PluginTablePermissionService;
 import cn.hutool.core.util.StrUtil;
@@ -17,6 +16,8 @@ import cn.hutool.log.LogFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 插件系统表访问权限申请服务实现
@@ -26,10 +27,10 @@ public class PluginTablePermissionRequestServiceImpl implements PluginTablePermi
     
     private static final Log log = LogFactory.get(PluginTablePermissionRequestServiceImpl.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private PluginTablePermissionService permissionService;
     
     @Override
@@ -79,6 +80,7 @@ public class PluginTablePermissionRequestServiceImpl implements PluginTablePermi
         if (request == null) {
             throw new IllegalArgumentException("批准请求不能为空");
         }
+        RequestActorContextBinder.bindReviewer(request);
         
         SysPluginTablePermissionRequest entity = dataSource.lambdaQuery(SysPluginTablePermissionRequest.class)
                 .eq(SysPluginTablePermissionRequest::getId, id)
@@ -139,6 +141,7 @@ public class PluginTablePermissionRequestServiceImpl implements PluginTablePermi
         if (request == null) {
             throw new IllegalArgumentException("拒绝请求不能为空");
         }
+        RequestActorContextBinder.bindReviewer(request);
         if (StrUtil.isBlank(request.getReason())) {
             throw new IllegalArgumentException("拒绝原因不能为空");
         }
@@ -178,7 +181,7 @@ public class PluginTablePermissionRequestServiceImpl implements PluginTablePermi
         
         return convertToDTO(entity);
     }
-    
+
     /**
      * 实体转DTO
      */
@@ -206,4 +209,3 @@ public class PluginTablePermissionRequestServiceImpl implements PluginTablePermi
         return dto;
     }
 }
-

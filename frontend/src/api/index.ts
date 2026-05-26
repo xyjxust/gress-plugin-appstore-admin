@@ -9,6 +9,7 @@ import type {
   PluginVersion,
   Category, 
   Tag, 
+  TagType,
   PageResult, 
   ApiResponse,
   QueryParams,
@@ -28,6 +29,11 @@ import type {
   SigningKeyDTO,
   GenerateSigningKeyRequest,
   ActivateSigningKeyRequest
+  ,ApiKey
+  ,ApiKeyCreateRequest
+  ,ApiKeyCreateResponse
+  ,ApiKeyDownloadLog
+  ,RevealSecretResponse
 } from '../types'
 
 export { tablePermissionApi } from './tablePermission'
@@ -39,7 +45,7 @@ export type {
   RejectPermissionRequest 
 } from './permissionRequest'
 
-const API_BASE = '/plugins/appstore-admin'
+const API_BASE = '/plugins/as-admin'
 
 /**
  * 插件提交API
@@ -179,7 +185,7 @@ export const pluginApi = {
   /**
    * 获取插件类型列表
    */
-  getTypes(): Promise<ApiResponse<PluginTypeInfo[]>> {
+  getTypes(): Promise<PluginTypeInfo[]> {
     return http.get(`${API_BASE}/plugins/types`)
   },
 
@@ -227,22 +233,15 @@ export const pluginApi = {
   /**
    * 下架插件
    */
-  delist(pluginId: string, data: { reason: string; operatorId?: string; operatorName?: string }): Promise<ApiResponse> {
-    return http.post(`${API_BASE}/plugins/${pluginId}/delist`, {
-      reason: data.reason,
-      operatorId: data.operatorId || 'admin',
-      operatorName: data.operatorName || '管理员'
-    })
+  delist(pluginId: string, data: { reason: string }): Promise<void> {
+    return http.post(`${API_BASE}/plugins/${pluginId}/delist`, data)
   },
 
   /**
    * 重新上架插件
    */
-  relist(pluginId: string, data?: { operatorId?: string; operatorName?: string; comment?: string }): Promise<ApiResponse> {
-    return http.post(`${API_BASE}/plugins/${pluginId}/relist`, data || {
-      operatorId: 'admin',
-      operatorName: '管理员'
-    })
+  relist(pluginId: string, data?: { comment?: string }): Promise<void> {
+    return http.post(`${API_BASE}/plugins/${pluginId}/relist`, data)
   },
 
   /**
@@ -297,6 +296,18 @@ export const tagApi = {
    */
   delete(id: number): Promise<ApiResponse> {
     return http.delete(`${API_BASE}/tags/${id}`)
+  },
+
+  getTypes(): Promise<ApiResponse<TagType[]>> {
+    return http.get(`${API_BASE}/tags/types`)
+  },
+
+  createType(data: Partial<TagType>): Promise<ApiResponse<TagType>> {
+    return http.post(`${API_BASE}/tags/types`, data)
+  },
+
+  deleteType(id: number): Promise<ApiResponse> {
+    return http.delete(`${API_BASE}/tags/types/${id}`)
   },
 
   /**
@@ -375,21 +386,21 @@ export const developerApi = {
   /**
    * 批准开发者资格
    */
-  approve(id: number, data: { reviewerId: string; reviewerName: string; comment?: string }): Promise<ApiResponse> {
+  approve(id: number, data: { comment?: string }): Promise<ApiResponse> {
     return http.post(`${API_BASE}/developers/${id}/approve`, data)
   },
 
   /**
    * 暂停开发者账户
    */
-  suspend(id: number, data: { operatorId: string; operatorName: string; reason: string }): Promise<ApiResponse> {
+  suspend(id: number, data: { reason: string }): Promise<ApiResponse> {
     return http.post(`${API_BASE}/developers/${id}/suspend`, data)
   },
 
   /**
    * 激活开发者账户
    */
-  activate(id: number, data: { operatorId: string; operatorName: string; comment?: string }): Promise<ApiResponse> {
+  activate(id: number, data: { comment?: string }): Promise<ApiResponse> {
     return http.post(`${API_BASE}/developers/${id}/activate`, data)
   }
 }
@@ -502,7 +513,7 @@ export const feedbackApi = {
   /**
    * 关闭反馈
    */
-  close(id: number, data: { handlerId: string; handlerName: string; comment?: string }): Promise<ApiResponse> {
+  close(id: number, data: { comment?: string }): Promise<ApiResponse> {
     return http.post(`${API_BASE}/feedbacks/${id}/close`, data)
   }
 }
@@ -525,5 +536,34 @@ export const signingKeyApi = {
 
   activate(keyId: string, data: ActivateSigningKeyRequest): Promise<ApiResponse> {
     return http.post(`${API_BASE}/signing-keys/${keyId}/activate`, data)
+  }
+}
+
+/**
+ * API Key 管理 API
+ */
+export const apiKeyApi = {
+  list(userId?: string): Promise<ApiResponse<ApiKey[]>> {
+    return http.get(`${API_BASE}/api-keys`, userId ? { userId } : undefined)
+  },
+
+  createOrReset(data: ApiKeyCreateRequest): Promise<ApiResponse<ApiKeyCreateResponse>> {
+    return http.post(`${API_BASE}/api-keys`, data)
+  },
+
+  enable(keyId: string): Promise<ApiResponse<void>> {
+    return http.post(`${API_BASE}/api-keys/${encodeURIComponent(keyId)}/enable`)
+  },
+
+  disable(keyId: string): Promise<ApiResponse<void>> {
+    return http.post(`${API_BASE}/api-keys/${encodeURIComponent(keyId)}/disable`)
+  },
+
+  revealSecret(keyId: string): Promise<ApiResponse<RevealSecretResponse>> {
+    return http.get(`${API_BASE}/api-keys/${encodeURIComponent(keyId)}/secret`)
+  },
+
+  getDownloadLogs(keyId: string, page: number = 1, size: number = 20): Promise<ApiResponse<PageResult<ApiKeyDownloadLog>>> {
+    return http.get(`${API_BASE}/api-keys/${encodeURIComponent(keyId)}/download-logs`, { page, size })
   }
 }

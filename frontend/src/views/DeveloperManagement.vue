@@ -506,8 +506,6 @@ const handleApprove = (developer: Developer) => {
     onPositiveClick: async () => {
     
         const response = await developerApi.approve(developer.id, {
-          reviewerId: 'admin', // TODO: Get from current user
-          reviewerName: '管理员', // TODO: Get from current user
           comment: '资格审核通过'
         })
 
@@ -528,8 +526,6 @@ const handleSuspend = (developer: Developer) => {
     onPositiveClick: async () => {
   
         const response = await developerApi.suspend(developer.id, {
-          operatorId: 'admin', // TODO: Get from current user
-          operatorName: '管理员', // TODO: Get from current user
           reason: '违反平台规则'
         })
 
@@ -549,8 +545,6 @@ const handleActivate = (developer: Developer) => {
     onPositiveClick: async () => {
     
         const response = await developerApi.activate(developer.id, {
-          operatorId: 'admin', // TODO: Get from current user
-          operatorName: '管理员', // TODO: Get from current user
           comment: '账户已恢复正常'
         })
 

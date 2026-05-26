@@ -1,7 +1,5 @@
 package com.keqi.gress.plugin.appstore.admin.controller;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.service.DisplayConfigService;
 import cn.hutool.log.Log;
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 展示配置控制器
@@ -23,7 +23,7 @@ public class DisplayConfigController {
     
     private static final Log log = LogFactory.get(DisplayConfigController.class);
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private DisplayConfigService displayConfigService;
     
     /**

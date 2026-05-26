@@ -3,13 +3,15 @@ package com.keqi.gress.plugin.appstore.admin.controller;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.service.PluginStatisticsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Plugin Statistics Controller
@@ -19,11 +21,12 @@ import java.time.LocalDate;
 @Service
 @RestController
 @RequestMapping("/plugins/statistics")
+@PluginMenu(id = "statistics", name = "统计分析")
 public class PluginStatisticsController {
 
     private final static Log log = LogFactory.get(PluginStatisticsController.class);
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private PluginStatisticsService pluginStatisticsService;
     
     /**
@@ -56,6 +59,7 @@ public class PluginStatisticsController {
      * @return Statistics overview
      */
     @GetMapping("/overview")
+    @PluginAction(id = "overview", name = "统计概览")
     public Result<StatisticsOverviewDTO> getStatisticsOverview() {
 
             StatisticsOverviewDTO overview = pluginStatisticsService.getStatisticsOverview();

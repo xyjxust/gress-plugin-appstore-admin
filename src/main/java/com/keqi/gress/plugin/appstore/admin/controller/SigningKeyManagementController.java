@@ -1,32 +1,37 @@
 package com.keqi.gress.plugin.appstore.admin.controller;
 
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.ActivateSigningKeyRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.GenerateSigningKeyRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.SigningKeyDTO;
 import com.keqi.gress.plugin.appstore.admin.service.AppStoreSigningKeyService;
+import com.keqi.gress.plugin.appstore.admin.support.OperatorContextHelper;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * Signing key management for appstore-admin UI.
+ * Signing key management for as-admin UI.
  */
 @Service
 @RestController
 @RequestMapping("/signing-keys")
+@PluginMenu(id = "signing-keys", name = "签名密钥管理", managementEnabled = true)
 public class SigningKeyManagementController {
 
     private static final Log log = LogFactory.get(SigningKeyManagementController.class);
 
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private AppStoreSigningKeyService signingKeyService;
 
     @GetMapping
+    @PluginAction(id = "refresh", name = "刷新")
     public Result<List<SigningKeyDTO>> list() {
 
             return Result.success(signingKeyService.listSigningKeys());
@@ -48,23 +53,18 @@ public class SigningKeyManagementController {
     }
 
     @PostMapping("/generate")
+    @PluginAction(id = "generate", name = "生成密钥")
     public Result<SigningKeyDTO> generate(@RequestBody GenerateSigningKeyRequest request) {
-
-            // TODO: operator from security context
-            String operatorName = "admin";
-            return signingKeyService.generateSigningKey(request, operatorName);
+            return signingKeyService.generateSigningKey(request, OperatorContextHelper.getOperatorName());
 
     }
 
     @PostMapping("/{keyId}/activate")
+    @PluginAction(id = "activate", name = "激活密钥", managementEnabled = true, actionCode = "MANAGE")
     public Result<Void> activate(
             @PathVariable String keyId,
             @RequestBody(required = false) ActivateSigningKeyRequest request) {
-
-            // TODO: operator from security context
-            String operatorName = "admin";
-            return signingKeyService.activateKey(keyId, request, operatorName);
+            return signingKeyService.activateKey(keyId, request, OperatorContextHelper.getOperatorName());
 
     }
 }
-

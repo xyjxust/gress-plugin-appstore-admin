@@ -2,30 +2,25 @@ package com.keqi.gress.plugin.appstore.admin.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 /**
  * Plugin Statistics Entity
  * Stores daily statistics for each plugin
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_plugin_statistics")
-public class PluginStatistics {
-    
-    /**
-     * Primary key
-     */
-    private Long id;
-    
+@TableName("as_admin_plugin_statistics")
+public class PluginStatistics extends BaseEntity {
     /**
      * Plugin ID
      */
@@ -94,15 +89,4 @@ public class PluginStatistics {
      */
     private Integer reportCount;
     
-    // Timestamps
-    
-    /**
-     * Creation time
-     */
-    private LocalDateTime createTime;
-    
-    /**
-     * Last update time
-     */
-    private LocalDateTime updateTime;
 }

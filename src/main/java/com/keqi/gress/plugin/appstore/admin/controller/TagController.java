@@ -1,17 +1,19 @@
 package com.keqi.gress.plugin.appstore.admin.controller;
 
-import cn.hutool.log.Log;
-import cn.hutool.log.LogFactory;
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
+import com.keqi.gress.plugin.appstore.admin.dto.CreateTagTypeRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.CreateTagRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.TagDTO;
+import com.keqi.gress.plugin.appstore.admin.dto.TagTypeDTO;
 import com.keqi.gress.plugin.appstore.admin.dto.UpdateTagRequest;
 import com.keqi.gress.plugin.appstore.admin.service.TagService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Tag Management Controller
@@ -21,11 +23,10 @@ import java.util.List;
 @Service
 @RestController
 @RequestMapping("/tags")
+@PluginMenu(id = "tags", name = "标签管理", managementEnabled = true)
 public class TagController {
 
-    private final static Log log = LogFactory.get(TagController.class);
-    
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private TagService tagService;
     
     /**
@@ -57,6 +58,7 @@ public class TagController {
      * POST /tags
      */
     @PostMapping
+    @PluginAction(id = "create", name = "新建标签")
     public Result<TagDTO> createTag(@RequestBody CreateTagRequest request) {
 
             TagDTO tag = tagService.createTag(request);
@@ -69,6 +71,7 @@ public class TagController {
      * PUT /tags/{id}
      */
     @PutMapping("/{id}")
+    @PluginAction(id = "update", name = "编辑标签", managementEnabled = true, actionCode = "UPDATE")
     public Result<TagDTO> updateTag(
             @PathVariable Long id,
             @RequestBody UpdateTagRequest request) {
@@ -84,6 +87,7 @@ public class TagController {
      * DELETE /tags/{id}
      */
     @DeleteMapping("/{id}")
+    @PluginAction(id = "delete", name = "删除标签", managementEnabled = true, actionCode = "DELETE")
     public Result<Void> deleteTag(@PathVariable Long id) {
 
             tagService.deleteTag(id);
@@ -130,5 +134,23 @@ public class TagController {
             tagService.removeTagFromPlugin(pluginId, tagId);
             return Result.success();
 
+    }
+
+    @GetMapping("/types")
+    public Result<List<TagTypeDTO>> getAllTagTypes() {
+        List<TagTypeDTO> tagTypes = tagService.getAllTagTypes();
+        return Result.success(tagTypes);
+    }
+
+    @PostMapping("/types")
+    public Result<TagTypeDTO> createTagType(@RequestBody CreateTagTypeRequest request) {
+        TagTypeDTO tagType = tagService.createTagType(request);
+        return Result.success(tagType);
+    }
+
+    @DeleteMapping("/types/{id}")
+    public Result<Void> deleteTagType(@PathVariable Long id) {
+        tagService.deleteTagType(id);
+        return Result.success();
     }
 }

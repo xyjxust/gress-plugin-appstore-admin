@@ -76,4 +76,7 @@ public class PluginPackageDTO {
     
     /** 依赖信息（JSON格式） */
     private String dependencies;
+
+    /** 价格类型（free/paid） */
+    private String priceType;
 }

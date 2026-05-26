@@ -3,8 +3,6 @@ package com.keqi.gress.plugin.appstore.admin.service;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.alibaba.fastjson2.JSON;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginManager;
@@ -17,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 批量操作服务
@@ -27,10 +27,10 @@ public class BatchOperationService {
     
     private static final Log log = LogFactory.get(BatchOperationService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private AuditLogService auditLogService;
     
     /**
@@ -142,8 +142,8 @@ public class BatchOperationService {
             .decision(status.name())
             .comment(request.getComment())
             .reviewTime(now)
-            .createTime(now)
             .build();
+        history.setCreateTime(now);
         
         dataSource.insert(history);
         
@@ -176,9 +176,9 @@ public class BatchOperationService {
             PluginManager manager = PluginManager.builder()
                 .pluginId(pluginId)
                 .status("ONLINE")
-                .createTime(now)
-                .updateTime(now)
                 .build();
+            manager.setCreateTime(now);
+            manager.setUpdateTime(now);
             
             dataSource.insert(manager);
         }
@@ -281,7 +281,7 @@ public class BatchOperationService {
         
         // 3. 记录下架历史（使用动态 SQL）
         String insertHistorySql = """
-                INSERT INTO appstore_delist_history 
+                INSERT INTO as_admin_delist_history 
                 (plugin_id, operator_id, operator_name, reason, delist_time) 
                 VALUES (#{pluginId}, #{operatorId}, #{operatorName}, #{reason}, #{delistTime})
                 """;

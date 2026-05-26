@@ -1,12 +1,12 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
 import com.alibaba.fastjson2.JSON;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import cn.hutool.core.util.StrUtil;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.api.database.page.IPage;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.Developer;
+import com.keqi.gress.plugin.appstore.admin.support.RequestActorContextBinder;
 import com.keqi.gress.common.plugin.PluginType;
 import com.keqi.gress.plugin.appstore.admin.enums.SubmissionStatus;
 import cn.hutool.log.Log;
@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Developer Management Service
@@ -26,10 +28,10 @@ public class DeveloperManagementService {
     
     private static final Log log = LogFactory.get(DeveloperManagementService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private AuditLogService auditLogService;
     
     /**
@@ -103,7 +105,7 @@ public class DeveloperManagementService {
         
         // Query developer's plugins using Dynamic SQL (multi-table join potential)
         // For now it's single table, but using dynamic SQL for consistency with multi-table pattern
-        String pluginsSql = "SELECT * FROM appstore_plugin_submission " +
+        String pluginsSql = "SELECT * FROM as_admin_plugin_submission " +
                            "<where>" +
                            "  <if test='developerId != nil'>AND developer_id = #{developerId}</if>" +
                            "</where>" +
@@ -134,9 +136,10 @@ public class DeveloperManagementService {
      */
     public void approveDeveloper(Long id, DeveloperApprovalRequest request) {
         log.info("Approving developer: {}, reviewer: {}", id, request.getReviewerName());
+        RequestActorContextBinder.bindReviewer(request);
         
         // Validate request
-        if (request.getReviewerId() == null || request.getReviewerId().trim().isEmpty()) {
+        if (StrUtil.isBlank(request.getReviewerId())) {
             throw new IllegalArgumentException("Reviewer ID is required");
         }
         
@@ -189,13 +192,14 @@ public class DeveloperManagementService {
      */
     public void suspendDeveloper(Long id, DeveloperSuspendRequest request) {
         log.info("Suspending developer: {}, operator: {}", id, request.getOperatorName());
+        RequestActorContextBinder.bindOperator(request);
         
         // Validate request
         if (request.getReason() == null || request.getReason().trim().isEmpty()) {
             throw new IllegalArgumentException("Suspension reason is required");
         }
         
-        if (request.getOperatorId() == null || request.getOperatorId().trim().isEmpty()) {
+        if (StrUtil.isBlank(request.getOperatorId())) {
             throw new IllegalArgumentException("Operator ID is required");
         }
         
@@ -244,9 +248,10 @@ public class DeveloperManagementService {
      */
     public void activateDeveloper(Long id, DeveloperActivateRequest request) {
         log.info("Activating developer: {}, operator: {}", id, request.getOperatorName());
+        RequestActorContextBinder.bindOperator(request);
         
         // Validate request
-        if (request.getOperatorId() == null || request.getOperatorId().trim().isEmpty()) {
+        if (StrUtil.isBlank(request.getOperatorId())) {
             throw new IllegalArgumentException("Operator ID is required");
         }
         
@@ -286,7 +291,7 @@ public class DeveloperManagementService {
         
         log.info("Developer activated successfully: {}", id);
     }
-    
+
     /**
      * Map Developer entity to DeveloperDTO
      */

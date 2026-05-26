@@ -1,5 +1,9 @@
 package com.keqi.gress.plugin.appstore.admin.service.crypto;
 
+import com.keqi.gress.plugin.appstore.admin.config.AppStoreAdminConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -11,17 +15,18 @@ import java.util.Base64;
 /**
  * AES-GCM helper for encrypting keystore passwords in DB.
  *
- * <p>Master key must be provided via env var: {@code APPSTORE_MASTER_ENCRYPTION_KEY}.</p>
+ * <p>Master key is provided by plugin config.</p>
  */
-public final class AesGcmCryptoUtil {
+@Service
+public class AesGcmCryptoUtil {
 
-    private static final String ENV_MASTER_KEY = "APPSTORE_MASTER_ENCRYPTION_KEY";
     private static final int IV_LEN_BYTES = 12; // recommended for GCM
     private static final int TAG_BITS = 128;
 
-    private AesGcmCryptoUtil() {}
+    @Autowired
+    private AppStoreAdminConfig appStoreAdminConfig;
 
-    public static String encrypt(String plaintext) {
+    public String encrypt(String plaintext) {
         if (plaintext == null) {
             return null;
         }
@@ -43,7 +48,7 @@ public final class AesGcmCryptoUtil {
         }
     }
 
-    public static String decrypt(String encrypted) {
+    public String decrypt(String encrypted) {
         if (encrypted == null || encrypted.isEmpty()) {
             return encrypted;
         }
@@ -68,10 +73,12 @@ public final class AesGcmCryptoUtil {
         }
     }
 
-    private static String requireMasterKey() {
-        String masterKey = System.getenv(ENV_MASTER_KEY);
+    private String requireMasterKey() {
+        String masterKey = appStoreAdminConfig != null && appStoreAdminConfig.getSecurity() != null
+                ? appStoreAdminConfig.getSecurity().getMasterEncryptionKey()
+                : null;
         if (masterKey == null || masterKey.isBlank()) {
-            throw new IllegalStateException("Missing env var: " + ENV_MASTER_KEY);
+            throw new IllegalStateException("Missing plugin config: appstoreAdmin.security.masterEncryptionKey");
         }
         return masterKey;
     }
@@ -85,4 +92,3 @@ public final class AesGcmCryptoUtil {
         }
     }
 }
-

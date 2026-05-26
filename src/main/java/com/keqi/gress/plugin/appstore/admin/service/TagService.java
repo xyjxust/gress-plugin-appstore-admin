@@ -1,20 +1,21 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
+import com.keqi.gress.plugin.appstore.admin.dto.CreateTagTypeRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.CreateTagRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.TagDTO;
+import com.keqi.gress.plugin.appstore.admin.dto.TagTypeDTO;
 import com.keqi.gress.plugin.appstore.admin.dto.UpdateTagRequest;
 import com.keqi.gress.plugin.appstore.admin.entity.Tag;
-import cn.hutool.log.Log;
-import cn.hutool.log.LogFactory;
+import com.keqi.gress.plugin.appstore.admin.entity.TagType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Tag Management Service
@@ -23,10 +24,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TagService {
 
-    @Inject
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject
+    @Autowired
     private AuditLogService auditLogService;
     
     /**
@@ -97,6 +98,10 @@ public class TagService {
      * Create tag with uniqueness validation
      */
     public TagDTO createTag(CreateTagRequest request) {
+        if (request.getTagTypeKey() != null && !request.getTagTypeKey().isBlank()) {
+            ensureTagTypeExistsByKey(request.getTagTypeKey());
+        }
+
         // Validate uniqueness of tag name
         long nameCount = dataSource.lambdaQuery(Tag.class)
             .eq(Tag::getTagName, request.getTagName())
@@ -120,11 +125,12 @@ public class TagService {
             .tagKey(request.getTagKey())
             .description(request.getDescription())
             .color(request.getColor())
+            .tagTypeKey(request.getTagTypeKey())
             .enabled(request.getEnabled() != null ? request.getEnabled() : Boolean.TRUE)
             .usageCount(0)
-            .createTime(now)
-            .updateTime(now)
             .build();
+        entity.setCreateTime(now);
+        entity.setUpdateTime(now);
 
         dataSource.insert(entity);
         
@@ -154,6 +160,10 @@ public class TagService {
             }
         }
         
+        if (request.getTagTypeKey() != null && !request.getTagTypeKey().isBlank()) {
+            ensureTagTypeExistsByKey(request.getTagTypeKey());
+        }
+
         dataSource.lambdaUpdate(Tag.class)
             .eq(Tag::getId, id)
             .func(chain -> {
@@ -165,6 +175,9 @@ public class TagService {
                 }
                 if (request.getColor() != null) {
                     chain.set(Tag::getColor, request.getColor());
+                }
+                if (request.getTagTypeKey() != null) {
+                    chain.set(Tag::getTagTypeKey, request.getTagTypeKey());
                 }
                 if (request.getEnabled() != null) {
                     chain.set(Tag::getEnabled, request.getEnabled());
@@ -193,7 +206,7 @@ public class TagService {
         TagDTO tag = getTagById(id);
         
         // Check if any plugins are using this tag (use dynamic SQL)
-        String checkUsageSql = "SELECT COUNT(*) as count FROM appstore_plugin_tag WHERE tag_id = #{tagId}";
+        String checkUsageSql = "SELECT COUNT(*) as count FROM as_admin_plugin_tag WHERE tag_id = #{tagId}";
         List<Map<String, Object>> rows = dataSource.dynamicSql(checkUsageSql)
             .param("tagId", id)
             .query();
@@ -224,7 +237,7 @@ public class TagService {
         getTagById(tagId);
         
         // Check if already assigned (use dynamic SQL)
-        String checkSql = "SELECT COUNT(*) as count FROM appstore_plugin_tag WHERE plugin_id = #{pluginId} AND tag_id = #{tagId}";
+        String checkSql = "SELECT COUNT(*) as count FROM as_admin_plugin_tag WHERE plugin_id = #{pluginId} AND tag_id = #{tagId}";
         List<Map<String, Object>> rows = dataSource.dynamicSql(checkSql)
             .param("pluginId", pluginId)
             .param("tagId", tagId)
@@ -238,7 +251,7 @@ public class TagService {
         }
         
         // Insert relationship (use dynamic SQL)
-        String insertSql = "INSERT INTO appstore_plugin_tag (plugin_id, tag_id) VALUES (#{pluginId}, #{tagId})";
+        String insertSql = "INSERT INTO as_admin_plugin_tag (plugin_id, tag_id) VALUES (#{pluginId}, #{tagId})";
         dataSource.dynamicSql(insertSql)
             .param("pluginId", pluginId)
             .param("tagId", tagId)
@@ -254,11 +267,11 @@ public class TagService {
      * Remove all tag associations for a plugin (e.g. before deleting the plugin).
      */
     public void clearPluginTagsForPlugin(String pluginId) {
-        String listSql = "SELECT tag_id FROM appstore_plugin_tag WHERE plugin_id = #{pluginId}";
+        String listSql = "SELECT tag_id FROM as_admin_plugin_tag WHERE plugin_id = #{pluginId}";
         List<Map<String, Object>> rows = dataSource.dynamicSql(listSql)
             .param("pluginId", pluginId)
             .query();
-        String deleteSql = "DELETE FROM appstore_plugin_tag WHERE plugin_id = #{pluginId}";
+        String deleteSql = "DELETE FROM as_admin_plugin_tag WHERE plugin_id = #{pluginId}";
         dataSource.dynamicSql(deleteSql)
             .param("pluginId", pluginId)
             .execute();
@@ -279,7 +292,7 @@ public class TagService {
      */
     public void removeTagFromPlugin(String pluginId, Long tagId) {
         // Delete relationship (use dynamic SQL)
-        String deleteSql = "DELETE FROM appstore_plugin_tag WHERE plugin_id = #{pluginId} AND tag_id = #{tagId}";
+        String deleteSql = "DELETE FROM as_admin_plugin_tag WHERE plugin_id = #{pluginId} AND tag_id = #{tagId}";
         dataSource.dynamicSql(deleteSql)
             .param("pluginId", pluginId)
             .param("tagId", tagId)
@@ -297,8 +310,8 @@ public class TagService {
     public List<TagDTO> getPluginTags(String pluginId) {
         // Use dynamic SQL for multi-table join
         String sql = """
-            SELECT t.* FROM appstore_tag t 
-            INNER JOIN appstore_plugin_tag pt ON t.id = pt.tag_id 
+            SELECT t.* FROM as_admin_tag t 
+            INNER JOIN as_admin_plugin_tag pt ON t.id = pt.tag_id 
             WHERE pt.plugin_id = #{pluginId}
             ORDER BY t.usage_count DESC
             """;
@@ -315,6 +328,7 @@ public class TagService {
                 tag.setTagKey((String) row.get("tag_key"));
                 tag.setDescription((String) row.get("description"));
                 tag.setColor((String) row.get("color"));
+                tag.setTagTypeKey((String) row.get("tag_type_key"));
                 tag.setEnabled((Boolean) row.get("enabled"));
                 tag.setUsageCount(row.get("usage_count") != null ? ((Number) row.get("usage_count")).intValue() : 0);
                 tag.setCreateTime((LocalDateTime) row.get("create_time"));
@@ -329,7 +343,7 @@ public class TagService {
      */
     public void updateUsageCount(Long tagId) {
         // Count plugins using this tag (use dynamic SQL)
-        String countSql = "SELECT COUNT(*) as count FROM appstore_plugin_tag WHERE tag_id = #{tagId}";
+        String countSql = "SELECT COUNT(*) as count FROM as_admin_plugin_tag WHERE tag_id = #{tagId}";
         List<Map<String, Object>> rows = dataSource.dynamicSql(countSql)
             .param("tagId", tagId)
             .query();
@@ -342,6 +356,71 @@ public class TagService {
             .eq(Tag::getId, tagId)
             .update();
     }
+
+    public List<TagTypeDTO> getAllTagTypes() {
+        List<TagType> tagTypes = dataSource.lambdaQuery(TagType.class)
+            .orderByDesc(TagType::getCreateTime)
+            .list();
+        return tagTypes.stream().map(this::mapToTypeDTO).collect(Collectors.toList());
+    }
+
+    public TagTypeDTO createTagType(CreateTagTypeRequest request) {
+        long nameCount = dataSource.lambdaQuery(TagType.class)
+            .eq(TagType::getTypeName, request.getTypeName())
+            .count();
+        if (nameCount > 0) {
+            throw new RuntimeException("Tag type name already exists: " + request.getTypeName());
+        }
+
+        long keyCount = dataSource.lambdaQuery(TagType.class)
+            .eq(TagType::getTypeKey, request.getTypeKey())
+            .count();
+        if (keyCount > 0) {
+            throw new RuntimeException("Tag type key already exists: " + request.getTypeKey());
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        TagType entity = TagType.builder()
+            .typeName(request.getTypeName())
+            .typeKey(request.getTypeKey())
+            .description(request.getDescription())
+            .enabled(request.getEnabled() != null ? request.getEnabled() : Boolean.TRUE)
+            .build();
+        entity.setCreateTime(now);
+        entity.setUpdateTime(now);
+
+        dataSource.insert(entity);
+        return mapToTypeDTO(entity);
+    }
+
+    public void deleteTagType(Long id) {
+        TagType tagType = dataSource.lambdaQuery(TagType.class)
+            .eq(TagType::getId, id)
+            .one();
+        if (tagType == null) {
+            throw new RuntimeException("Tag type not found: " + id);
+        }
+
+        long usedCount = dataSource.lambdaQuery(Tag.class)
+            .eq(Tag::getTagTypeKey, tagType.getTypeKey())
+            .count();
+        if (usedCount > 0) {
+            throw new RuntimeException("Cannot delete tag type: " + usedCount + " tags are using this type.");
+        }
+
+        dataSource.lambdaUpdate(TagType.class)
+            .eq(TagType::getId, id)
+            .delete();
+    }
+
+    private void ensureTagTypeExistsByKey(String tagTypeKey) {
+        long count = dataSource.lambdaQuery(TagType.class)
+            .eq(TagType::getTypeKey, tagTypeKey)
+            .count();
+        if (count == 0) {
+            throw new RuntimeException("Tag type not found: " + tagTypeKey);
+        }
+    }
     
     /**
      * Map database row to DTO
@@ -353,8 +432,21 @@ public class TagService {
             .tagKey(entity.getTagKey())
             .description(entity.getDescription())
             .color(entity.getColor())
+            .tagTypeKey(entity.getTagTypeKey())
             .enabled(entity.getEnabled())
             .usageCount(entity.getUsageCount() != null ? entity.getUsageCount() : 0)
+            .createTime(entity.getCreateTime())
+            .updateTime(entity.getUpdateTime())
+            .build();
+    }
+
+    private TagTypeDTO mapToTypeDTO(TagType entity) {
+        return TagTypeDTO.builder()
+            .id(entity.getId())
+            .typeName(entity.getTypeName())
+            .typeKey(entity.getTypeKey())
+            .description(entity.getDescription())
+            .enabled(entity.getEnabled())
             .createTime(entity.getCreateTime())
             .updateTime(entity.getUpdateTime())
             .build();

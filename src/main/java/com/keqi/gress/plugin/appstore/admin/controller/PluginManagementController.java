@@ -3,16 +3,21 @@ package com.keqi.gress.plugin.appstore.admin.controller;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
+import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.common.storage.FileStorageService;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
+import com.keqi.gress.plugin.appstore.admin.support.OperatorContextHelper;
+import com.keqi.gress.plugin.appstore.admin.support.RequestActorContextBinder;
 import com.keqi.gress.plugin.appstore.admin.service.PluginManagementService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Plugin Management Controller
@@ -22,14 +27,41 @@ import java.io.IOException;
 @Service
 @RestController
 @RequestMapping("/plugins")
+@PluginMenu(id = "plugins", name = "插件列表", managementEnabled = true)
 public class PluginManagementController {
 
-    private final static Log log = LogFactory.get(PluginSubmissionController.class);
+    private static final Log log = LogFactory.get(PluginManagementController.class);
+    private static final List<PluginTypeInfo> PLUGIN_TYPES = List.of(
+            PluginTypeInfo.builder()
+                    .code("TASK")
+                    .label("任务节点")
+                    .description("工作流中的任务执行节点")
+                    .tagType("info")
+                    .build(),
+            PluginTypeInfo.builder()
+                    .code("TRIGGER")
+                    .label("触发器")
+                    .description("工作流的触发节点")
+                    .tagType("success")
+                    .build(),
+            PluginTypeInfo.builder()
+                    .code("APPLICATION")
+                    .label("应用插件")
+                    .description("提供应用级功能的插件")
+                    .tagType("warning")
+                    .build(),
+            PluginTypeInfo.builder()
+                    .code("MIDDLEWARE")
+                    .label("中间件")
+                    .description("基础设施中间件插件（如 Milvus、Redis 等）")
+                    .tagType("error")
+                    .build()
+    );
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private PluginManagementService pluginManagementService;
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private FileStorageService fileStorageService;
     
     /**
@@ -42,38 +74,32 @@ public class PluginManagementController {
      * @return Uploaded plugin info
      */
     @PostMapping("/upload")
+    @PluginAction(id = "upload", name = "上传插件")
     public Result<PluginManagerDTO> uploadPlugin(
             @RequestParam("file") MultipartFile file,
             @RequestParam("pluginType") String pluginType,
             @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "priceType", required = false) String priceType,
             @RequestParam(value = "autoList", defaultValue = "false") Boolean autoList) {
         
         log.info("POST /plugins/upload - file: {}, type: {}, autoList: {}", 
                  file.getOriginalFilename(), pluginType, autoList);
         
-        // Validate file
-        if (file.isEmpty()) {
-            return Result.error("请选择插件文件");
-        }
-        
-        if (!file.getOriginalFilename().endsWith(".jar")) {
-            return Result.error("只支持 JAR 格式的插件包");
-        }
-        
         File tempFile = null;
         try {
+            validateJarFile(file);
+
             // Save uploaded file to temp location
             tempFile = File.createTempFile("plugin-upload-", ".jar");
             file.transferTo(tempFile);
             
             // Build request
-            PluginUploadRequest request = PluginUploadRequest.builder()
+            PluginUploadRequest request = RequestActorContextBinder.bindOperator(PluginUploadRequest.builder()
                     .pluginType(pluginType)
                     .description(description)
+                    .priceType(priceType)
                     .autoList(autoList)
-                    .operatorId("admin") // TODO: Get from security context
-                    .operatorName("管理员") // TODO: Get from security context
-                    .build();
+                    .build());
             
             // Upload plugin
             PluginManagerDTO plugin = pluginManagementService.uploadPlugin(tempFile, request);
@@ -117,6 +143,7 @@ public class PluginManagementController {
      * @return Upgraded plugin info
      */
     @PostMapping("/upgrade")
+    @PluginAction(id = "upgrade", name = "升级插件")
     public Result<PluginManagerDTO> upgradePlugin(
             @RequestParam("file") MultipartFile file,
             @RequestParam("pluginId") String pluginId,
@@ -126,16 +153,9 @@ public class PluginManagementController {
         log.info("POST /plugins/upgrade - pluginId: {}, file: {}, autoList: {}", 
                  pluginId, file.getOriginalFilename(), autoList);
         
-        // Validate file
-        if (file.isEmpty()) {
-            return Result.error("请选择插件文件");
-        }
-        
-        if (!file.getOriginalFilename().endsWith(".jar")) {
-            return Result.error("只支持 JAR 格式的插件包");
-        }
-        
         try {
+            validateJarFile(file);
+
             // Upload file to storage service
             String storedFilePath = fileStorageService.upload(file)
                     .withMetadata("pluginId", pluginId)
@@ -145,14 +165,12 @@ public class PluginManagementController {
             log.info("Plugin file uploaded to: {}", storedFilePath);
             
             // Build request (version will be parsed from JAR in service)
-            PluginUpgradeRequest request = PluginUpgradeRequest.builder()
+            PluginUpgradeRequest request = RequestActorContextBinder.bindOperator(PluginUpgradeRequest.builder()
                     .pluginId(pluginId)
                     .version(null) // Will be parsed from JAR
                     .updateNotes(updateNotes)
                     .autoList(autoList)
-                    .operatorId("admin") // TODO: Get from security context
-                    .operatorName("管理员") // TODO: Get from security context
-                    .build();
+                    .build());
             
             // Upgrade plugin
             PluginManagerDTO plugin = pluginManagementService.upgradePlugin(storedFilePath, request);
@@ -186,19 +204,21 @@ public class PluginManagementController {
      * @return Paginated list of listed plugins
      */
     @GetMapping
+    @PluginAction(id = "refresh", name = "刷新")
     public Result<PageResult<PluginManagerDTO>> getListedPlugins(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "20") Integer size,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String keyword) {
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String priceType) {
         
-        log.info("GET /plugins - page: {}, size: {}, status: {}, type: {}, keyword: {}", 
-                 page, size, status, type, keyword);
+        log.info("GET /plugins - page: {}, size: {}, status: {}, type: {}, keyword: {}, priceType: {}", 
+                 page, size, status, type, keyword, priceType);
         
         try {
             PageResult<PluginManagerDTO> result = pluginManagementService.getListedPlugins(
-                page, size, status, type, keyword);
+                page, size, status, type, keyword, priceType);
             
             return Result.success(result);
             
@@ -249,14 +269,7 @@ public class PluginManagementController {
         try {
             // Set plugin ID from path
             request.setPluginId(pluginId);
-            
-            // Set operator info (TODO: Get from security context)
-            if (request.getOperatorId() == null) {
-                request.setOperatorId("admin");
-            }
-            if (request.getOperatorName() == null) {
-                request.setOperatorName("管理员");
-            }
+            RequestActorContextBinder.bindOperator(request);
             
             PluginManagerDTO plugin = pluginManagementService.updatePlugin(request);
             
@@ -286,11 +299,13 @@ public class PluginManagementController {
      * @return Success result
      */
     @PostMapping("/{pluginId}/delist")
+    @PluginAction(id = "delist", name = "下架", managementEnabled = true, actionCode = "MANAGE")
     public Result<Void> delistPlugin(@PathVariable String pluginId, @RequestBody DelistRequest request) {
         log.info("POST /plugins/{}/delist - operator: {}, reason: {}", 
                  pluginId, request.getOperatorName(), request.getReason());
         
         try {
+            RequestActorContextBinder.bindOperator(request);
             pluginManagementService.delistPlugin(pluginId, request);
             return Result.success();
             
@@ -316,12 +331,17 @@ public class PluginManagementController {
      * @return Success result
      */
     @PostMapping("/{pluginId}/relist")
-    public Result<Void> relistPlugin(@PathVariable String pluginId, @RequestBody RelistRequest request) {
-        log.info("POST /plugins/{}/relist - operator: {}", 
-                 pluginId, request.getOperatorName());
+    @PluginAction(id = "relist", name = "重新上架", managementEnabled = true, actionCode = "MANAGE")
+    public Result<Void> relistPlugin(
+            @PathVariable String pluginId,
+            @RequestBody(required = false) RelistRequest request) {
+        RelistRequest safeRequest = request != null ? request : new RelistRequest();
+        log.info("POST /plugins/{}/relist - operator: {}",
+                pluginId, safeRequest.getOperatorName());
         
         try {
-            pluginManagementService.relistPlugin(pluginId, request);
+            RequestActorContextBinder.bindOperator(safeRequest);
+            pluginManagementService.relistPlugin(pluginId, safeRequest);
             return Result.success();
             
         } catch (IllegalArgumentException e) {
@@ -345,7 +365,11 @@ public class PluginManagementController {
     public Result<Void> deletePlugin(@PathVariable String pluginId) {
         log.info("DELETE /plugins/{}", pluginId);
         try {
-            pluginManagementService.deletePluginPermanently(pluginId, "admin", "管理员");
+            pluginManagementService.deletePluginPermanently(
+                    pluginId,
+                    OperatorContextHelper.getOperatorId(),
+                    OperatorContextHelper.getOperatorName()
+            );
             return Result.success();
         } catch (IllegalArgumentException e) {
             log.warn("Invalid delete request: {}", e.getMessage());
@@ -368,38 +392,21 @@ public class PluginManagementController {
     public Result<java.util.List<PluginTypeInfo>> getPluginTypes() {
         
         try {
-            java.util.List<PluginTypeInfo> types = java.util.Arrays.asList(
-                PluginTypeInfo.builder()
-                    .code("TASK")
-                    .label("任务节点")
-                    .description("工作流中的任务执行节点")
-                    .tagType("info")
-                    .build(),
-                PluginTypeInfo.builder()
-                    .code("TRIGGER")
-                    .label("触发器")
-                    .description("工作流的触发节点")
-                    .tagType("success")
-                    .build(),
-                PluginTypeInfo.builder()
-                    .code("APPLICATION")
-                    .label("应用插件")
-                    .description("提供应用级功能的插件")
-                    .tagType("warning")
-                    .build(),
-                PluginTypeInfo.builder()
-                    .code("MIDDLEWARE")
-                    .label("中间件")
-                    .description("基础设施中间件插件（如 Milvus、Redis 等）")
-                    .tagType("error")
-                    .build()
-            );
-            
-            return Result.success(types);
+            return Result.success(PLUGIN_TYPES);
             
         } catch (Exception e) {
             log.error("Failed to get plugin types", e);
             return Result.error("获取插件类型失败：" + e.getMessage());
+        }
+    }
+
+    private void validateJarFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("请选择插件文件");
+        }
+        String filename = file.getOriginalFilename();
+        if (filename == null || !filename.endsWith(".jar")) {
+            throw new IllegalArgumentException("只支持 JAR 格式的插件包");
         }
     }
 }

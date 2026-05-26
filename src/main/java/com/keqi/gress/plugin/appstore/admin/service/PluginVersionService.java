@@ -1,7 +1,5 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginManager;
@@ -15,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Plugin Version Service
@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PluginVersionService {
     
-    @Inject
+    @Autowired
     private PluginLambdaDataSource pluginDataSource;
     
-    @Inject
+    @Autowired
     private AuditLogService auditLogService;
 
     
@@ -293,18 +293,18 @@ public class PluginVersionService {
             }
             
             // 3. Insert new version using Lambda
-            PluginVersion newVersion = PluginVersion.builder()
-                .pluginId(pluginId)
-                .version(version)
+        PluginVersion newVersion = PluginVersion.builder()
+            .pluginId(pluginId)
+            .version(version)
                 .releaseNotes(submission.getDescription())
                 .filePath(submission.getFilePath())
                 .fileSize(submission.getFileSize())
-                .fileHash(submission.getFileHash())
-                .status("APPROVED")
-                .isCurrent(false)
-                .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now())
-                .build();
+            .fileHash(submission.getFileHash())
+            .status("APPROVED")
+            .isCurrent(false)
+            .build();
+        newVersion.setCreateTime(LocalDateTime.now());
+        newVersion.setUpdateTime(LocalDateTime.now());
             
             pluginDataSource.insert(newVersion);
         });

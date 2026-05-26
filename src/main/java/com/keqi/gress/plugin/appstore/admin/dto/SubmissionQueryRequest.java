@@ -20,11 +20,13 @@ public class SubmissionQueryRequest {
     /**
      * Page number (1-based)
      */
+    @Builder.Default
     private Integer page = 1;
     
     /**
      * Page size
      */
+    @Builder.Default
     private Integer size = 20;
     
     /**

@@ -2,8 +2,6 @@ package com.keqi.gress.plugin.appstore.admin.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.keqi.gress.common.model.Result;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginStatistics;
@@ -22,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Plugin Statistics Service
@@ -32,7 +32,7 @@ public class PluginStatisticsService {
     
     private static final Log log = LogFactory.get(PluginStatisticsService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
     /**
@@ -58,7 +58,7 @@ public class PluginStatisticsService {
                 SUM(review_count) as total_reviews, 
                 SUM(feedback_count) as total_feedback, 
                 SUM(report_count) as total_reports 
-            FROM appstore_plugin_statistics 
+            FROM as_admin_plugin_statistics 
             WHERE plugin_id = #{pluginId} AND stat_date BETWEEN #{startDate} AND #{endDate}
             """)
             .param("pluginId", pluginId)
@@ -119,7 +119,7 @@ public class PluginStatisticsService {
         // Get active plugins count (plugins with installs in last 30 days)
         List<Map<String, Object>> activePluginsResult = dataSource.dynamicSql("""
             SELECT COUNT(DISTINCT plugin_id) as active 
-            FROM appstore_plugin_statistics 
+            FROM as_admin_plugin_statistics 
             WHERE stat_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND active_installs > 0
             """)
             .query();
@@ -139,7 +139,7 @@ public class PluginStatisticsService {
                 AVG(rating_average) as avg_rating, 
                 SUM(feedback_count) as total_feedback, 
                 SUM(report_count) as total_reports 
-            FROM appstore_plugin_statistics 
+            FROM as_admin_plugin_statistics 
             WHERE stat_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
             """)
             .query();
@@ -172,7 +172,7 @@ public class PluginStatisticsService {
         if (request.getPluginId() != null) {
             rows = dataSource.dynamicSql("""
                 SELECT stat_date, install_count, uninstall_count, active_installs, active_users, new_users 
-                FROM appstore_plugin_statistics 
+                FROM as_admin_plugin_statistics 
                 WHERE plugin_id = #{pluginId} AND stat_date BETWEEN #{startDate} AND #{endDate} 
                 ORDER BY stat_date ASC
                 """)
@@ -188,7 +188,7 @@ public class PluginStatisticsService {
                     SUM(active_installs) as active_installs, 
                     SUM(active_users) as active_users, 
                     SUM(new_users) as new_users 
-                FROM appstore_plugin_statistics 
+                FROM as_admin_plugin_statistics 
                 WHERE stat_date BETWEEN #{startDate} AND #{endDate} 
                 GROUP BY stat_date 
                 ORDER BY stat_date ASC
@@ -231,8 +231,8 @@ public class PluginStatisticsService {
             StringBuilder sqlBuilder = new StringBuilder();
             sqlBuilder.append("""
                 SELECT s.*, m.plugin_name, m.developer_name 
-                FROM appstore_plugin_statistics s 
-                LEFT JOIN appstore_manager m ON s.plugin_id = m.plugin_id 
+                FROM as_admin_plugin_statistics s 
+                LEFT JOIN as_admin_manager m ON s.plugin_id = m.plugin_id 
                 WHERE s.stat_date BETWEEN #{startDate} AND #{endDate}
                 """);
             
@@ -321,9 +321,9 @@ public class PluginStatisticsService {
                 .statDate(today)
                 .installCount(1)
                 .activeInstalls(1)
-                .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now())
                 .build();
+            newStats.setCreateTime(LocalDateTime.now());
+            newStats.setUpdateTime(LocalDateTime.now());
             
             dataSource.insert(newStats);
             log.info("Created new statistics record for plugin: {}", pluginId);
@@ -366,9 +366,9 @@ public class PluginStatisticsService {
                 .statDate(today)
                 .uninstallCount(1)
                 .activeInstalls(0)
-                .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now())
                 .build();
+            newStats.setCreateTime(LocalDateTime.now());
+            newStats.setUpdateTime(LocalDateTime.now());
             
             dataSource.insert(newStats);
             log.info("Created new statistics record for plugin: {}", pluginId);

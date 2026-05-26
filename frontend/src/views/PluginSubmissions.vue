@@ -473,10 +473,8 @@ async function confirmApprove() {
   approveLoading.value = true
   try {
     for (const id of approveTargetIds.value) {
-      await submissionApi.approve(id, { 
-        comment: approveForm.comment,
-        reviewerId: 'admin', // TODO: Get from current user
-        reviewerName: '管理员' // TODO: Get from current user
+      await submissionApi.approve(id, {
+        comment: approveForm.comment
       })
     }
     
@@ -511,10 +509,8 @@ async function confirmReject() {
   rejectLoading.value = true
   try {
     for (const id of rejectTargetIds.value) {
-      await submissionApi.reject(id, { 
-        reason: rejectForm.reason,
-        reviewerId: 'admin', // TODO: Get from current user
-        reviewerName: '管理员' // TODO: Get from current user
+      await submissionApi.reject(id, {
+        reason: rejectForm.reason
       })
     }
     

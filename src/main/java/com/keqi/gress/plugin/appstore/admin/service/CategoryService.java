@@ -1,7 +1,5 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.Category;
@@ -11,6 +9,8 @@ import cn.hutool.log.LogFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Category Management Service
@@ -20,10 +20,10 @@ public class CategoryService {
     
     private static final Log log = LogFactory.get(CategoryService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject(source = Inject.BeanSource.PLUGIN)
+    @Autowired
     private AuditLogService auditLogService;
     
     /**
@@ -192,7 +192,7 @@ public class CategoryService {
         
         // Check if any plugins are using this category (使用动态 SQL)
         String checkPluginsSql = """
-                SELECT COUNT(*) as count FROM appstore_plugin_submission 
+                SELECT COUNT(*) as count FROM as_admin_plugin_submission 
                 WHERE category = #{categoryKey}
                 """;
         List<Map<String, Object>> pluginRows = dataSource.dynamicSql(checkPluginsSql)
@@ -208,7 +208,7 @@ public class CategoryService {
         
         // Check in manager table as well (使用动态 SQL)
         String checkManagerSql = """
-                SELECT COUNT(*) as count FROM appstore_manager 
+                SELECT COUNT(*) as count FROM as_admin_manager 
                 WHERE category = #{categoryKey}
                 """;
         List<Map<String, Object>> managerRows = dataSource.dynamicSql(checkManagerSql)
@@ -239,7 +239,7 @@ public class CategoryService {
     public void updatePluginCount(String categoryKey) {
         // Count plugins in this category (使用动态 SQL)
         String countSql = """
-                SELECT COUNT(*) as count FROM appstore_manager 
+                SELECT COUNT(*) as count FROM as_admin_manager 
                 WHERE category = #{categoryKey} AND status = 'ONLINE'
                 """;
         List<Map<String, Object>> rows = dataSource.dynamicSql(countSql)

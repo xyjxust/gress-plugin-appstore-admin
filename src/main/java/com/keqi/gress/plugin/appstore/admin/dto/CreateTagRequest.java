@@ -21,6 +21,8 @@ public class CreateTagRequest {
     private String description;
     
     private String color;
+
+    private String tagTypeKey;
     
     private Boolean enabled;
 }

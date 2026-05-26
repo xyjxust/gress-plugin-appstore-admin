@@ -20,6 +20,7 @@ import FeedbackManagement from './views/FeedbackManagement.vue'
 import PermissionRequestReview from './views/PermissionRequestReview.vue'
 import PluginTablePermissionManagement from './views/PluginTablePermissionManagement.vue'
 import SigningKeyManagement from './views/SigningKeyManagement.vue'
+import ApiKeyManagement from './views/ApiKeyManagement.vue'
 
 export interface AppStoreAdminConfig {
   enabled?: boolean
@@ -63,7 +64,7 @@ export default (bridge: any, properties?: AppStoreAdminConfig): any => {
 
 
   return {
-    id: 'appstore-admin',
+    id: 'as-admin',
     name: '插件商店管理',
     version: '1.0.0',
     description: '插件商店管理后台，提供插件审核、上架、下架、版本管理等功能',
@@ -89,10 +90,10 @@ export default (bridge: any, properties?: AppStoreAdminConfig): any => {
     /**
      * 组件注册表（名称 -> 组件实例）
      *
-     * - 后端 plugin-ui.yml 中只写组件名称（如 PluginAdminLayout / PluginSubmissions）
+     * - 后端 plugin.yml → plugin.ui.menus 中只写组件名称（如 PluginAdminLayout / PluginSubmissions）
      * - 宿主通过 PluginRuntime 获取 manifest.components 后按名称查找组件：
      *   const runtime = getPluginRuntime()
-     *   const plugin = runtime.get('appstore-admin')
+     *   const plugin = runtime.get('as-admin')
      *   const comp = plugin?.manifest.components?.['PluginAdminLayout']
      */
     components: {
@@ -108,11 +109,12 @@ export default (bridge: any, properties?: AppStoreAdminConfig): any => {
       FeedbackManagement,
       PermissionRequestReview,
       PluginTablePermissionManagement,
-      SigningKeyManagement
+      SigningKeyManagement,
+      ApiKeyManagement
     },
 
     extensions: {
-      // 路由和菜单交由后端 plugin-ui.yml 管理，避免前后端信息重复维护
+      // 路由和菜单交由后端 plugin.yml 管理，避免前后端信息重复维护
       routes: [],
       components: [],
       menus: []

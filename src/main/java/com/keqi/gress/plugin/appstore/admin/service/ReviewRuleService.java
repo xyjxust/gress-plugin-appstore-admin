@@ -1,8 +1,7 @@
 package com.keqi.gress.plugin.appstore.admin.service;
 
 import com.alibaba.fastjson2.JSON;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
+import com.keqi.gress.plugin.appstore.admin.support.OperatorContextHelper;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.entity.ReviewRule;
@@ -15,6 +14,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Review Rule Service
@@ -25,13 +26,13 @@ import java.util.stream.Collectors;
 public class ReviewRuleService {
     
 
-    @Inject
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject
+    @Autowired
     private AuditLogService auditLogService;
     
-    @Inject
+    @Autowired
     private ReviewRuleEngine reviewRuleEngine;
     
     /**
@@ -66,8 +67,10 @@ public class ReviewRuleService {
     /**
      * Create a new review rule
      */
-    public Long createRule(CreateReviewRuleRequest request, String createdBy) {
+    public Long createRule(CreateReviewRuleRequest request) {
         log.info("Creating review rule: {}", request.getRuleName());
+        String operatorId = OperatorContextHelper.getOperatorId();
+        String operatorName = OperatorContextHelper.getOperatorName();
         
         // Build rule entity for validation
         ReviewRule rule = ReviewRule.builder()
@@ -88,7 +91,7 @@ public class ReviewRuleService {
         
         // Insert rule
         rule.setMatchCount(0);
-        rule.setCreatedBy(createdBy);
+        rule.setCreatedBy(operatorName);
         rule.setCreateTime(LocalDateTime.now());
         rule.setUpdateTime(LocalDateTime.now());
         
@@ -103,8 +106,8 @@ public class ReviewRuleService {
                 "REVIEW_RULE",
                 ruleId.toString(),
                 request.getRuleName(),
-                createdBy,
-                createdBy,
+                operatorId,
+                operatorName,
                 null,
                 Map.of(
                         "ruleName", request.getRuleName(),
@@ -121,13 +124,14 @@ public class ReviewRuleService {
      */
     public void updateRule(Long id, UpdateReviewRuleRequest request) {
         log.info("Updating review rule: {}", id);
+        String operatorId = OperatorContextHelper.getOperatorId();
+        String operatorName = OperatorContextHelper.getOperatorName();
         
         // Check if rule exists
         ReviewRuleDTO existing = getRuleById(id);
         
         // Build updated rule for validation
         ReviewRule rule = ReviewRule.builder()
-                .id(id)
                 .ruleName(request.getRuleName() != null ? request.getRuleName() : existing.getRuleName())
                 .description(request.getDescription())
                 .ruleType(request.getRuleType() != null ? request.getRuleType().name() : existing.getRuleType().name())
@@ -139,6 +143,7 @@ public class ReviewRuleService {
                         JSON.toJSONString(existing.getActions()))
                 .priority(request.getPriority() != null ? request.getPriority() : existing.getPriority())
                 .build();
+        rule.setId(id);
         
         // Validate rule
         ValidationResult validation = reviewRuleEngine.validateRule(rule);
@@ -179,8 +184,8 @@ public class ReviewRuleService {
                 "REVIEW_RULE",
                 id.toString(),
                 existing.getRuleName(),
-                "admin", // TODO: Get from security context
-                "admin",
+                operatorId,
+                operatorName,
                 existing,
                 request
         );
@@ -193,6 +198,8 @@ public class ReviewRuleService {
      */
     public void deleteRule(Long id) {
         log.info("Deleting review rule: {}", id);
+        String operatorId = OperatorContextHelper.getOperatorId();
+        String operatorName = OperatorContextHelper.getOperatorName();
         
         // Get rule details before deletion
         ReviewRuleDTO rule = getRuleById(id);
@@ -209,8 +216,8 @@ public class ReviewRuleService {
                 "REVIEW_RULE",
                 id.toString(),
                 rule.getRuleName(),
-                "admin", // TODO: Get from security context
-                "admin",
+                operatorId,
+                operatorName,
                 rule,
                 null
         );
@@ -223,6 +230,8 @@ public class ReviewRuleService {
      */
     public void enableRule(Long id) {
         log.info("Enabling review rule: {}", id);
+        String operatorId = OperatorContextHelper.getOperatorId();
+        String operatorName = OperatorContextHelper.getOperatorName();
         
         // Get rule details
         ReviewRuleDTO rule = getRuleById(id);
@@ -241,8 +250,8 @@ public class ReviewRuleService {
                 "REVIEW_RULE",
                 id.toString(),
                 rule.getRuleName(),
-                "admin", // TODO: Get from security context
-                "admin",
+                operatorId,
+                operatorName,
                 Map.of("enabled", false),
                 Map.of("enabled", true)
         );
@@ -255,6 +264,8 @@ public class ReviewRuleService {
      */
     public void disableRule(Long id) {
         log.info("Disabling review rule: {}", id);
+        String operatorId = OperatorContextHelper.getOperatorId();
+        String operatorName = OperatorContextHelper.getOperatorName();
         
         // Get rule details
         ReviewRuleDTO rule = getRuleById(id);
@@ -273,8 +284,8 @@ public class ReviewRuleService {
                 "REVIEW_RULE",
                 id.toString(),
                 rule.getRuleName(),
-                "admin", // TODO: Get from security context
-                "admin",
+                operatorId,
+                operatorName,
                 Map.of("enabled", true),
                 Map.of("enabled", false)
         );

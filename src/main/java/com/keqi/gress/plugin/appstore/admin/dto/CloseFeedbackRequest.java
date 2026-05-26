@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.keqi.gress.plugin.appstore.admin.support.HandlerAwareRequest;
 
 /**
  * Close Feedback Request
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CloseFeedbackRequest {
+public class CloseFeedbackRequest implements HandlerAwareRequest {
     
     /**
      * Handler ID

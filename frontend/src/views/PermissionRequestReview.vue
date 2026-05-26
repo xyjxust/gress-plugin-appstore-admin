@@ -405,9 +405,7 @@ const handleApproveSubmit = async () => {
   
 
     const request: ApprovePermissionRequest = {
-      comment: approveForm.comment,
-      reviewerId: 'admin', // TODO: 从用户上下文获取
-      reviewerName: '管理员' // TODO: 从用户上下文获取
+      comment: approveForm.comment
     }
     
     const response = await permissionRequestApi.approve(currentRequest.value.id, request)
@@ -434,9 +432,7 @@ const handleRejectSubmit = async () => {
     if (!errors && currentRequest.value && currentRequest.value.id) {
  
         const request: RejectPermissionRequest = {
-          reason: rejectForm.reason,
-          reviewerId: 'admin', // TODO: 从用户上下文获取
-          reviewerName: '管理员' // TODO: 从用户上下文获取
+          reason: rejectForm.reason
         }
         
         const response = await permissionRequestApi.reject(currentRequest.value.id, request)

@@ -1,7 +1,5 @@
 package com.keqi.gress.plugin.appstore.admin.service.impl;
 
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.PluginTablePermissionDTO;
 import com.keqi.gress.plugin.appstore.admin.entity.SysPluginTablePermission;
@@ -13,6 +11,8 @@ import cn.hutool.log.LogFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 插件系统表访问权限配置服务实现
@@ -22,7 +22,7 @@ public class PluginTablePermissionServiceImpl implements PluginTablePermissionSe
     
     private static final Log log = LogFactory.get(PluginTablePermissionServiceImpl.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
     @Override

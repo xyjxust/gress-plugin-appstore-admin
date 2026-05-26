@@ -1,12 +1,12 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
@@ -15,18 +15,12 @@ import java.time.LocalDateTime;
  * Represents a plugin developer account
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_developer")
-public class Developer {
-    
-    /**
-     * Primary key
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-    
+@TableName("as_admin_developer")
+public class Developer extends BaseEntity {
     /**
      * User ID
      */
@@ -112,13 +106,4 @@ public class Developer {
      */
     private LocalDateTime applyTime;
     
-    /**
-     * Creation time
-     */
-    private LocalDateTime createTime;
-    
-    /**
-     * Last update time
-     */
-    private LocalDateTime updateTime;
 }

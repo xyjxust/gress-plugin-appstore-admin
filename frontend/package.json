@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Gress App Store Admin plugin frontend (IIFE)",
-  "main": "dist/appstore-admin-frontend.js",
+  "main": "dist/as-admin-frontend.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@keqi.gress/plugin-bridge": "^1.0.0",
-    "@keqi.gress/plugin-ui": "^1.0.1",
+    "@keqi.gress/plugin-ui": "file:../../gress/gress-plugin-packages/plugin-ui",
     "@keqi.gress/shared-utils": "^1.0.3",
     "@vicons/ionicons5": "^0.12.0",
     "naive-ui": "^2.38.0",

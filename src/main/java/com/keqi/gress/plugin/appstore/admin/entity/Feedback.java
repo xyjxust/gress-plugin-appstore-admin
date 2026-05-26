@@ -1,14 +1,14 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
 import com.keqi.gress.plugin.api.database.annotation.TableField;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
 import com.keqi.gress.plugin.api.database.mapping.FastJsonListTypeHandler;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,18 +18,12 @@ import java.util.List;
  * Represents user feedback or report
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_feedback")
-public class Feedback {
-    
-    /**
-     * Primary key
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-    
+@TableName("as_admin_feedback")
+public class Feedback extends BaseEntity {
     /**
      * Plugin ID
      */
@@ -134,15 +128,4 @@ public class Feedback {
     @TableField("submit_time")
     private LocalDateTime submitTime;
     
-    /**
-     * Creation time
-     */
-    @TableField("create_time")
-    private LocalDateTime createTime;
-    
-    /**
-     * Last update time
-     */
-    @TableField("update_time")
-    private LocalDateTime updateTime;
 }

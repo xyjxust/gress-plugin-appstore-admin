@@ -5,8 +5,6 @@ import com.keqi.gress.common.utils.PluginVersionComparator;
 import com.keqi.gress.plugin.api.database.page.IPage;
 import com.keqi.gress.common.plugin.PluginMetadataParser;
 import com.keqi.gress.common.plugin.PluginType;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.common.storage.FileStorageService;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
@@ -37,6 +35,7 @@ import java.util.stream.Collectors;
 import com.keqi.gress.plugin.appstore.admin.service.crypto.AesGcmCryptoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Plugin Management Service
@@ -51,29 +50,27 @@ public class PluginManagementService {
     @Autowired
     private PluginLambdaDataSource dataSource;
     
-    @Inject
+    @Autowired
     private AuditLogService auditLogService;
     
-    @Inject
+    @Autowired
     private FileStorageService fileStorageService;
     
-    @Inject
+    @Autowired
     private PluginDependencyValidationService dependencyValidationService;
 
-    @Inject
+    @Autowired
     private AppStoreSigningKeyService signingKeyService;
 
-    @Inject
+    @Autowired
     private AppStoreAdminConfig appStoreAdminConfig;
+
+    @Autowired
+    private AesGcmCryptoUtil aesGcmCryptoUtil;
     
-    @Inject
+    @Autowired
     private TagService tagService;
 
-    private static final String ENV_KEYSTORE_PATH = "APPSTORE_SIGNING_KEYSTORE_PATH";
-    private static final String ENV_KEYSTORE_PASSWORD = "APPSTORE_SIGNING_KEYSTORE_PASSWORD";
-    private static final String ENV_KEY_ALIAS = "APPSTORE_SIGNING_KEY_ALIAS";
-    private static final String ENV_KEY_PASSWORD = "APPSTORE_SIGNING_KEY_PASSWORD";
-    
     /**
      * Get listed plugins with filtering and pagination
      *
@@ -85,10 +82,10 @@ public class PluginManagementService {
      * @return Paginated list of listed plugins
      */
     public PageResult<PluginManagerDTO> getListedPlugins(
-            Integer page, Integer size, String status, String type, String keyword) {
+            Integer page, Integer size, String status, String type, String keyword, String priceType) {
         
-        log.info("Querying listed plugins - page: {}, size: {}, status: {}, type: {}, keyword: {}", 
-                 page, size, status, type, keyword);
+        log.info("Querying listed plugins - page: {}, size: {}, status: {}, type: {}, keyword: {}, priceType: {}", 
+                 page, size, status, type, keyword, priceType);
         
         // Build query using Lambda
         IPage<PluginManager> pageResult = dataSource.lambdaQuery(PluginManager.class)
@@ -118,6 +115,11 @@ public class PluginManagementService {
                         .like(PluginManager::getDeveloperName, keywordPattern)
                         .or()
                         .like(PluginManager::getDescription, keywordPattern);
+                }
+
+                // Apply price type filter
+                if (priceType != null && !priceType.trim().isEmpty()) {
+                    wrapper.eq(PluginManager::getPriceType, priceType.trim());
                 }
                 
                 // Order by update time desc
@@ -193,6 +195,10 @@ public class PluginManagementService {
                 
                 if (request.getCategory() != null) {
                     wrapper.set(PluginManager::getCategory, request.getCategory().trim());
+                }
+
+                if (request.getPriceType() != null && !request.getPriceType().trim().isEmpty()) {
+                    wrapper.set(PluginManager::getPriceType, request.getPriceType().trim());
                 }
                 
                 if (request.getTags() != null) {
@@ -566,11 +572,12 @@ public class PluginManagementService {
                         .description(request.getDescription() != null ? request.getDescription() : metadata.getDescription())
                         .icon(metadata.getIcon())
                         .category(metadata.getCategory())
+                        .priceType((request.getPriceType() != null && !request.getPriceType().isBlank()) ? request.getPriceType() : "free")
                         .installCount(0)
                         .ratingAverage(0.0)
-                        .createTime(now)
-                        .updateTime(now)
                         .build();
+                pluginManager.setCreateTime(now);
+                pluginManager.setUpdateTime(now);
                 
                 // Insert using PluginLambdaDataSource
                 dataSource.insert(pluginManager);
@@ -587,9 +594,9 @@ public class PluginManagementService {
                         .status(initialStatus)
                         .dependencies(dependenciesJson) // 存储依赖信息
                         .uploadTime(now)
-                        .createTime(now)
-                        .updateTime(now)
                         .build();
+                pluginVersion.setCreateTime(now);
+                pluginVersion.setUpdateTime(now);
                 
                 // Insert using PluginLambdaDataSource
                 dataSource.insert(pluginVersion);
@@ -759,7 +766,7 @@ public class PluginManagementService {
             String finalFileHash = fileHash;
             String finalStoredFilePath = storedFilePath;
             dataSource.executeTransaction(() -> {
-                // 7. Insert new version record in appstore_version
+                // 7. Insert new version record in as_admin_version
                 PluginVersion pluginVersion = PluginVersion.builder()
                         .pluginId(request.getPluginId())
                         .version(newVersion)
@@ -771,9 +778,9 @@ public class PluginManagementService {
                         .isCurrent(true)
                         .status(versionStatus)
                         .uploadTime(now)
-                        .createTime(now)
-                        .updateTime(now)
                         .build();
+                pluginVersion.setCreateTime(now);
+                pluginVersion.setUpdateTime(now);
                 
                 dataSource.insert(pluginVersion);
                 
@@ -786,7 +793,7 @@ public class PluginManagementService {
                     .set(PluginVersion::getUpdateTime, now)
                     .update();
                 
-                // 9. Update appstore_manager current version info
+                // 9. Update as_admin_manager current version info
                 dataSource.lambdaUpdate(PluginManager.class)
                     .eq(PluginManager::getPluginId, request.getPluginId())
                     .set(PluginManager::getCurrentVersion, newVersion)
@@ -908,7 +915,7 @@ public class PluginManagementService {
         try {
             long size = Files.size(unsignedJar);
             if (isVerifySignatureEnabled()) {
-                signedJar = Files.createTempFile("appstore-admin-signed-", ".jar");
+                signedJar = Files.createTempFile("as-admin-signed-", ".jar");
                 signJarWithActiveKey(unsignedJar, signedJar);
                // PublicKey expectedPublicKey = loadExpectedSigningPublicKeyOrThrow();
               //  verifySignedJarWithExpectedPublicKey(signedJar, expectedPublicKey);
@@ -966,11 +973,11 @@ public class PluginManagementService {
                 return parsePublicKeyFromPem(activeKey.getPublicKeyPem());
             }
 
-            // fallback: legacy env-based signing
-            String keystorePath = getenvRequired(ENV_KEYSTORE_PATH);
-            String storePassword = getenvRequired(ENV_KEYSTORE_PASSWORD);
-            String keyAlias = getenvRequired(ENV_KEY_ALIAS);
-            return loadPublicKeyFromKeystore(keystorePath, storePassword, keyAlias);
+            AppStoreAdminConfig.LegacySigningConfig legacySigning = requireLegacySigningConfig();
+            return loadPublicKeyFromKeystore(
+                    requiredLegacySigningValue(legacySigning.getKeystorePath(), "keystorePath"),
+                    requiredLegacySigningValue(legacySigning.getKeystorePassword(), "keystorePassword"),
+                    requiredLegacySigningValue(legacySigning.getKeyAlias(), "keyAlias"));
         } catch (Exception e) {
             throw new IllegalStateException("Failed to load expected signing public key: " + e.getMessage(), e);
         }
@@ -1123,21 +1130,21 @@ public class PluginManagementService {
     }
 
     /**
-     * Sign jar using active signing key from appstore_signing_key table.
+     * Sign jar using active signing key from as_admin_signing_key table.
      * <p>
-     * Fallback: if there is no active key in DB, use legacy env-based signing.
+     * Fallback: if there is no active key in DB, use legacy signing config.
      * </p>
      */
     private void signJarWithActiveKey(Path inputJar, Path outputJar) throws Exception {
         var activeKey = signingKeyService != null ? signingKeyService.getActiveKeyOrNull() : null;
         if (activeKey == null) {
-            // Backward compatibility: old deployments use env vars only.
+            // Backward compatibility: old deployments may still rely on legacy signing config.
             signJarWithPlatformKey(inputJar, outputJar);
             return;
         }
 
-        String storePassword = AesGcmCryptoUtil.decrypt(activeKey.getStorePasswordEnc());
-        String keyPassword = AesGcmCryptoUtil.decrypt(activeKey.getKeyPasswordEnc());
+        String storePassword = aesGcmCryptoUtil.decrypt(activeKey.getStorePasswordEnc());
+        String keyPassword = aesGcmCryptoUtil.decrypt(activeKey.getKeyPasswordEnc());
 
         Path tempKeystore = null;
         try {
@@ -1192,10 +1199,11 @@ public class PluginManagementService {
     }
 
     private void signJarWithPlatformKey(Path inputJar, Path outputJar) throws Exception {
-        String keystorePath = getenvRequired(ENV_KEYSTORE_PATH);
-        String storePassword = getenvRequired(ENV_KEYSTORE_PASSWORD);
-        String keyAlias = getenvRequired(ENV_KEY_ALIAS);
-        String keyPassword = System.getenv(ENV_KEY_PASSWORD);
+        AppStoreAdminConfig.LegacySigningConfig legacySigning = requireLegacySigningConfig();
+        String keystorePath = requiredLegacySigningValue(legacySigning.getKeystorePath(), "keystorePath");
+        String storePassword = requiredLegacySigningValue(legacySigning.getKeystorePassword(), "keystorePassword");
+        String keyAlias = requiredLegacySigningValue(legacySigning.getKeyAlias(), "keyAlias");
+        String keyPassword = legacySigning.getKeyPassword();
         if (keyPassword == null || keyPassword.isBlank()) {
             keyPassword = storePassword;
         }
@@ -1228,10 +1236,18 @@ public class PluginManagementService {
         }
     }
 
-    private static String getenvRequired(String key) {
-        String v = System.getenv(key);
+    private AppStoreAdminConfig.LegacySigningConfig requireLegacySigningConfig() {
+        AppStoreAdminConfig.SecurityConfig security = appStoreAdminConfig != null ? appStoreAdminConfig.getSecurity() : null;
+        AppStoreAdminConfig.LegacySigningConfig legacySigning = security != null ? security.getLegacySigning() : null;
+        if (legacySigning == null) {
+            throw new IllegalStateException("Missing plugin config: appstoreAdmin.security.legacySigning");
+        }
+        return legacySigning;
+    }
+
+    private static String requiredLegacySigningValue(String v, String fieldName) {
         if (v == null || v.isBlank()) {
-            throw new IllegalStateException("Missing env var: " + key);
+            throw new IllegalStateException("Missing plugin config: appstoreAdmin.security.legacySigning." + fieldName);
         }
         return v;
     }
@@ -1342,6 +1358,7 @@ public class PluginManagementService {
                 .description(entity.getDescription())
                 .icon(entity.getIcon())
                 .category(entity.getCategory())
+                .priceType(entity.getPriceType())
                 .installCount(entity.getInstallCount())
                 .ratingAverage(entity.getRatingAverage())
                 .createTime(entity.getCreateTime())

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.keqi.gress.plugin.appstore.admin.support.ReviewerAwareRequest;
 
 /**
  * Plugin Rejection Request DTO
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RejectionRequest {
+public class RejectionRequest implements ReviewerAwareRequest {
     
     /**
      * Reviewer ID

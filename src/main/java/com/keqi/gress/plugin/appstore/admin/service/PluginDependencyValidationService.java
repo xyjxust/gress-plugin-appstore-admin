@@ -4,14 +4,14 @@ import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keqi.gress.common.plugin.annotion.Inject;
-import com.keqi.gress.common.plugin.annotion.Service;
 import com.keqi.gress.plugin.api.service.PluginLambdaDataSource;
 import com.keqi.gress.plugin.appstore.admin.entity.PluginManager;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 插件依赖验证服务
@@ -26,7 +26,7 @@ public class PluginDependencyValidationService {
     
     private static final Log log = LogFactory.get(PluginDependencyValidationService.class);
     
-    @Inject(source = Inject.BeanSource.SPRING)
+    @Autowired
     private PluginLambdaDataSource dataSource;
     
     private final ObjectMapper objectMapper = new ObjectMapper();

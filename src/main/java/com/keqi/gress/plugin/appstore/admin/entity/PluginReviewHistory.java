@@ -1,12 +1,12 @@
 package com.keqi.gress.plugin.appstore.admin.entity;
 
-import com.keqi.gress.plugin.api.database.annotation.IdType;
-import com.keqi.gress.plugin.api.database.annotation.TableId;
 import com.keqi.gress.plugin.api.database.annotation.TableName;
+import com.keqi.gress.plugin.api.domain.BaseEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
@@ -15,18 +15,12 @@ import java.time.LocalDateTime;
  * Records the review history of plugin submissions
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("appstore_plugin_review_history")
-public class PluginReviewHistory {
-    
-    /**
-     * Primary key
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-    
+@TableName("as_admin_plugin_review_history")
+public class PluginReviewHistory extends BaseEntity {
     /**
      * Submission ID
      */
@@ -67,8 +61,4 @@ public class PluginReviewHistory {
      */
     private LocalDateTime reviewTime;
     
-    /**
-     * Creation time
-     */
-    private LocalDateTime createTime;
 }
