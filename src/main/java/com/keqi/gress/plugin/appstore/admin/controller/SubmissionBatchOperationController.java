@@ -2,7 +2,6 @@ package com.keqi.gress.plugin.appstore.admin.controller;
 
 import com.keqi.gress.common.model.Result;
 import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
-import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.BatchOperationResult;
 import com.keqi.gress.plugin.appstore.admin.dto.BatchReviewRequest;
 import com.keqi.gress.plugin.appstore.admin.service.BatchOperationService;
@@ -14,12 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 批量审核（菜单 submissions，与 plugin.yml plugin.ui.menus 对齐）
+ * 批量审核 API（菜单与路由以 plugin.yml 为准；勿在此类重复 @PluginMenu，避免覆盖 submissions 的 component）。
  */
 @Service
 @RestController
 @RequestMapping("/batch")
-@PluginMenu(id = "submissions", name = "插件审核", managementEnabled = true)
 public class SubmissionBatchOperationController {
 
     @Autowired

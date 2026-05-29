@@ -3,7 +3,7 @@ plugin:
   id: as-admin
   class: com.keqi.gress.plugin.appstore.admin.AppStoreAdminPlugin
   name: 应用商店管理
-  version: 1.0.12
+  version: 1.0.13
   provider: Gress Team
   description: Plugin Store Management System - Provides plugin review, listing, delisting, version management and other management functions
   license: MIT

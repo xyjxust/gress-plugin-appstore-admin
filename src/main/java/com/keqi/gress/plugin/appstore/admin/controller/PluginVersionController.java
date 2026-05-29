@@ -4,7 +4,6 @@ import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.keqi.gress.common.model.Result;
 import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
-import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.*;
 import com.keqi.gress.plugin.appstore.admin.service.PluginVersionService;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RestController
 @RequestMapping("/plugins")
-@PluginMenu(id = "plugins", name = "插件列表", managementEnabled = true)
 public class PluginVersionController {
     private final static Log log = LogFactory.get(PluginVersionController.class);
     

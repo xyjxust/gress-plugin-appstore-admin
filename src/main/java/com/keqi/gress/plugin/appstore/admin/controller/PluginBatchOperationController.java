@@ -2,7 +2,6 @@ package com.keqi.gress.plugin.appstore.admin.controller;
 
 import com.keqi.gress.common.model.Result;
 import com.keqi.gress.plugin.api.ui.annotation.PluginAction;
-import com.keqi.gress.plugin.api.ui.annotation.PluginMenu;
 import com.keqi.gress.plugin.appstore.admin.dto.BatchCategoryUpdateRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.BatchDelistRequest;
 import com.keqi.gress.plugin.appstore.admin.dto.BatchOperationResult;
@@ -15,12 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 插件批量下架/分类（菜单 plugins）
+ * 插件批量下架/分类 API（菜单以 plugin.yml 为准）。
  */
 @Service
 @RestController
 @RequestMapping("/batch")
-@PluginMenu(id = "plugins", name = "插件列表", managementEnabled = true)
 public class PluginBatchOperationController {
 
     @Autowired
